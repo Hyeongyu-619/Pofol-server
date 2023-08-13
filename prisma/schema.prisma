@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     Role     @default(USER)
+  profile  Profile?
+  company  Company? 
+  admin    Admin?   
+  companyId Int?    @unique @map("company_id")
+  adminId Int?      @unique @map("admin_id")
+}
+
+model Profile {
+  id      Int     @id @default(autoincrement())
+  name    String
+  avatar  String?
+  userId  Int     @unique @map("user_id")
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+model TechStack {
+  id           Int          @id @default(autoincrement())
+  name         String       @unique
+  jobPostings  JobPosting[] @relation("JobPostingToTechStack")
+}
+
+model Position {
+  id           Int           @id @default(autoincrement())
+  positionType PositionType
+  jobPostings  JobPosting[]  @relation("JobPostingToPosition")
+}
+
+model JobPosting {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  salary      String?
+  location    String?
+  companyId   Int
+  company     Company      @relation(fields: [companyId], references: [id])
+  techStacks  TechStack[]  @relation("JobPostingToTechStack")
+  positions   Position[]   @relation("JobPostingToPosition")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Company {
+  id          Int          @id @default(autoincrement())
+  userId      Int          @unique @map("user_id")
+  user        User         @relation(fields: [userId], references: [id])
+  jobPostings JobPosting[]
+}
+
+model Admin {
+  id      Int     @id @default(autoincrement())
+  userId  Int     @unique @map("user_id")
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+
+enum Role {
+  USER
+  COMPANY
+  ADMIN
+}
+
+enum PositionType {
+  FRONTEND_DEVELOPER
+  BACKEND_DEVELOPER
+  FULLSTACK_DEVELOPER
+  ANDROID_DEVELOPER
+  IOS_DEVELOPER
+}
+
