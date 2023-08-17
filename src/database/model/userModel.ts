@@ -62,8 +62,12 @@ export class UserModel {
     return updatedUser;
   }
 
-  async deleteUser(_id: string): Promise<void> {
+  async deleteUser(_id: string): Promise<UserData | null> {
     const deletedUser = await User.findOneAndDelete({ _id });
+    if (!deletedUser) {
+      throw new Error(`${_id}가 DB에 존재하지 않습니다!`);
+    }
+    return deletedUser;
   }
 
   async adminDeleteUser(userId: string): Promise<void> {
