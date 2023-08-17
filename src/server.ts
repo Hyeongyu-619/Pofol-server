@@ -24,8 +24,7 @@ app.use(
 );
 
 app.use(errorHandler);
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => console.log(`server is running ${PORT}`));
-}
+
+app.listen(PORT, () => console.log(`server is running ${PORT}`));
 
 export { app };

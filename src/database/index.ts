@@ -1,5 +1,5 @@
 import mongoose, { model } from "mongoose";
-import { UserSchema, CommentSchema } from "./schema";
+import { UserSchema } from "./schema";
 
 const DB_URL =
   process.env.MONGODB_URL ||
@@ -16,4 +16,3 @@ db.on("error", (error: Error) => {
 });
 
 export const User = model("users", UserSchema);
-export const Comment = model("comments", CommentSchema);
