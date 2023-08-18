@@ -21,11 +21,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const { PORT } = process.env;
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));
 });
+
 app.use(
   morgan(
     ":method :url :status :response-time ms - :res[content-length] :date[web]"
