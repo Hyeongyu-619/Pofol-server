@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares";
+import path from "path";
 
 const app = express();
 
@@ -20,7 +21,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const { PORT } = process.env;
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 app.use(
   morgan(
     ":method :url :status :response-time ms - :res[content-length] :date[web]"
