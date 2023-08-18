@@ -21,10 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const { PORT } = process.env;
-app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
+app.use(express.static("/home/elice/frontend/build"));
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));
+  res.sendFile("/home/elice/frontend/build/index.html");
 });
 
 app.use(
