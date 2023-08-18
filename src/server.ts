@@ -8,7 +8,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:8080"],
+    origin: [
+      "http://34.64.245.195:8080",
+      "kdt-sw-5-2-team01.elicecoding.com",
+      "http://localhost:8080",
+    ],
     credentials: true,
   })
 );
