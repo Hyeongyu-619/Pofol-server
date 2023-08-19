@@ -19,22 +19,16 @@ export class UserModel {
     return user;
   }
   async findAll(): Promise<UserInfo[]> {
-    const users = await User.find({});
+    const users = await User.find({}).lean();
     return users;
   }
   async create(userInfo: UserInfo): Promise<UserData> {
     const createdUser = await User.create(userInfo);
-
-    if (!createdUser) {
-      const error = new Error("회원가입에 실패하였습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-    return createdUser;
+    return createdUser.toObject();
   }
   async update(_id: string, update: Partial<UserInfo>): Promise<UserData> {
     const filter = { _id };
-    const option = { returnOriginal: false };
+    const option = { returnOriginal: false, new: true };
     const updatedUser = await User.findOneAndUpdate(filter, update, option);
 
     if (!updatedUser) {

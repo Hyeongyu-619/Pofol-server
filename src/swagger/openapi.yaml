@@ -1,0 +1,19 @@
+openapi: "3.0.0"
+info:
+  version: 0.1.0
+  title: 포폴 API docs
+  description: 포폴의 API 문서입니다
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/
+paths:
+components:
+  responses:
+    successResponse:
+      description: successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
