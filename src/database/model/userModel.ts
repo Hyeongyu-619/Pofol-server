@@ -88,7 +88,6 @@ export class UserModel {
     if (!updatedUser) {
       throw new Error(`DB에 ${userId}로 조회한 유저가 존재하지 않습니다.`);
     }
-
     return updatedUser;
   }
 }

@@ -1,14 +1,6 @@
-/* eslint-disable no-underscore-dangle */
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { userService } from "../services";
-
-interface UserEmail {
-  email: string;
-  primary: true;
-  verified: true;
-  visibility: any;
-}
 
 async function loginRequired(req: any, res: Response, next: NextFunction) {
   // request 헤더로부터 authorization bearer 토큰을 받음.
@@ -24,10 +16,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
         reason: "지원되지 않는 토큰 포맷입니다.",
       });
     }
-
     const userToken = wholeToken[1];
-    // 이 토큰은 github 토큰 문자열이거나, 혹은 "null" 문자열이거나, undefined임.
-    // 토큰이 "null" 일 경우, login_required 가 필요한 서비스 사용을 제한함.
     if (!userToken || userToken === "null") {
       res.status(401).json({
         result: "Unauthorized",
@@ -36,17 +25,38 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     }
 
     try {
-      const userEmail = await axios.get("https://api.github.com/user/emails", {
-        headers: {
-          Accept: "application/json",
-          Authorization: `token ${userToken}`,
-        },
-      });
-      const user = await userService.getUserByEmail(
-        userEmail.data.filter((obj: UserEmail) => obj.primary)[0].email
+      //  네이버 Access Token 얻기
+      const tokenResponse = await axios.post(
+        "https://nid.naver.com/oauth2.0/token",
+        null,
+        {
+          params: {
+            grant_type: "authorization_code",
+            client_id: process.env.NAVER_CLIENT_ID,
+            client_secret: process.env.NAVER_CLIENT_SECRET,
+            code: userToken,
+            state: "YOUR_STATE",
+          },
+        }
       );
+      const accessToken = tokenResponse.data.access_token;
+
+      //  네이버 사용자 프로필 정보 가져오기
+      const profileResponse = await axios.get(
+        "https://openapi.naver.com/v1/nid/me",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const userEmail = profileResponse.data.response.email;
+
+      // DB에서 해당 이메일로 사용자 정보 찾기
+      const user = await userService.getUserByEmail(userEmail);
+
       if (!user) {
-        const error = Error("등록된 회원이 아닙니다.");
+        const error = new Error("등록된 회원이 아닙니다.");
         error.name = "Unauthorized";
         throw error;
       }
@@ -55,11 +65,12 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     } catch (error) {
       next(error);
     }
-  } else {
-    res.status(401).json({
-      result: "Unauthorized",
-      reason: "토큰이 존재하지 않습니다.",
-    });
+    if (tokenFormat !== "Bearer") {
+      return res.status(401).json({
+        result: "Unauthorized",
+        reason: "지원되지 않는 토큰 포맷입니다.",
+      });
+    }
   }
 }
 
