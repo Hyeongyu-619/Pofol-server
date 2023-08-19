@@ -1,11 +1,5 @@
-/* eslint-disable no-underscore-dangle */
-import {
-  UserModel,
-  userModel,
-  UserInfo,
-  UserData,
-  ImageInfo,
-} from "../database/model/userModel";
+import { UserModel } from "../database/model/userModel";
+import { UserInfo, UserData } from "../types/user";
 import { validation } from "../utils/validation";
 
 class UserService {
@@ -55,7 +49,7 @@ class UserService {
 
   async findAll(): Promise<UserInfo[]> {
     try {
-      const users = await userModel.findAll();
+      const users = await this.userModel.findAll();
       return users;
     } catch (error) {
       // 에러 핸들링을 원하는 방식대로 구현합니다.
@@ -63,11 +57,10 @@ class UserService {
     }
   }
 
-  // 유저 승인 - 관리자
   async approveMentor(_id: string): Promise<UserData> {
-    const updatedUser = await this.userModel.approveMentor(_id);
+    const updatedUser = await this.userModel.update(_id, { role: "mentor" });
     if (!updatedUser) {
-      const error = Error("해당 유저가 존재하지 않습니다.");
+      const error = new Error("해당 유저가 존재하지 않습니다.");
       error.name = "NotFound";
       throw error;
     }
@@ -75,4 +68,5 @@ class UserService {
   }
 }
 
-export const userService = new UserService(userModel);
+const userModelInstance = new UserModel();
+export const userService = new UserService(userModelInstance);

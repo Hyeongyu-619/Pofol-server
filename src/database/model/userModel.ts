@@ -1,24 +1,7 @@
-import { Types } from "mongoose";
+import { Document, model } from "mongoose";
 import { User } from "..";
-
-export interface UserInfo {
-  name: string;
-  email: string;
-  nickName: string;
-  career: string;
-  position: string;
-  role?: string;
-  profileImage?: string;
-}
-export interface UserData extends UserInfo {
-  _id: Types.ObjectId;
-}
-
-export interface ImageInfo {
-  body: string;
-  file: string;
-  type: string;
-}
+import { UserInfo, UserData } from "../../types/user";
+import { UserSchema } from "../schema/userSchema";
 
 export class UserModel {
   async findByEmail(email: string): Promise<UserData | null> {
@@ -78,18 +61,7 @@ export class UserModel {
     }
     await User.deleteOne({ _id: userId });
   }
-
-  async approveMentor(userId: string): Promise<UserData | null> {
-    const filter = { _id: userId };
-    const update = { role: "mentor" };
-    const option = { returnOriginal: false };
-
-    const updatedUser = await User.findOneAndUpdate(filter, update, option);
-    if (!updatedUser) {
-      throw new Error(`DB에 ${userId}로 조회한 유저가 존재하지 않습니다.`);
-    }
-    return updatedUser;
-  }
 }
 
-export const userModel = new UserModel();
+const userModel = model<UserInfo & Document>("User", UserSchema);
+export default UserModel;

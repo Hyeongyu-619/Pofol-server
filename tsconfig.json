@@ -1,12 +1,8 @@
 {
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
     "outDir": "./dist",
     "rootDir": ".",
-    "strict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./src/types", "./node_modules/@types"]
   }

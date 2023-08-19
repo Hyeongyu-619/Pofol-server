@@ -2,37 +2,26 @@ import { Router, Request, Response, NextFunction } from "express";
 import { loginRequired } from "../../middlewares";
 import { userService } from "../../services";
 import { validation } from "../../utils/validation";
-import { upload } from "../../utils/multer";
 
 const userRouter = Router();
 
 userRouter.post(
   "/register",
-  upload.single("profileImage"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const img: any = req.file;
-      if (img) {
-        const profileImage = img.location;
-        const { name, email, nickName, career, position, role, techStack } =
-          req.body;
-        const userInfo = {
-          name,
-          email,
-          nickName,
-          career,
-          position,
-          role,
-          techStack,
-          profileImage,
-        };
-        const newUser = await userService.addUser(userInfo);
-        res.status(201).json(newUser);
-      } else {
-        const error = new Error("이미지 업로드에 실패하였습니다");
-        error.name = "NotFound";
-        throw error;
-      }
+      const { name, email, nickName, career, position, role, techStack } =
+        req.body;
+      const userInfo = {
+        name,
+        email,
+        nickName,
+        career,
+        position,
+        role,
+        techStack,
+      };
+      const newUser = await userService.addUser(userInfo);
+      res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }

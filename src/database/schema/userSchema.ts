@@ -25,7 +25,7 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      required: false,
+      required: true,
       default: "user",
     },
     profileImage: {
@@ -35,7 +35,7 @@ const UserSchema = new Schema(
     },
     techStack: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {

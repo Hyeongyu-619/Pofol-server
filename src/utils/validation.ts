@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { UserInfo } from "../database/model/userModel";
+import { UserInfo } from "../types/user";
 
 class Validation {
   addUser(userInfo: UserInfo): void {
