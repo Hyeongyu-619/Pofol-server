@@ -5,6 +5,7 @@ async function adminRequired(req: any, res: Response, next: NextFunction) {
   const adminId = req.currentUserId;
   if (adminId) {
     const adminInfo = await userService.getUserById(adminId);
+    next();
     if (adminInfo.role === "admin") {
       next();
     } else {

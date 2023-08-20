@@ -8,4 +8,12 @@ info:
 servers:
   - url: 'http://localhost:8080/'
 paths: null
-components: null
+components:
+  responses:
+    successResponse:
+      description: successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: null

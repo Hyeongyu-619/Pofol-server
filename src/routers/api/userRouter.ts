@@ -27,23 +27,6 @@ userRouter.post(
     }
   }
 );
-
-userRouter.get(
-  "/:naverEmail",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const { naverEmail } = req.params;
-
-      const userData = await userService.getUserByEmail(naverEmail);
-
-      res.status(200).json(userData);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 userRouter.get(
   "/mypage",
   loginRequired,
@@ -58,8 +41,39 @@ userRouter.get(
   }
 );
 
+userRouter.put(
+  "/",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.currentUserId;
+      const update = req.body;
+      const updatedUser = await userService.updateUser(userId, update);
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 userRouter.get(
-  "/profile/:userId",
+  "/:email",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { email } = req.params;
+
+      const userData = await userService.getUserByEmail(email);
+
+      res.status(200).json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.get(
+  "/:userId/profile",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
@@ -73,28 +87,12 @@ userRouter.get(
   }
 );
 
-userRouter.put(
-  "/",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const userId = validation.isLogin(req.currentUserId);
-      const update = req.body;
-      const updatedUser = await userService.setUser(userId, update);
-
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 userRouter.delete(
   "/",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = validation.isLogin(req.currentUserId);
+      const userId = req.currentUserId;
       const deleteResult = await userService.deleteUser(userId);
 
       res.status(200).json(deleteResult);

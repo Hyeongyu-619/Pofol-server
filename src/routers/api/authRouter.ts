@@ -1,30 +1,88 @@
 import passport from "passport";
-import "passport-naver-v2";
+import { Strategy as NaverStrategy } from "passport-naver";
 import { NextFunction, Request, Response, Router } from "express";
-import axios from "axios";
 import { userService } from "../../services";
-
-interface UserEmail {
-  email: string;
-  primary: true;
-  verified: true;
-  visibility: any;
-}
+import ensureLoggedIn from "connect-ensure-login";
 
 const authRouter = Router();
-// 네이버로 로그인하기 라우터
-authRouter.get(
-  "/login",
-  passport.authenticate("naver", { authType: "reprompt" })
-);
 
-// 네이버 서버 로그인 후 redirect URL 설정에 따른 라우터
+authRouter.get("/", (req, res) => {
+  res.render("home", { user: req.user });
+});
+
+authRouter.get("/login", (req, res) => {
+  res.render("login");
+});
+
+authRouter.get("/login/naver", passport.authenticate("naver"));
+
 authRouter.get(
-  "/naver/callback",
-  passport.authenticate("naver", { failureRedirect: "/" }),
-  (req: Request, res: Response) => {
-    res.redirect("/");
+  "/return",
+  passport.authenticate("naver", { failureRedirect: "/login" }),
+  (req, res) => {
+    if (req.isAuthenticated()) {
+      res.json({ success: true, message: "Login successful", user: req.user });
+    } else {
+      res.json({ success: false, message: "Login failed" });
+    }
   }
 );
 
+authRouter.get("/register", (req, res) => {
+  res.render("register");
+});
+
+authRouter.post("/register", async (req, res) => {
+  try {
+    // 입력 데이터 추출
+    const {
+      name,
+      email,
+      nickName,
+      career,
+      position,
+      role,
+      profileImageUrl,
+      techStack,
+    } = req.body;
+    // 이메일 중복 확인
+    const existingUser = await userService.getUserByEmail(email);
+
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already exists" });
+    }
+    // 사용자 생성
+    const newUser = await userService.addUser({
+      name,
+      email,
+      nickName,
+      career,
+      position,
+      role,
+      profileImageUrl,
+      techStack,
+    });
+
+    res.json({
+      success: true,
+      message: "Registration successful",
+      user: newUser,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ success: false, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ success: false, message: "An unexpected error occurred." });
+    }
+  }
+});
+
+authRouter.get("/profile", ensureLoggedIn.ensureLoggedIn(), (req, res) => {
+  console.log(JSON.stringify(req.user));
+  res.render("profile", { user: req.user });
+});
 export { authRouter };

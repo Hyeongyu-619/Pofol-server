@@ -37,7 +37,7 @@ class UserService {
     return user;
   }
 
-  async setUser(_id: string, update: Partial<UserInfo>): Promise<UserData> {
+  async updateUser(_id: string, update: Partial<UserInfo>): Promise<UserData> {
     const updatedUser = await this.userModel.update(_id, update);
     return updatedUser;
   }
