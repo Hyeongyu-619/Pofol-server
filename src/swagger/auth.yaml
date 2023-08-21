@@ -1,0 +1,62 @@
+/auth:
+  get:
+    summary: Get home page with user info
+    responses:
+      "200":
+        description: Successfully returned home page
+
+/auth/login:
+  get:
+    summary: Get login page
+    responses:
+      "200":
+        description: Successfully returned login page
+
+/auth/login/naver:
+  get:
+    summary: Authenticate using Naver
+    responses:
+      "302":
+        description: Redirect to Naver for authentication
+
+/auth/login/naver/callback:
+  post:
+    summary: Handle Naver login callback
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Authorization code from Naver.
+              nickName:
+                type: string
+              career:
+                type: string
+              position:
+                type: string
+              role:
+                type: string
+            required:
+              - code
+    responses:
+      "200":
+        description: Successfully authenticated user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                token:
+                  type: string
+
+/auth/logout:
+  get:
+    summary: Logout user
+    responses:
+      "200":
+        description: Successfully logged out user

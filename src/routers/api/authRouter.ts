@@ -3,6 +3,10 @@ import { Strategy as NaverStrategy } from "passport-naver";
 import { NextFunction, Request, Response, Router } from "express";
 import { userService } from "../../services";
 import ensureLoggedIn from "connect-ensure-login";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const authRouter = Router();
 
@@ -16,73 +20,43 @@ authRouter.get("/login", (req, res) => {
 
 authRouter.get("/login/naver", passport.authenticate("naver"));
 
-authRouter.get(
-  "/return",
+authRouter.post(
+  "/login/naver/callback",
   passport.authenticate("naver", { failureRedirect: "/login" }),
-  (req, res) => {
-    if (req.isAuthenticated()) {
-      res.json({ success: true, message: "Login successful", user: req.user });
+  async (req, res) => {
+    const profile = req.user as any;
+
+    const existingUser = await userService.getUserByEmail(profile.email);
+
+    const { nickName, career, position, role } = req.body;
+
+    if (existingUser) {
+      const token = jwt.sign(
+        { id: existingUser._id },
+        process.env.JWT_SECRET as string
+      );
+      res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Login failed" });
+      const newUser = await userService.addUser({
+        name: profile.displayName,
+        email: profile.email,
+        nickName: nickName,
+        career: career,
+        position: position,
+        role: role,
+      });
+
+      const token = jwt.sign(
+        { id: newUser._id },
+        process.env.JWT_SECRET as string
+      );
+      res.json({ success: true, token });
     }
   }
 );
 
-authRouter.get("/register", (req, res) => {
-  res.render("register");
+authRouter.get("/logout", function (req, res) {
+  req.logout();
 });
 
-authRouter.post("/register", async (req, res) => {
-  try {
-    // 입력 데이터 추출
-    const {
-      name,
-      email,
-      nickName,
-      career,
-      position,
-      role,
-      profileImageUrl,
-      techStack,
-    } = req.body;
-    // 이메일 중복 확인
-    const existingUser = await userService.getUserByEmail(email);
-
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email already exists" });
-    }
-    // 사용자 생성
-    const newUser = await userService.addUser({
-      name,
-      email,
-      nickName,
-      career,
-      position,
-      role,
-      profileImageUrl,
-      techStack,
-    });
-
-    res.json({
-      success: true,
-      message: "Registration successful",
-      user: newUser,
-    });
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ success: false, message: error.message });
-    } else {
-      res
-        .status(500)
-        .json({ success: false, message: "An unexpected error occurred." });
-    }
-  }
-});
-
-authRouter.get("/profile", ensureLoggedIn.ensureLoggedIn(), (req, res) => {
-  console.log(JSON.stringify(req.user));
-  res.render("profile", { user: req.user });
-});
 export { authRouter };

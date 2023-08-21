@@ -1,8 +1,6 @@
 import passport from "passport";
-import { naverStrategy } from "./strategies/naver";
 import { userService } from "../services/userService";
-
-passport.use(naverStrategy);
+import "./strategies/naver";
 
 passport.serializeUser((user, done) => {
   done(null, user);

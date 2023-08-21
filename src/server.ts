@@ -8,6 +8,7 @@ import path from "path";
 import { apiRouter } from "./routers";
 import passport from "passport";
 import session from "express-session";
+import "./passport";
 
 const app = express();
 
@@ -24,7 +25,6 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api", apiRouter);
 
 app.use(
   session({
@@ -33,17 +33,19 @@ app.use(
     saveUninitialized: true,
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/api", apiRouter);
 
 const { PORT } = process.env;
 app.use(express.static(__dirname));
 
-app.listen(PORT, () => console.log(`server is running ${PORT}`));
-
 const swaggerSpec: any = YAML.load(path.join(__dirname, "./swagger.yaml"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.listen(PORT, () => console.log(`server is running ${PORT}`));
 app.use(errorHandler);
 
 export { app };

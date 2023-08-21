@@ -6,8 +6,9 @@ info:
   license:
     name: MIT
 servers:
-  - url: 'http://localhost:8080/'
-paths: null
+  - url: "http://localhost:8080/"
+paths:
+  $ref: "./swagger/auth.yaml"
 components:
   responses:
     successResponse:

@@ -25,6 +25,7 @@
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.3",
     "passport": "^0.6.0",
+    "passport-naver": "^1.0.6",
     "passport-naver-v2": "^2.0.8",
     "swagger-cli": "^4.0.4",
     "swagger-ui-express": "^5.0.0",
