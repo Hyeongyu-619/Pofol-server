@@ -12,6 +12,7 @@ const naverStrategy = new NaverStrategy(
     callbackURL: process.env.NAVER_CALLBACK_URL as string,
   },
   async (accessToken, refreshToken, profile, done) => {
+    console.log(accessToken);
     try {
       const userEmail = profile.emails?.[0]?.value ?? "";
       const existingUser = await userService.getUserByEmail(userEmail);
@@ -22,6 +23,7 @@ const naverStrategy = new NaverStrategy(
         return done(null, null);
       }
     } catch (error) {
+      console.log(accessToken);
       return done(error);
     }
   }

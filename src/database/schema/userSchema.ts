@@ -15,10 +15,6 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    career: {
-      type: String,
-      required: true,
-    },
     position: {
       type: String,
       required: true,

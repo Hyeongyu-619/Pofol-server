@@ -1,5 +1,6 @@
 import mongoose, { model } from "mongoose";
 import { UserSchema } from "./schema";
+import { PortfolioSchema } from "./schema/portfolioSchema";
 
 const DB_URL =
   process.env.MONGODB_URL ||
@@ -16,3 +17,4 @@ db.on("error", (error: Error) => {
 });
 
 export const User = model("users", UserSchema);
+export const Portfolio = model("portfolios", PortfolioSchema);

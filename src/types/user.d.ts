@@ -2,7 +2,6 @@ export interface UserInfo {
   name: string;
   email: string;
   nickName: string;
-  career: string;
   position: string;
   role: string;
   profileImageUrl?: string;

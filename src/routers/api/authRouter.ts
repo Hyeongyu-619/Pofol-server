@@ -21,14 +21,12 @@ authRouter.get("/login", (req, res) => {
 authRouter.get("/login/naver", passport.authenticate("naver"));
 
 authRouter.post(
-  "/login/naver/callback",
+  "/signup", //naver/callback
   passport.authenticate("naver", { failureRedirect: "/login" }),
   async (req, res) => {
     const profile = req.user as any;
-
     const existingUser = await userService.getUserByEmail(profile.email);
-
-    const { nickName, career, position, role } = req.body;
+    const { nickName, position, role } = req.body;
 
     if (existingUser) {
       const token = jwt.sign(
@@ -41,7 +39,6 @@ authRouter.post(
         name: profile.displayName,
         email: profile.email,
         nickName: nickName,
-        career: career,
         position: position,
         role: role,
       });
