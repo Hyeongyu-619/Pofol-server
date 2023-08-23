@@ -1,6 +1,11 @@
-import { Document, model } from "mongoose";
+import { Document, Types, model } from "mongoose";
 import { Portfolio } from "..";
-import { PortfolioInfo, PortfolioData } from "../../types/portfolio";
+import {
+  PortfolioInfo,
+  PortfolioData,
+  CommentData,
+  CommentInfo,
+} from "../../types/portfolio";
 import { PortfolioSchema } from "../schema/portfolioSchema";
 
 export class PortfolioModel {
@@ -59,6 +64,70 @@ export class PortfolioModel {
       throw new Error(`${_id}가 DB에 존재하지 않습니다!`);
     }
     return deletedPortfolio;
+  }
+  async addCommentToPortfolio(
+    _id: string,
+    comment: CommentInfo
+  ): Promise<PortfolioData> {
+    const portfolio = await Portfolio.findById(_id);
+    if (!portfolio) {
+      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    portfolio.comments.push({ _id: new Types.ObjectId(), ...comment });
+
+    await portfolio.save();
+    return portfolio.toObject();
+  }
+
+  async deleteCommentFromPortfolio(
+    portfolioId: string,
+    commentId: Types.ObjectId
+  ): Promise<PortfolioData> {
+    const portfolio = await Portfolio.findById(portfolioId);
+    if (!portfolio || !portfolio.comments) {
+      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    portfolio.comments = portfolio.comments.filter(
+      (comment) => !comment._id?.equals(commentId)
+    );
+    await portfolio.save();
+    return portfolio.toObject();
+  }
+
+  async updateCommentInPortfolio(
+    portfolioId: string,
+    commentId: Types.ObjectId,
+    updatedComment: CommentInfo
+  ): Promise<PortfolioData> {
+    const portfolio = await Portfolio.findById(portfolioId);
+    if (!portfolio || !portfolio.comments) {
+      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    const commentIndex = portfolio.comments.findIndex((comment) =>
+      comment._id.equals(commentId)
+    );
+    if (commentIndex === -1) {
+      const error = new Error("해당 댓글이 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    portfolio.comments[commentIndex] = {
+      ...portfolio.comments[commentIndex],
+      ...updatedComment,
+    };
+
+    await portfolio.save();
+    return portfolio.toObject();
   }
 }
 

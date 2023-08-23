@@ -24,6 +24,11 @@ const PortfolioSchema = new Schema(
     },
     comments: [
       {
+        _id: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          auto: true,
+        },
         author: {
           type: String,
           required: true,
@@ -32,14 +37,14 @@ const PortfolioSchema = new Schema(
           type: String,
           required: true,
         },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-        updatedAt: {
-          type: Date,
-          default: Date.now,
-        },
+        // createdAt: {
+        //   type: Date,
+        //   default: Date.now,
+        // },
+        // updatedAt: {
+        //   type: Date,
+        //   default: Date.now,
+        // },
       },
     ],
   },

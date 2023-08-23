@@ -1,6 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { loginRequired } from "../../middlewares";
 import { portfolioService } from "../../services";
+import { CommentInfo } from "../../types/portfolio";
+import { Types } from "mongoose";
 
 const portfolioRouter = Router();
 
@@ -60,6 +62,59 @@ portfolioRouter.delete(
       const { portfolioId } = req.params;
       const deleteResult = await portfolioService.deletePortfolio(portfolioId);
       res.status(200).json(deleteResult);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+portfolioRouter.post(
+  "/:portfolioId/comments",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { portfolioId } = req.params;
+      const comment: CommentInfo = req.body;
+      const updatedPortfolio = await portfolioService.addCommentToPortfolio(
+        portfolioId,
+        comment
+      );
+      res.status(201).json(updatedPortfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 댓글 삭제
+portfolioRouter.delete(
+  "/:portfolioId/comments/:commentId",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { portfolioId, commentId } = req.params;
+      const updatedPortfolio =
+        await portfolioService.deleteCommentFromPortfolio(
+          portfolioId,
+          new Types.ObjectId(commentId)
+        );
+      res.status(200).json(updatedPortfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 댓글 수정
+portfolioRouter.put(
+  "/:portfolioId/comments/:commentId",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { portfolioId, commentId } = req.params;
+      const updatedComment: CommentInfo = req.body;
+      const updatedPortfolio = await portfolioService.updateCommentInPortfolio(
+        portfolioId,
+        new Types.ObjectId(commentId),
+        updatedComment
+      );
+      res.status(200).json(updatedPortfolio);
     } catch (error) {
       next(error);
     }
