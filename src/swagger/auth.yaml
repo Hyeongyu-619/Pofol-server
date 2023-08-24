@@ -1,25 +1,25 @@
-/auth:
+/api/auth:
   get:
     summary: Get home page with user info
     responses:
       "200":
         description: Successfully returned home page
 
-/auth/login:
+/api/auth/login:
   get:
     summary: Get login page
     responses:
       "200":
         description: Successfully returned login page
 
-/auth/login/naver:
+/api/auth/login/naver:
   get:
     summary: Authenticate using Naver
     responses:
       "302":
         description: Redirect to Naver for authentication
 
-/auth/login/naver/callback:
+/api/auth/login/signup:
   post:
     summary: Handle Naver login callback
     requestBody:
@@ -28,19 +28,16 @@
           schema:
             type: object
             properties:
-              code:
-                type: string
-                description: Authorization code from Naver.
               nickName:
-                type: string
-              career:
                 type: string
               position:
                 type: string
               role:
                 type: string
             required:
-              - code
+              - nickName
+              - position
+              - role
     responses:
       "200":
         description: Successfully authenticated user
@@ -54,7 +51,7 @@
                 token:
                   type: string
 
-/auth/logout:
+/api/auth/logout:
   get:
     summary: Logout user
     responses:

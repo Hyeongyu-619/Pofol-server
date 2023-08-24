@@ -19,56 +19,54 @@ authRouter.get("/login", (req, res) => {
 
 authRouter.get("/login/naver", passport.authenticate("naver"));
 
-authRouter.post("/signup", (req, res, next) => {
+authRouter.get("/login/naver/callback", (req, res, next) => {
   passport.authenticate("naver", async (error: any, user: any, info: any) => {
     if (error) {
-      console.error("Authentication error:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error });
     }
+    const existingUser = await userService.getUserByEmail(user.emails[0].value);
+    const userName = user.displayName;
+    const email = user.email[0].value;
 
-    if (!user) {
-      console.log("No user found:", info);
-      return res.redirect("/login");
+    if (existingUser) {
+      const token = jwt.sign(
+        { id: existingUser._id },
+        process.env.JWT_SECRET as string
+      );
+      return res.json({ success: true, token, userName, email });
+    } else {
+      res.redirect("/signup");
     }
-
-    req.logIn(user, async (loginError) => {
-      if (loginError) {
-        console.error("Login error:", loginError);
-        return res.status(500).json({ error: "Login Error" });
-      }
-
-      const profile = user;
-      console.log(profile);
-      const existingUser = await userService.getUserByEmail(profile.email);
-      console.log(existingUser);
-      const { nickName, position, role } = req.body;
-      console.log(req.body);
-
-      if (existingUser) {
-        const token = jwt.sign(
-          { id: existingUser._id },
-          process.env.JWT_SECRET as string
-        );
-        return res.json({ success: true, token });
-      } else {
-        console.log("Creating new user...");
-        const newUser = await userService.addUser({
-          name: profile.displayName,
-          email: profile.email,
-          nickName: nickName,
-          position: position,
-          role: role,
-        });
-
-        const token = jwt.sign(
-          { id: newUser._id },
-          process.env.JWT_SECRET as string
-        );
-        return res.json({ success: true, token });
-      }
-    });
   })(req, res, next);
 });
+
+authRouter.post("/signup", async (req, res, next) => {
+  try {
+    const { email, name, nickName, position, role } = req.body;
+
+    const existingUser = await userService.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ error: "이미 가입한 사용자입니다." });
+    }
+    const newUser = await userService.addUser({
+      name,
+      email,
+      nickName,
+      position,
+      role,
+    });
+
+    const token = jwt.sign(
+      { id: newUser._id },
+      process.env.JWT_SECRET as string
+    );
+
+    res.json({ success: true, token });
+  } catch (error) {
+    next(error);
+  }
+});
+
 authRouter.get("/logout", function (req, res) {
   req.logout();
 });

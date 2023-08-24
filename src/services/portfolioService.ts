@@ -114,6 +114,16 @@ class PortfolioService {
     portfolio.comments[commentIndex] = updatedComment;
     return this.portfolioModel.update(portfolioId, portfolio);
   }
+
+  async findTopCoachedPortfolios(): Promise<PortfolioInfo[]> {
+    try {
+      const portfolios =
+        await this.portfolioModel.findPortfoliosByCoachingCount(4);
+      return portfolios;
+    } catch (error) {
+      throw new Error("포트폴리오 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
 }
 
 const portfolioModelInstance = new PortfolioModel();

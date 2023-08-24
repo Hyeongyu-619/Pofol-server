@@ -19,6 +19,18 @@ portfolioRouter.get(
     }
   }
 );
+portfolioRouter.get(
+  "/",
+  // loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const portfolios = await portfolioService.findAll();
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 portfolioRouter.post(
   "/",
@@ -115,6 +127,18 @@ portfolioRouter.put(
         updatedComment
       );
       res.status(200).json(updatedPortfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+portfolioRouter.get(
+  "/topCoached",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const portfolios = await portfolioService.findTopCoachedPortfolios();
+      res.status(200).json(portfolios);
     } catch (error) {
       next(error);
     }

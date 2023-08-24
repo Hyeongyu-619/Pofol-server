@@ -9,6 +9,7 @@ export interface UserInfo {
   _id?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
+  coachingCount?: number;
 }
 
 export interface UserData extends UserInfo {

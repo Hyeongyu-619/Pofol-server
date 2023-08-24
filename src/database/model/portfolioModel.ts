@@ -31,6 +31,13 @@ export class PortfolioModel {
     return portfolios;
   }
 
+  async findPortfoliosByCoachingCount(limit: number): Promise<PortfolioInfo[]> {
+    return Portfolio.find()
+      .sort({ coachingCount: -1, createdAt: -1 })
+      .limit(limit)
+      .lean();
+  }
+
   async create(portfolioInfo: PortfolioInfo): Promise<PortfolioData> {
     const createdPortfolio = await Portfolio.create(portfolioInfo);
     return createdPortfolio.toObject();

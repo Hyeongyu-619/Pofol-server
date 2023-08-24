@@ -1,0 +1,72 @@
+api/user/mypage:
+  get:
+    summary: Fetch the current user's info
+    responses:
+      "200":
+        description: Returns user info
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+
+api/user:
+  put:
+    summary: Update the current user's info
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+
+    responses:
+      "200":
+        description: Returns updated user info
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+
+  delete:
+    summary: Delete the current user's info
+    responses:
+      "200":
+        description: Returns deletion result
+
+api/user/{email}:
+  get:
+    summary: Fetch user info by email
+    parameters:
+      - in: path
+        name: email
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: Returns user info by email
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+
+api/user/{userId}/profile:
+  get:
+    summary: Fetch user profile by userId
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: Returns user profile
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:

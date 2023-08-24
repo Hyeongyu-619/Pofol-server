@@ -33,6 +33,11 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
+    coachingCount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
     collection: "users",

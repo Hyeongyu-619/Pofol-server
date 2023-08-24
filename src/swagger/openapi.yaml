@@ -8,7 +8,24 @@ info:
 servers:
   - url: http://localhost:8080/
 paths:
-  $ref: "./auth.yaml"
+  /api/auth:
+    $ref: "./auth.yaml#/"
+  /api/auth/login:
+    $ref: "./auth.yaml#/login"
+  /api/auth/login/naver:
+    $ref: "./auth.yaml#/login/naver"
+  /api/auth/login/signup:
+    $ref: "./auth.yaml#/login/signup"
+  /api/auth/logout:
+    $ref: "./auth.yaml#/logout"
+  /api/user/mypage:
+    $ref: "./user.yaml#/mypage"
+  /api/user:
+    $ref: "./user.yaml#/"
+  /api/user{email}:
+    $ref: "./user.yaml#/{email}"
+  /api/user/{userId}/profile:
+    $ref: "./user.yaml#/{userId}/profile"
 components:
   responses:
     successResponse:

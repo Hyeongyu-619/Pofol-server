@@ -78,5 +78,18 @@ userRouter.delete(
     }
   }
 );
+userRouter.put(
+  "/:userId/completeMentoring",
+  // loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { userId } = req.params;
+      const updatedUser = await userService.incrementCoachingCount(userId);
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export { userRouter };

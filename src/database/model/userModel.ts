@@ -51,14 +51,17 @@ export class UserModel {
     return deletedUser;
   }
 
-  // async adminDeleteUser(userId: string): Promise<void> {
-  //   const targetUser = await User.findOne({ _id: userId });
-
-  //   if (!targetUser) {
-  //     throw new Error(`${userId}가 DB에 존재하지 않습니다!`);
-  //   }
-  //   await User.deleteOne({ _id: userId });
-  // }
+  async incrementCoachingCount(userId: string): Promise<UserData> {
+    const user = await User.findById(userId);
+    if (!user) {
+      const error = new Error("해당 유저가 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+    user.coachingCount += 1;
+    await user.save();
+    return user.toObject();
+  }
 }
 
 const userModel = model<UserInfo & Document>("User", UserSchema);

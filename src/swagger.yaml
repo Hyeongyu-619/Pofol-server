@@ -6,28 +6,28 @@ info:
   license:
     name: MIT
 servers:
-  - url: 'http://localhost:8080/'
+  - url: "http://localhost:8080/"
 paths:
-  /auth:
+  /api/auth:
     get:
       summary: Get home page with user info
       responses:
-        '200':
+        "200":
           description: Successfully returned home page
-  /auth/login:
+  /api/auth/login:
     get:
       summary: Get login page
       responses:
-        '200':
+        "200":
           description: Successfully returned login page
-  /auth/login/naver:
+  /api/auth/login/naver:
     get:
       summary: Authenticate using Naver
       responses:
-        '302':
+        "302":
           description: Redirect to Naver for authentication
-  /auth/login/naver/callback:
-    post:
+  /api/auth/login/signup:
+    get:
       summary: Handle Naver login callback
       requestBody:
         content:
@@ -35,21 +35,18 @@ paths:
             schema:
               type: object
               properties:
-                code:
-                  type: string
-                  description: Authorization code from Naver.
                 nickName:
-                  type: string
-                career:
                   type: string
                 position:
                   type: string
                 role:
                   type: string
               required:
-                - code
+                - nickName
+                - position
+                - role
       responses:
-        '200':
+        "200":
           description: Successfully authenticated user
           content:
             application/json:
@@ -60,12 +57,79 @@ paths:
                     type: boolean
                   token:
                     type: string
-  /auth/logout:
+  /api/auth/logout:
     get:
       summary: Logout user
       responses:
-        '200':
+        "200":
           description: Successfully logged out user
+  /api/user/mypage:
+    get:
+      summary: Fetch the current user's info
+      responses:
+        "200":
+          description: Returns user info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+  /api/user:
+    put:
+      summary: Update the current user's info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+      responses:
+        "200":
+          description: Returns updated user info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+    delete:
+      summary: Delete the current user's info
+      responses:
+        "200":
+          description: Returns deletion result
+  /api/user/{email}:
+    get:
+      summary: Fetch user info by email
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns user info by email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+  /api/user/{userId}/profile:
+    get:
+      summary: Fetch user profile by userId
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
 components:
   responses:
     successResponse:

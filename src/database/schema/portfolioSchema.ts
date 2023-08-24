@@ -22,6 +22,11 @@ const PortfolioSchema = new Schema(
       type: String,
       required: true,
     },
+    coachingCount: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     comments: [
       {
         _id: {

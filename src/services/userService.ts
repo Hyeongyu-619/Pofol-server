@@ -52,8 +52,16 @@ class UserService {
       const users = await this.userModel.findAll();
       return users;
     } catch (error) {
-      // 에러 핸들링을 원하는 방식대로 구현합니다.
       throw new Error("유저 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
+  async incrementCoachingCount(userId: string): Promise<UserInfo> {
+    try {
+      const user = await this.userModel.incrementCoachingCount(userId);
+      return user;
+    } catch (error) {
+      throw new Error("멘토링 완료 업데이트 중 오류가 발생했습니다.");
     }
   }
 
