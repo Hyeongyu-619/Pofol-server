@@ -6,7 +6,7 @@ const userRouter = Router();
 
 userRouter.get(
   "/mypage",
-  loginRequired,
+  // loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUserId;

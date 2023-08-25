@@ -19,6 +19,7 @@ portfolioRouter.get(
     }
   }
 );
+
 portfolioRouter.get(
   "/",
   // loginRequired,
