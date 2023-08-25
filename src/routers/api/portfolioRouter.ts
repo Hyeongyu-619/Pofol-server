@@ -218,7 +218,7 @@ portfolioRouter.get(
 // );
 
 portfolioRouter.get(
-  "/topMentor",
+  "/recommend/topMentor",
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const portfolios = await portfolioService.findTopMentorPortfolios();
