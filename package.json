@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -b tsconfig.json && cp src/swagger.yaml dist/src/swagger.yaml",
     "start": "nodemon --watch src --exec ts-node src/server.ts",
-    "api-docs": "swagger-cli bundle ./src/swagger/openapi.yaml --outfile src/swagger.yaml --type yaml",
+    "api-docs": "swagger-cli bundle ./src/swagger.yaml --outfile src/swagger.yaml --type yaml",
     "prestart": "npm run api-docs"
   },
   "keywords": [],
