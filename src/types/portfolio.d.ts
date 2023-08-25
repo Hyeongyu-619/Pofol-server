@@ -1,9 +1,18 @@
 import { Types } from "mongoose";
 
+export interface MentoringRequest {
+  _id?: Types.ObjectId;
+  userId: Types.ObjectId;
+  status: "requested" | "accepted" | "completed";
+}
+
 export interface PortfolioInfo {
+  _id?: Types.ObjectId;
+  mentoringRequests: MentoringRequest[];
   position: string;
   name: string;
   company: string;
+  career: number;
   title: string;
   description: string;
   comments?: CommentInfo[];

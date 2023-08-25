@@ -33,13 +33,11 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
         { id: existingUser._id },
         process.env.JWT_SECRET as string
       );
-      return res.json({ success: true, token });
+      return res.cookie("token", token, { httpOnly: true });
     } else {
-      res.json({
-        redirect: "/signup",
-        userName: userName,
-        email: email,
-      });
+      res.cookie("userName", userName);
+      res.cookie("email", email);
+      res.redirect("/signup");
     }
   })(req, res, next);
 });

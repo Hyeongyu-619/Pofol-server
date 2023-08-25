@@ -27,7 +27,7 @@ class PortfolioService {
   async getPortfolioById(_id: string): Promise<PortfolioData> {
     const portfolio = await this.portfolioModel.findById(_id);
     if (!portfolio) {
-      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
+      const error = new Error("해당 멘토가 존재하지 않습니다.");
       error.name = "NotFound";
       throw error;
     }
@@ -52,7 +52,7 @@ class PortfolioService {
       const portfolios = await this.portfolioModel.findAll();
       return portfolios;
     } catch (error) {
-      throw new Error("포트폴리오 목록을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
   async addCommentToPortfolio(
@@ -61,7 +61,7 @@ class PortfolioService {
   ): Promise<PortfolioData> {
     const portfolio = await this.portfolioModel.findById(portfolioId);
     if (!portfolio) {
-      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
+      const error = new Error("해당 멘토가 존재하지 않습니다.");
       error.name = "NotFound";
       throw error;
     }
@@ -78,7 +78,7 @@ class PortfolioService {
   ): Promise<PortfolioData> {
     const portfolio = await this.portfolioModel.findById(portfolioId);
     if (!portfolio || !portfolio.comments) {
-      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
+      const error = new Error("해당하는 멘토나 댓글이 존재하지 않습니다.");
       error.name = "NotFound";
       throw error;
     }
@@ -97,7 +97,7 @@ class PortfolioService {
   ): Promise<PortfolioData> {
     const portfolio = await this.portfolioModel.findById(portfolioId);
     if (!portfolio || !portfolio.comments) {
-      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
+      const error = new Error("해당하는 멘토나 댓글이 존재하지 않습니다.");
       error.name = "NotFound";
       throw error;
     }
@@ -128,7 +128,7 @@ class PortfolioService {
         );
       return portfolios;
     } catch (error) {
-      throw new Error("포트폴리오 목록을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
 
@@ -138,8 +138,78 @@ class PortfolioService {
         await this.portfolioModel.findPortfoliosByCoachingCount(4);
       return portfolios;
     } catch (error) {
-      throw new Error("포트폴리오 목록을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
+  }
+  async addMentoringRequestToPortfolio(
+    portfolioId: string,
+    mentoringRequest: any
+  ): Promise<PortfolioData> {
+    const portfolio = await this.portfolioModel.findById(portfolioId);
+    if (!portfolio) {
+      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+    if (!portfolio.mentoringRequests) {
+      portfolio.mentoringRequests = [];
+    }
+    portfolio.mentoringRequests.push(mentoringRequest);
+    return this.portfolioModel.update(portfolioId, portfolio);
+  }
+
+  async acceptMentoringRequest(
+    portfolioId: string,
+    requestId: Types.ObjectId
+  ): Promise<PortfolioData> {
+    const portfolio = await this.portfolioModel.findById(portfolioId);
+    if (!portfolio || !portfolio.mentoringRequests) {
+      const error = new Error(
+        "해당 포트폴리오나 멘토링 요청이 존재하지 않습니다."
+      );
+      error.name = "NotFound";
+      throw error;
+    }
+
+    const requestIndex = (portfolio.mentoringRequests as any[]).findIndex(
+      (request) => request._id === requestId
+    );
+
+    if (requestIndex === -1) {
+      const error = new Error("해당 멘토링 요청이 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    portfolio.mentoringRequests[requestIndex].status = "accepted";
+    return this.portfolioModel.update(portfolioId, portfolio);
+  }
+
+  async completeMentoringRequest(
+    portfolioId: string,
+    requestId: Types.ObjectId
+  ): Promise<PortfolioData> {
+    const portfolio = await this.portfolioModel.findById(portfolioId);
+    if (!portfolio || !portfolio.mentoringRequests) {
+      const error = new Error(
+        "해당 포트폴리오나 멘토링 요청이 존재하지 않습니다."
+      );
+      error.name = "NotFound";
+      throw error;
+    }
+
+    const requestIndex = (portfolio.mentoringRequests as any[]).findIndex(
+      (request) => request._id === requestId
+    );
+
+    if (requestIndex === -1) {
+      const error = new Error("해당 멘토링 요청이 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    portfolio.mentoringRequests[requestIndex].status = "completed";
+    return this.portfolioModel.update(portfolioId, portfolio);
   }
 }
 

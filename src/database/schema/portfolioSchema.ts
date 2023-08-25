@@ -1,12 +1,22 @@
 import { Schema } from "mongoose";
 
+const MentoringRequestSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  status: {
+    type: String,
+    enum: ["requested", "accepted", "completed"],
+    default: "requested",
+  },
+});
+
 const PortfolioSchema = new Schema(
   {
+    mentoringRequests: [MentoringRequestSchema],
     position: {
-      type: String,
-      required: true,
-    },
-    nickName: {
       type: String,
       required: true,
     },
@@ -16,6 +26,10 @@ const PortfolioSchema = new Schema(
     },
     company: {
       type: String,
+      required: true,
+    },
+    career: {
+      type: Number,
       required: true,
     },
     title: {
@@ -37,6 +51,10 @@ const PortfolioSchema = new Schema(
           type: Schema.Types.ObjectId,
           required: true,
           auto: true,
+        },
+        requestId: {
+          type: Schema.Types.ObjectId,
+          required: true,
         },
         author: {
           type: String,
