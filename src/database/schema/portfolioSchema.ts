@@ -34,7 +34,7 @@ const PortfolioSchema = new Schema(
     },
     profileImageUrl: {
       type: String,
-      required: true,
+      required: false,
       default: "",
     },
     career: {
