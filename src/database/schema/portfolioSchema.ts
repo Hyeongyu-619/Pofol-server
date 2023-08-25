@@ -20,6 +20,10 @@ const PortfolioSchema = new Schema(
       type: String,
       required: true,
     },
+    nickName: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,

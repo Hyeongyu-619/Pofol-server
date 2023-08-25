@@ -12,6 +12,8 @@ export interface PortfolioInfo {
   position: string;
   name: string;
   company: string;
+  nickName: string;
+  coachingCount: number;
   career: number;
   title: string;
   description: string;

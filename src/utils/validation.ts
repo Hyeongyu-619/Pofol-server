@@ -19,9 +19,27 @@ class Validation {
     }
   }
   addPortfolioApplication(portfolioInfo: PortfolioInfo): void {
-    const { name, position, company, title, description } = portfolioInfo;
+    const {
+      name,
+      position,
+      company,
+      title,
+      description,
+      career,
+      nickName,
+      coachingCount,
+    } = portfolioInfo;
 
-    if (!name || !position || !company || !title || !description) {
+    if (
+      !name ||
+      !position ||
+      !company ||
+      !title ||
+      !description ||
+      !career ||
+      !nickName ||
+      !coachingCount
+    ) {
       const error = new Error(
         "포트폴리오 멘토링 신청서에 필요한 정보가 모두 입력되지 않았습니다."
       );
