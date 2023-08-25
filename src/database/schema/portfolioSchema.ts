@@ -32,6 +32,12 @@ const PortfolioSchema = new Schema(
       type: String,
       required: true,
     },
+    profileImageUrl: {
+      type: String,
+      required: true,
+      default:
+        "https://pofol-bucket.s3.ap-northeast-2.amazonaws.com/1692854421756_study.png",
+    },
     career: {
       type: Number,
       required: true,

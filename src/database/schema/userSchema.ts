@@ -13,6 +13,7 @@ const UserSchema = new Schema(
     },
     nickName: {
       type: String,
+      unique: true,
       required: true,
     },
     position: {
@@ -27,7 +28,8 @@ const UserSchema = new Schema(
     profileImage: {
       type: String,
       required: false,
-      default: "",
+      default:
+        "https://pofol-bucket.s3.ap-northeast-2.amazonaws.com/1692854421756_study.png",
     },
     techStack: {
       type: String,
