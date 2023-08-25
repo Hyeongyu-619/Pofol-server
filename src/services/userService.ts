@@ -37,6 +37,14 @@ class UserService {
     return user;
   }
 
+  async getUserPositionById(userId: string): Promise<string> {
+    const user = await this.getUserById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user.position;
+  }
+
   async updateUser(_id: string, update: Partial<UserInfo>): Promise<UserData> {
     const updatedUser = await this.userModel.update(_id, update);
     return updatedUser;

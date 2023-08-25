@@ -35,7 +35,11 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
       );
       return res.json({ success: true, token });
     } else {
-      res.redirect("/signup");
+      res.json({
+        redirect: "/signup",
+        userName: userName,
+        email: email,
+      });
     }
   })(req, res, next);
 });

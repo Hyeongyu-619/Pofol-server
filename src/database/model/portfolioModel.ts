@@ -31,6 +31,16 @@ export class PortfolioModel {
     return portfolios;
   }
 
+  async findPortfoliosByCoachingCountAndPosition(
+    position: string,
+    limit: number
+  ): Promise<PortfolioInfo[]> {
+    return Portfolio.find({ position: position })
+      .sort({ coachingCount: -1, createdAt: -1 })
+      .limit(limit)
+      .lean();
+  }
+
   async findPortfoliosByCoachingCount(limit: number): Promise<PortfolioInfo[]> {
     return Portfolio.find()
       .sort({ coachingCount: -1, createdAt: -1 })

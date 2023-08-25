@@ -4,7 +4,7 @@ import { loginRequired, adminRequired } from "../middlewares";
 
 const apiRouter = Router();
 
-apiRouter.use("/users", userRouter);
+apiRouter.use("/user", userRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/portfolio", portfolioRouter);
 

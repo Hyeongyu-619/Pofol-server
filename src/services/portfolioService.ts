@@ -7,6 +7,7 @@ import {
   CommentInfo,
 } from "../types/portfolio";
 import { validation } from "../utils/validation";
+import { userService } from "./userService";
 
 class PortfolioService {
   portfolioModel: PortfolioModel;
@@ -115,7 +116,23 @@ class PortfolioService {
     return this.portfolioModel.update(portfolioId, portfolio);
   }
 
-  async findTopCoachedPortfolios(): Promise<PortfolioInfo[]> {
+  async findTopMentorPortfoliosByPosition(
+    userId: string
+  ): Promise<PortfolioInfo[]> {
+    try {
+      const userPosition = await userService.getUserPositionById(userId);
+      const portfolios =
+        await this.portfolioModel.findPortfoliosByCoachingCountAndPosition(
+          userPosition,
+          5
+        );
+      return portfolios;
+    } catch (error) {
+      throw new Error("포트폴리오 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
+  async findTopMentorPortfolios(): Promise<PortfolioInfo[]> {
     try {
       const portfolios =
         await this.portfolioModel.findPortfoliosByCoachingCount(4);

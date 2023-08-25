@@ -133,12 +133,40 @@ portfolioRouter.put(
     }
   }
 );
-
 portfolioRouter.get(
-  "/topCoached",
+  "/recommendMentor",
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const portfolios = await portfolioService.findTopCoachedPortfolios();
+      // 여기서 로그인된 사용자의 ID를 서비스 함수에 전달합니다.
+      const portfolios =
+        await portfolioService.findTopMentorPortfoliosByPosition(
+          req.currentUserId
+        );
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// portfolioRouter.get(
+//   "/recentStudyProject",
+//   async (req: any, res: Response, next: NextFunction) => {
+//     try {
+//       const portfolios = await portfolioService.findTopCoachedPortfolios();
+//       res.status(200).json(portfolios);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
+
+portfolioRouter.get(
+  "/topMentor",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const portfolios = await portfolioService.findTopMentorPortfolios();
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);
