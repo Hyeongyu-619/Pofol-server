@@ -189,7 +189,7 @@ portfolioRouter.put(
 );
 
 portfolioRouter.get(
-  "/recommendMentor",
+  "/recommend/recommendMentor",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
