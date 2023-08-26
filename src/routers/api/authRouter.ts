@@ -36,7 +36,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
       if (existingUser) {
         const token = jwt.sign(
           { id: existingUser._id },
-          process.env.JWT_SECRET as string
+          process.env.JWT_SECRET_KEY as string
         );
         res.cookie("token", token, { httpOnly: true });
         return res.redirect("/");
@@ -68,7 +68,7 @@ authRouter.post("/signup", async (req, res, next) => {
 
     const token = jwt.sign(
       { id: newUser._id },
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET_KEY as string
     );
 
     res.cookie("token", token);
