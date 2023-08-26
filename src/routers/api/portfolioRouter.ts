@@ -8,7 +8,6 @@ const portfolioRouter = Router();
 
 portfolioRouter.get(
   "/:portfolioId",
-  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -22,7 +21,6 @@ portfolioRouter.get(
 
 portfolioRouter.get(
   "/",
-  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const portfolios = await portfolioService.findAll();

@@ -27,6 +27,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     req.currentUserId = String(user._id);
     next();
   } catch (error) {
+    console.error(error);
     return res.status(401).json({
       result: "Unauthorized",
       reason: "정상적인 토큰이 아닙니다.",
