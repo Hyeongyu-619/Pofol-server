@@ -24,20 +24,28 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
     if (error) {
       return res.status(500).json({ error });
     }
-    const existingUser = await userService.getUserByEmail(user.emails[0].value);
-    const userName = user.displayName;
-    const email = user.email[0].value;
 
-    if (existingUser) {
-      const token = jwt.sign(
-        { id: existingUser._id },
-        process.env.JWT_SECRET as string
+    try {
+      const existingUser = await userService.getUserByEmail(
+        user.emails[0].value
       );
-      return res.cookie("token", token, { httpOnly: true });
-    } else {
-      res.cookie("userName", userName);
-      res.cookie("email", email);
-      res.redirect("/signup");
+      const userName = user.displayName;
+      const email = user.emails[0].value;
+
+      if (existingUser) {
+        const token = jwt.sign(
+          { id: existingUser._id },
+          process.env.JWT_SECRET as string
+        );
+        res.cookie("token", token, { httpOnly: true });
+        return res.sendStatus(200);
+      } else {
+        res.cookie("userName", userName);
+        res.cookie("email", email);
+        return res.redirect("/signup");
+      }
+    } catch (err) {
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   })(req, res, next);
 });
