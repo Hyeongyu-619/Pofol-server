@@ -16,7 +16,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
     const decoded = jwt.verify(token, secretKey) as any;
 
-    const user = await userService.getUserByEmail(decoded.email);
+    const user = await userService.getUserById(decoded._id);
 
     if (!user) {
       const error = new Error("등록된 회원이 아닙니다.");
