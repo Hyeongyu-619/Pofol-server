@@ -30,7 +30,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
       const existingUser = await userService.getUserByEmail(
         user.emails[0].value
       );
-      const userName = user.displayName;
+      // const userName = user.displayName;
       const email = user.emails[0].value;
 
       if (existingUser) {
@@ -41,7 +41,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
         res.cookie("token", token, { httpOnly: true });
         return res.sendStatus(200);
       } else {
-        res.cookie("userName", userName);
+        // res.cookie("userName", userName);
         res.cookie("email", email);
         return res.redirect("/signup");
       }
@@ -72,7 +72,8 @@ authRouter.post("/signup", async (req, res, next) => {
       process.env.JWT_SECRET as string
     );
 
-    res.json({ success: true, token });
+    res.cookie("token", token);
+    return res.redirect("/");
   } catch (error) {
     next(error);
   }
