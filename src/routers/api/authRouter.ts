@@ -39,7 +39,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
           process.env.JWT_SECRET as string
         );
         res.cookie("token", token, { httpOnly: true });
-        return res.sendStatus(200);
+        return res.redirect("/");
       } else {
         // res.cookie("userName", userName);
         res.cookie("email", email);
