@@ -41,7 +41,6 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
         res.cookie("token", token, { httpOnly: true });
         return res.redirect("/");
       } else {
-        // res.cookie("userName", userName);
         res.cookie("email", email);
         return res.redirect("/signup");
       }

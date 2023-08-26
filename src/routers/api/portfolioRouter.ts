@@ -8,7 +8,7 @@ const portfolioRouter = Router();
 
 portfolioRouter.get(
   "/:portfolioId",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -22,7 +22,7 @@ portfolioRouter.get(
 
 portfolioRouter.get(
   "/",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const portfolios = await portfolioService.findAll();
@@ -35,7 +35,7 @@ portfolioRouter.get(
 
 portfolioRouter.post(
   "/",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const newPortfolio = req.body;
@@ -51,7 +51,7 @@ portfolioRouter.post(
 
 portfolioRouter.put(
   "/:portfolioId",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -69,7 +69,7 @@ portfolioRouter.put(
 
 portfolioRouter.delete(
   "/:portfolioId",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -82,6 +82,7 @@ portfolioRouter.delete(
 );
 portfolioRouter.post(
   "/:portfolioId/comments",
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -100,6 +101,7 @@ portfolioRouter.post(
 // 댓글 삭제
 portfolioRouter.delete(
   "/:portfolioId/comments/:commentId",
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId, commentId } = req.params;
@@ -118,6 +120,7 @@ portfolioRouter.delete(
 // 댓글 수정
 portfolioRouter.put(
   "/:portfolioId/comments/:commentId",
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId, commentId } = req.params;
@@ -135,7 +138,7 @@ portfolioRouter.put(
 );
 portfolioRouter.post(
   "/:portfolioId/mentoringRequests",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -156,7 +159,7 @@ portfolioRouter.post(
 );
 portfolioRouter.put(
   "/:portfolioId/mentoringRequests/:requestId/complete",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId, requestId } = req.params;
@@ -173,7 +176,7 @@ portfolioRouter.put(
 
 portfolioRouter.put(
   "/:portfolioId/mentoringRequests/:requestId/accept",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId, requestId } = req.params;
