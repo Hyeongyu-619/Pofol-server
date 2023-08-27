@@ -72,6 +72,8 @@ class Validation {
       howContactContent,
       process,
       deadline,
+      recruits,
+      classification,
     } = projectStudyInfo;
 
     if (
@@ -83,7 +85,9 @@ class Validation {
       !howContactContent ||
       !nickName ||
       !process ||
-      !deadline
+      !deadline ||
+      !recruits ||
+      !classification
     ) {
       const error = new Error(
         "프로젝트/신청서 게시물에 필요한 정보가 모두 입력되지 않았습니다."

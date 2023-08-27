@@ -43,7 +43,15 @@ const ProjectStudySchema = new Schema(
       type: Date,
       required: true,
     },
-
+    recruits: {
+      type: String,
+      required: true,
+    },
+    classification: {
+      type: String,
+      enum: ["스터디", "프로젝트"],
+      required: true,
+    },
     comments: [
       {
         _id: {
