@@ -36,9 +36,10 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
       if (existingUser) {
         const token = jwt.sign(
           { id: existingUser._id },
-          process.env.JWT_SECRET_KEY as string
+          process.env.JWT_SECRET_KEY as string,
+          { expiresIn: "6h" }
         );
-        res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true, maxAge: 21600000 });
         return res.redirect("/");
       } else {
         res.cookie("email", email);
@@ -68,10 +69,11 @@ authRouter.post("/signup", async (req, res, next) => {
 
     const token = jwt.sign(
       { id: newUser._id },
-      process.env.JWT_SECRET_KEY as string
+      process.env.JWT_SECRET_KEY as string,
+      { expiresIn: "6h" }
     );
 
-    res.cookie("token", token);
+    res.cookie("token", token, { maxAge: 21600000 });
     return res.redirect("/");
   } catch (error) {
     next(error);
