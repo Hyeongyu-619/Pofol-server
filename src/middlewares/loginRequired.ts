@@ -4,6 +4,7 @@ import { userService } from "../services";
 
 async function loginRequired(req: any, res: Response, next: NextFunction) {
   const token = req.cookies.token;
+
   console.log(token);
   if (!token || token === "null") {
     return res.status(401).json({
@@ -13,10 +14,10 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
   }
 
   try {
-    const email = decodeURIComponent(req.cookies.email);
+    const decodedEmail = decodeURIComponent(req.cookies.email);
     // const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
     // const decoded = jwt.verify(token, secretKey) as any;
-    const user = await userService.getUserByEmail(email);
+    const user = await userService.getUserByEmail(decodedEmail);
 
     if (!user) {
       const error = new Error("등록된 회원이 아닙니다.");
