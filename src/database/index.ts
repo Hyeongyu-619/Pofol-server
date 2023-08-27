@@ -1,5 +1,6 @@
 import mongoose, { model } from "mongoose";
 import { PositionSchema, UserSchema, PortfolioSchema } from "./schema";
+import { ProjectStudySchema } from "./schema/projectStudySchema";
 
 const DB_URL =
   process.env.MONGODB_URL ||
@@ -18,3 +19,4 @@ db.on("error", (error: Error) => {
 export const User = model("users", UserSchema);
 export const Portfolio = model("portfolios", PortfolioSchema);
 export const Position = model("position", PositionSchema);
+export const ProjectStudy = model("projectStudy", ProjectStudySchema);

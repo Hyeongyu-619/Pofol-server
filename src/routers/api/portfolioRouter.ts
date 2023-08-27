@@ -96,7 +96,6 @@ portfolioRouter.post(
   }
 );
 
-// 댓글 삭제
 portfolioRouter.delete(
   "/:portfolioId/comments/:commentId",
   loginRequired,
@@ -115,7 +114,6 @@ portfolioRouter.delete(
   }
 );
 
-// 댓글 수정
 portfolioRouter.put(
   "/:portfolioId/comments/:commentId",
   loginRequired,
@@ -194,7 +192,6 @@ portfolioRouter.get(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      // 여기서 로그인된 사용자의 ID를 서비스 함수에 전달합니다.
       const portfolios =
         await portfolioService.findTopMentorPortfoliosByPosition(
           req.currentUserId
@@ -205,18 +202,6 @@ portfolioRouter.get(
     }
   }
 );
-
-// portfolioRouter.get(
-//   "/recentStudyProject",
-//   async (req: any, res: Response, next: NextFunction) => {
-//     try {
-//       const portfolios = await portfolioService.findTopCoachedPortfolios();
-//       res.status(200).json(portfolios);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
 
 portfolioRouter.get(
   "/recommend/topMentor",

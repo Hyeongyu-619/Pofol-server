@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { UserInfo } from "../types/user";
 import { PortfolioInfo } from "../types/portfolio";
+import { ProjectStudyInfo } from "../types/projectStudy";
 
 class Validation {
   addUser(userInfo: UserInfo): void {
@@ -53,21 +54,58 @@ class Validation {
       throw error;
     }
 
-    if (description.length > 500) {
-      const error = new Error("내용을 500자 이하로 입력해주세요.");
+    if (description.length > 1000) {
+      const error = new Error("내용을 1000자 이하로 입력해주세요.");
       error.name = "BadRequest";
       throw error;
     }
   }
 
-  // isLogin(userId: string | undefined): string {
-  //   if (typeof userId === "undefined") {
-  //     const error = new Error("로그인 후 확인 가능합니다.");
-  //     error.name = "Unauthorized";
-  //     throw error;
-  //   }
-  //   return userId;
-  // }
+  addProjectStudyApplication(projectStudyInfo: ProjectStudyInfo): void {
+    const {
+      name,
+      position,
+      company,
+      title,
+      description,
+      nickName,
+      howContactTitle,
+      howContactContent,
+      process,
+      deadline,
+    } = projectStudyInfo;
+
+    if (
+      !name ||
+      !position ||
+      !company ||
+      !title ||
+      !description ||
+      !howContactTitle ||
+      !howContactContent ||
+      !nickName ||
+      !process ||
+      !deadline
+    ) {
+      const error = new Error(
+        "프로젝트/신청서 게시물에 필요한 정보가 모두 입력되지 않았습니다."
+      );
+      error.name = "BadRequest";
+      throw error;
+    }
+
+    if (title.length > 50) {
+      const error = new Error("제목을 50자 이하로 입력해주세요.");
+      error.name = "BadRequest";
+      throw error;
+    }
+
+    if (description.length > 500) {
+      const error = new Error("내용을 1000자 이하로 입력해주세요.");
+      error.name = "BadRequest";
+      throw error;
+    }
+  }
 }
 
 export const validation = new Validation();
