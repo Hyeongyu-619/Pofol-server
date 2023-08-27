@@ -13,10 +13,10 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
   }
 
   try {
-    const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-    const decoded = jwt.verify(token, secretKey) as any;
-    console.log(decoded);
-    const user = await userService.getUserById(decoded._id);
+    const email = decodeURIComponent(req.cookies.email);
+    // const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
+    // const decoded = jwt.verify(token, secretKey) as any;
+    const user = await userService.getUserByEmail(email);
 
     if (!user) {
       const error = new Error("등록된 회원이 아닙니다.");
