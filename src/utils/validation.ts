@@ -65,7 +65,6 @@ class Validation {
     const {
       name,
       position,
-      company,
       title,
       description,
       nickName,
@@ -78,7 +77,6 @@ class Validation {
     if (
       !name ||
       !position ||
-      !company ||
       !title ||
       !description ||
       !howContactTitle ||
