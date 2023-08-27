@@ -16,10 +16,13 @@ const MentoringRequestSchema = new Schema({
 const PortfolioSchema = new Schema(
   {
     mentoringRequests: [MentoringRequestSchema],
-    position: {
-      type: String,
-      required: true,
-    },
+    position: [
+      {
+        type: String,
+        enum: ["백엔드", "프론트엔드", "웹퍼블리셔", "안드로이드", "IOS"],
+        required: true,
+      },
+    ],
     nickName: {
       type: String,
       required: true,
