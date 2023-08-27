@@ -40,7 +40,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
           { expiresIn: "6h" }
         );
         res.cookie("token", token, { httpOnly: true, maxAge: 21600000 });
-        res.cookie("isToken", true);
+        res.cookie("isToken", "true");
         return res.redirect("/");
       } else {
         res.cookie("email", email);
