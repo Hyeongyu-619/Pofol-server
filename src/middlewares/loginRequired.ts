@@ -4,7 +4,7 @@ import { userService } from "../services";
 
 async function loginRequired(req: any, res: Response, next: NextFunction) {
   const token = req.cookies.token;
-
+  console.log(token);
   if (!token || token === "null") {
     return res.status(401).json({
       result: "Unauthorized",
@@ -15,7 +15,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
   try {
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
     const decoded = jwt.verify(token, secretKey) as any;
-
+    console.log(decoded);
     const user = await userService.getUserById(decoded._id);
 
     if (!user) {
