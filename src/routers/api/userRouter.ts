@@ -5,12 +5,11 @@ import { userService } from "../../services";
 const userRouter = Router();
 
 userRouter.get(
-  "/mypage",
+  "/",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
-      const myInfo = await userService.getUserById(userId);
+      const myInfo = req.currentUser;
       res.status(200).json(myInfo);
     } catch (error) {
       next(error);
