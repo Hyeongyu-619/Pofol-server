@@ -81,7 +81,8 @@ authRouter.post("/signup", async (req, res, next) => {
 });
 
 authRouter.get("/logout", function (req, res) {
-  req.logout();
+  res.clearCookie("token");
+  res.redirect("/");
 });
 
 export { authRouter };
