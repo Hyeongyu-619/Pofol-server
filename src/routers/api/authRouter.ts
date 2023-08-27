@@ -80,7 +80,7 @@ authRouter.post("/signup", async (req, res, next) => {
   }
 });
 
-authRouter.get("/logout", function (req, res) {
+authRouter.post("/logout", function (req, res) {
   res.clearCookie("token");
   res.redirect("/");
 });
