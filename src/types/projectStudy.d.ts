@@ -8,6 +8,7 @@ export interface ProjectStudyInfo {
   nickName: string;
   title: string;
   description: string;
+  ownerId: Types.ObjectId;
   howContactTitle: "디스코드" | "오픈채팅" | "기타";
   howContactContent: string;
   process: "온라인" | "오프라인" | "온/오프라인";
@@ -26,6 +27,7 @@ export interface ProjectStudyData extends ProjectStudyInfo {
 export interface CommentInfo {
   author: string;
   content: string;
+  ownerId: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }

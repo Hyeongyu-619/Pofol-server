@@ -9,6 +9,11 @@ const ProjectStudySchema = new Schema(
         required: true,
       },
     ],
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     nickName: {
       type: String,
       required: true,
@@ -70,6 +75,11 @@ const ProjectStudySchema = new Schema(
         content: {
           type: String,
           required: true,
+        },
+        ownerId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
         },
       },
     ],
