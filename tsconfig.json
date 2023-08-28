@@ -1,13 +1,16 @@
 {
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
     "outDir": "./dist",
     "rootDir": ".",
-    "strict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./src/types", "./node_modules/@types"]
-  }
+  },
+  "include": [
+    "src/**/*",
+    "src/swagger.yaml",
+    "src/swagger/auth.yaml",
+    "src/swagger/openapi.yaml",
+    "src/swagger/user.yaml"
+  ]
 }

@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: 포폴 API docs
+  description: 포폴의 API 문서입니다
+  license:
+    name: MIT
+servers:
+  - url: 'http://localhost:8080/'
+paths:
+  /api/auth:
+    get:
+      summary: Get home page with user info
+      responses:
+        '200':
+          description: Successfully returned home page
+  /api/auth/login:
+    get:
+      summary: Get login page
+      responses:
+        '200':
+          description: Successfully returned login page
+  /api/auth/login/naver:
+    get:
+      summary: Authenticate using Naver
+      responses:
+        '302':
+          description: Redirect to Naver for authentication
+  /api/auth/login/signup:
+    get:
+      summary: Handle Naver login callback
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nickName:
+                  type: string
+                position:
+                  type: string
+                role:
+                  type: string
+              required:
+                - nickName
+                - position
+                - role
+      responses:
+        '200':
+          description: Successfully authenticated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+  /api/auth/logout:
+    get:
+      summary: Logout user
+      responses:
+        '200':
+          description: Successfully logged out user
+  /api/user/mypage:
+    get:
+      summary: Fetch the current user's info
+      responses:
+        '200':
+          description: Returns user info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: null
+  /api/user:
+    put:
+      summary: Update the current user's info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: null
+      responses:
+        '200':
+          description: Returns updated user info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: null
+    delete:
+      summary: Delete the current user's info
+      responses:
+        '200':
+          description: Returns deletion result
+  '/api/user/{email}':
+    get:
+      summary: Fetch user info by email
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns user info by email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: null
+  '/api/user/{userId}/profile':
+    get:
+      summary: Fetch user profile by userId
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: null
+components:
+  responses:
+    successResponse:
+      description: successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: null
