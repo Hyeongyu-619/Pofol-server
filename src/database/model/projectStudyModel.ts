@@ -32,7 +32,8 @@ export class ProjectStudyModel {
 
   async findAll(): Promise<ProjectStudyInfo[]> {
     const projectStudys: ProjectStudyInfo[] = await projectStudyModel
-      .find({})
+      .find()
+      .sort({ createdAt: -1 })
       .lean<ProjectStudyInfo[]>();
     return projectStudys;
   }

@@ -31,8 +31,8 @@ export class PortfolioModel {
   }
 
   async findAll(): Promise<PortfolioInfo[]> {
-    const portfolios: PortfolioInfo[] = await portfolioModel
-      .find({})
+    const portfolios: PortfolioInfo[] = await Portfolio.find()
+      .sort({ createdAt: -1 })
       .lean<PortfolioInfo[]>();
     return portfolios;
   }
