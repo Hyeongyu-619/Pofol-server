@@ -1,8 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { loginRequired } from "../../middlewares";
+import { loginRequired, ownershipRequired } from "../../middlewares";
 import { projectStudyService } from "../../services";
 import { CommentInfo } from "../../types/projectStudy";
 import { Types } from "mongoose";
+import isCommentOwner from "../../middlewares/isCommentOwner";
 
 const projectStudyRouter = Router();
 
@@ -51,6 +52,7 @@ projectStudyRouter.post(
 projectStudyRouter.put(
   "/:projectStudyId",
   loginRequired,
+  ownershipRequired("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId } = req.params;
@@ -69,6 +71,7 @@ projectStudyRouter.put(
 projectStudyRouter.delete(
   "/:projectStudyId",
   loginRequired,
+  ownershipRequired("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId } = req.params;
@@ -104,6 +107,7 @@ projectStudyRouter.post(
 projectStudyRouter.delete(
   "/:projectStudyId/comments/:commentId",
   loginRequired,
+  isCommentOwner("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId, commentId } = req.params;
@@ -122,6 +126,7 @@ projectStudyRouter.delete(
 projectStudyRouter.put(
   "/:projectStudyId/comments/:commentId",
   loginRequired,
+  isCommentOwner("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId, commentId } = req.params;

@@ -1,8 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { loginRequired } from "../../middlewares";
+import { loginRequired, ownershipRequired } from "../../middlewares";
 import { portfolioService } from "../../services";
 import { CommentInfo } from "../../types/portfolio";
 import { Types } from "mongoose";
+import isCommentOwner from "../../middlewares/isCommentOwner";
 
 const portfolioRouter = Router();
 
@@ -50,6 +51,7 @@ portfolioRouter.post(
 portfolioRouter.put(
   "/:portfolioId",
   loginRequired,
+  ownershipRequired("portfolio"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -68,6 +70,7 @@ portfolioRouter.put(
 portfolioRouter.delete(
   "/:portfolioId",
   loginRequired,
+  ownershipRequired("portfolio"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -99,6 +102,7 @@ portfolioRouter.post(
 portfolioRouter.delete(
   "/:portfolioId/comments/:commentId",
   loginRequired,
+  isCommentOwner("portfolio"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId, commentId } = req.params;
@@ -117,6 +121,7 @@ portfolioRouter.delete(
 portfolioRouter.put(
   "/:portfolioId/comments/:commentId",
   loginRequired,
+  isCommentOwner("portfolio"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId, commentId } = req.params;

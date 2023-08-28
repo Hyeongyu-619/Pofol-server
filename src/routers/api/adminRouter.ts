@@ -1,6 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { adminRequired, loginRequired } from "../../middlewares";
-import { portfolioService, userService } from "../../services";
+import {
+  portfolioService,
+  projectStudyService,
+  userService,
+} from "../../services";
 import { CommentInfo } from "../../types/portfolio";
 import { Types } from "mongoose";
 
@@ -21,22 +25,6 @@ adminRouter.get(
   }
 );
 
-adminRouter.put(
-  "/user",
-  loginRequired,
-  adminRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const userId = req.currentUserId;
-      const update = req.body;
-      const updatedUser = await userService.updateUser(userId, update);
-
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 adminRouter.get(
   "/user/:email",
   loginRequired,
@@ -101,25 +89,6 @@ adminRouter.get(
   }
 );
 
-adminRouter.put(
-  "/portfolio/:portfolioId",
-  loginRequired,
-  adminRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const { portfolioId } = req.params;
-      const updatedData = req.body;
-      const updatedPortfolio = await portfolioService.updatePortfolio(
-        portfolioId,
-        updatedData
-      );
-      res.status(200).json(updatedPortfolio);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 adminRouter.delete(
   "/portfolio/:portfolioId",
   loginRequired,
@@ -129,6 +98,71 @@ adminRouter.delete(
       const { portfolioId } = req.params;
       const deleteResult = await portfolioService.deletePortfolio(portfolioId);
       res.status(200).json(deleteResult);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+adminRouter.delete(
+  "/:portfolioId/comments/:commentId",
+  loginRequired,
+  adminRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { portfolioId, commentId } = req.params;
+      const updatedPortfolio =
+        await portfolioService.deleteCommentFromPortfolio(
+          portfolioId,
+          new Types.ObjectId(commentId)
+        );
+      res.status(200).json(updatedPortfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+adminRouter.get("/", async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const projectStudys = await projectStudyService.findAll();
+    res.status(200).json(projectStudys);
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.delete(
+  "/:projectStudyId",
+  loginRequired,
+  adminRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { projectStudyId } = req.params;
+      const deleteResult = await projectStudyService.deleteProjectStudy(
+        projectStudyId
+      );
+      res.status(200).json(deleteResult);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+adminRouter.put(
+  "/:projectStudyId/comments/:commentId",
+  loginRequired,
+  adminRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { projectStudyId, commentId } = req.params;
+      const updatedComment: CommentInfo = req.body;
+      const updatedprojectStudy =
+        await projectStudyService.updateCommentInProjectStudy(
+          projectStudyId,
+          new Types.ObjectId(commentId),
+          updatedComment
+        );
+      res.status(200).json(updatedprojectStudy);
     } catch (error) {
       next(error);
     }
