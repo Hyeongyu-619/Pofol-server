@@ -2,8 +2,8 @@ import { NextFunction, Response } from "express";
 import { projectStudyService } from "../services/projectStudyService";
 import { portfolioService } from "../services/portfolioService";
 
-export const ownershipCheck = (type: "projectStudy" | "portfolio") => {
-  return async (req: any, res: Response, next: NextFunction) => {
+const ownershipRequired = (type: "projectStudy" | "portfolio") => {
+  return async (req: any, res: Response, next: NextFunction): Promise<void> => {
     try {
       const itemId =
         type === "projectStudy"
@@ -19,13 +19,15 @@ export const ownershipCheck = (type: "projectStudy" | "portfolio") => {
       }
 
       if (!item) {
-        return res.status(404).send({ message: `${type} not found` });
+        res.status(404).send({ message: `${type} not found` });
+        return;
       }
 
       if (item.ownerId.toString() !== userId) {
-        return res.status(403).send({
+        res.status(403).send({
           message: `You do not have permission to modify this ${type}`,
         });
+        return;
       }
 
       next();
@@ -34,3 +36,5 @@ export const ownershipCheck = (type: "projectStudy" | "portfolio") => {
     }
   };
 };
+
+export { ownershipRequired };
