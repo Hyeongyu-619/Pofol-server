@@ -37,10 +37,7 @@ portfolioRouter.post(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const newPortfolio = {
-        ...req.body,
-        ownerId: req.currentUserId,
-      };
+      const newPortfolio = req.body;
       const createdPortfolio = await portfolioService.addPortfolioApplication(
         newPortfolio
       );
