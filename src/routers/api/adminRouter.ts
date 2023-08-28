@@ -13,6 +13,7 @@ adminRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const allUsers = await userService.findAll();
+      console.log(allUsers);
       res.status(200).json(allUsers);
     } catch (error) {
       next(error);
