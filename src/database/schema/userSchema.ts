@@ -18,7 +18,6 @@ const UserSchema = new Schema(
     },
     position: {
       type: String,
-      enum: ["백엔드", "프론트엔드", "웹퍼블리셔", "안드로이드", "IOS"],
       required: true,
     },
     role: {

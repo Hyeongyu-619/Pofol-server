@@ -3,11 +3,14 @@ import { Types } from "mongoose";
 export interface MentoringRequest {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
+  career: number;
+  authenticationImageUrl: string;
   status: "requested" | "accepted" | "completed";
 }
 
 export interface PortfolioInfo {
   _id?: Types.ObjectId;
+  ownerId: string;
   mentoringRequests: MentoringRequest[];
   position: string;
   name: string;
@@ -29,6 +32,7 @@ export interface PortfolioData extends PortfolioInfo {
 export interface CommentInfo {
   author: string;
   content: string;
+  ownerId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

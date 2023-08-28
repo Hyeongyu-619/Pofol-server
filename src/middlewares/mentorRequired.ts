@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { userService } from "../services/userService";
 
 async function mentorRequired(req: any, res: Response, next: NextFunction) {
-  // req.currentUser 는 loginRequired 미들웨어에서 설정해준 값입니다.
   const currentUser = req.currentUser;
 
   if (!currentUser) {

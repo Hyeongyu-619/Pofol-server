@@ -11,15 +11,27 @@ const MentoringRequestSchema = new Schema({
     enum: ["requested", "accepted", "completed"],
     default: "requested",
   },
+  career: {
+    type: Number,
+    required: true,
+  },
+  authenticationImageUrl: {
+    type: String,
+    required: true,
+  },
 });
 
 const PortfolioSchema = new Schema(
   {
     mentoringRequests: [MentoringRequestSchema],
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     position: [
       {
         type: String,
-        enum: ["백엔드", "프론트엔드", "웹퍼블리셔", "안드로이드", "IOS"],
         required: true,
       },
     ],
@@ -38,7 +50,8 @@ const PortfolioSchema = new Schema(
     profileImageUrl: {
       type: String,
       required: false,
-      default: "",
+      default:
+        "https://cdn.discordapp.com/attachments/1115922422894440469/1145666135879073882/profileImage.png",
     },
     career: {
       type: Number,
@@ -75,6 +88,11 @@ const PortfolioSchema = new Schema(
         content: {
           type: String,
           required: true,
+        },
+        ownerId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
         },
         // createdAt: {
         //   type: Date,

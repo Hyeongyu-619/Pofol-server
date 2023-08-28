@@ -7,7 +7,7 @@ import { Types } from "mongoose";
 const adminRouter = Router();
 
 adminRouter.get(
-  "/user/all",
+  "/user",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
@@ -15,19 +15,6 @@ adminRouter.get(
       const allUsers = await userService.findAll();
       console.log(allUsers);
       res.status(200).json(allUsers);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-adminRouter.get(
-  "/user",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const myInfo = req.currentUser;
-      res.status(200).json(myInfo);
     } catch (error) {
       next(error);
     }
