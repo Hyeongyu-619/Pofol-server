@@ -84,6 +84,7 @@ class Validation {
       process,
       deadline,
       recruits,
+      recruitsStatus,
       classification,
     } = projectStudyInfo;
 
@@ -98,6 +99,7 @@ class Validation {
       !process ||
       !deadline ||
       !recruits ||
+      !recruitsStatus ||
       !classification
     ) {
       const error = new Error(

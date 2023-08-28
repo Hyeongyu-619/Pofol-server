@@ -52,6 +52,11 @@ const ProjectStudySchema = new Schema(
       type: String,
       required: true,
     },
+    recruitsStatus: {
+      type: String,
+      enum: ["모집중", "모집마감"],
+      required: true,
+    },
     classification: {
       type: String,
       enum: ["스터디", "프로젝트"],

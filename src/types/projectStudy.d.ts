@@ -13,6 +13,7 @@ export interface ProjectStudyInfo {
   howContactContent: string;
   process: "온라인" | "오프라인" | "온/오프라인";
   recruits: string;
+  recruitsStatus: "모집중" | "모집마감";
   classification: "스터디" | "프로젝트";
   deadline: Date;
   comments?: CommentInfo[];
