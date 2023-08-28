@@ -18,6 +18,17 @@ class Validation {
       error.name = "BadRequest";
       throw error;
     }
+    const nickNamePattern = /^[가-힣a-zA-Z0-9]+$/;
+    if (!nickNamePattern.test(nickName)) {
+      const error = new Error("닉네임은 한글, 숫자, 영어만 입력 가능합니다.");
+      error.name = "BadRequest";
+      throw error;
+    }
+    if (nickName.length > 10) {
+      const error = new Error("닉네임을 10자 이하로 입력해주세요.");
+      error.name = "BadRequest";
+      throw error;
+    }
   }
   addPortfolioApplication(portfolioInfo: PortfolioInfo): void {
     const {

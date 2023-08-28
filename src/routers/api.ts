@@ -4,6 +4,7 @@ import {
   authRouter,
   portfolioRouter,
   projectStudyRouter,
+  adminRouter,
 } from "./api/index";
 import { loginRequired, adminRequired } from "../middlewares";
 
@@ -13,5 +14,6 @@ apiRouter.use("/user", userRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/portfolio", portfolioRouter);
 apiRouter.use("/projectStudy", projectStudyRouter);
+apiRouter.use("/admin", adminRouter);
 
 export { apiRouter };

@@ -25,6 +25,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     }
 
     req.currentUser = user;
+
     next();
   } catch (error) {
     console.error(error);

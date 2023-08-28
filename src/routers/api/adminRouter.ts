@@ -7,7 +7,21 @@ import { Types } from "mongoose";
 const adminRouter = Router();
 
 adminRouter.get(
-  "/",
+  "/user/all",
+  loginRequired,
+  adminRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const allUsers = await userService.findAll();
+      res.status(200).json(allUsers);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+adminRouter.get(
+  "/user",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
@@ -20,7 +34,7 @@ adminRouter.get(
 );
 
 adminRouter.put(
-  "/",
+  "/user",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
@@ -36,7 +50,7 @@ adminRouter.put(
   }
 );
 adminRouter.get(
-  "/:email",
+  "/user/:email",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
@@ -51,7 +65,7 @@ adminRouter.get(
   }
 );
 adminRouter.delete(
-  "/",
+  "/user",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
@@ -67,7 +81,7 @@ adminRouter.delete(
 );
 
 adminRouter.get(
-  "/:portfolioId",
+  "/portfolio/:portfolioId",
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
@@ -79,17 +93,21 @@ adminRouter.get(
   }
 );
 
-adminRouter.get("/", async (req: any, res: Response, next: NextFunction) => {
-  try {
-    const portfolios = await portfolioService.findAll();
-    res.status(200).json(portfolios);
-  } catch (error) {
-    next(error);
+adminRouter.get(
+  "/portfolio",
+  adminRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const portfolios = await portfolioService.findAll();
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 adminRouter.put(
-  "/:portfolioId",
+  "/portfolio/:portfolioId",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
@@ -108,7 +126,7 @@ adminRouter.put(
 );
 
 adminRouter.delete(
-  "/:portfolioId",
+  "/portfolio/:portfolioId",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
@@ -121,3 +139,5 @@ adminRouter.delete(
     }
   }
 );
+
+export { adminRouter };
