@@ -53,13 +53,20 @@ adminRouter.get(
   }
 );
 adminRouter.delete(
-  "/user",
+  "/user/:userId",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
-      const deleteResult = await userService.deleteUser(userId);
+      const userIdToDelete = req.params.userId;
+
+      if (userIdToDelete === req.currentUserId) {
+        return res
+          .status(400)
+          .send("You cannot delete your own account via this route.");
+      }
+
+      const deleteResult = await userService.deleteUser(userIdToDelete);
 
       res.status(200).json(deleteResult);
     } catch (error) {
