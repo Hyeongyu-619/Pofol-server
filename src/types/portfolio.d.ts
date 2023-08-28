@@ -5,7 +5,7 @@ export interface MentoringRequest {
   userId: Types.ObjectId;
   career: number;
   authenticationImageUrl: string;
-  status: "requested" | "accepted" | "completed";
+  status: "requested" | "accepted" | "completed" | "rejected";
 }
 
 export interface PortfolioInfo {

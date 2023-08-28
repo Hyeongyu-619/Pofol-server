@@ -8,7 +8,7 @@ const MentoringRequestSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["requested", "accepted", "completed"],
+    enum: ["requested", "accepted", "completed", "rejected"],
     default: "requested",
   },
   career: {
