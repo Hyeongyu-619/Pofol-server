@@ -5,7 +5,7 @@ import { adminRequired, loginRequired } from "../../middlewares";
 const positionRouter = Router();
 
 positionRouter.post(
-  "/add",
+  "/",
   loginRequired,
   adminRequired,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +31,7 @@ positionRouter.get(
 );
 
 positionRouter.put(
-  "/update/:id",
+  "/:id",
   loginRequired,
   adminRequired,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -48,7 +48,7 @@ positionRouter.put(
 );
 
 positionRouter.delete(
-  "/delete/:id",
+  "/:id",
   loginRequired,
   adminRequired,
   async (req: Request, res: Response, next: NextFunction) => {
