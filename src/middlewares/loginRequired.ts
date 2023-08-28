@@ -5,7 +5,6 @@ import { userService } from "../services";
 async function loginRequired(req: any, res: Response, next: NextFunction) {
   const token = req.cookies.token;
 
-  console.log(token);
   if (!token || token === "null") {
     return res.status(401).json({
       result: "Unauthorized",
