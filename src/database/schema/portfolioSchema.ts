@@ -11,8 +11,20 @@ const MentoringRequestSchema = new Schema({
     enum: ["requested", "accepted", "completed", "rejected"],
     default: "requested",
   },
-  career: {
-    type: Number,
+  email: {
+    type: String,
+    required: true,
+  },
+  portfolioAddress: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String,
     required: true,
   },
 });

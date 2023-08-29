@@ -3,8 +3,11 @@ import { Types } from "mongoose";
 export interface MentoringRequest {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
-  career: number;
   status: "requested" | "accepted" | "completed" | "rejected";
+  email: string;
+  portfolioAddress: string;
+  title: string;
+  content: string;
 }
 
 export interface PortfolioInfo {
