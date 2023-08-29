@@ -38,6 +38,41 @@ export class ProjectStudyModel {
     return projectStudys;
   }
 
+  async findByCategoryAndPosition(query: {
+    [key: string]: string;
+  }): Promise<ProjectStudyInfo[]> {
+    try {
+      const portfolios = await ProjectStudy.find(query)
+        .sort({ createdAt: -1 })
+        .lean<ProjectStudyInfo[]>();
+      return portfolios;
+    } catch (error) {
+      throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
+  // async findByCategory(category: string): Promise<ProjectStudyInfo[]> {
+  //   try {
+  //     const portfolios = await ProjectStudy.find({ category: category })
+  //       .sort({ createdAt: -1 })
+  //       .lean<ProjectStudyInfo[]>();
+  //     return portfolios;
+  //   } catch (error) {
+  //     throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+  //   }
+  // }
+
+  // async findByPosition(position: string): Promise<ProjectStudyInfo[]> {
+  //   try {
+  //     const portfolios = await ProjectStudy.find({ position: position })
+  //       .sort({ createdAt: -1 })
+  //       .lean<ProjectStudyInfo[]>();
+  //     return portfolios;
+  //   } catch (error) {
+  //     throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+  //   }
+  // }
+
   async findProjectStudiesByCreatedAt(
     limit: number
   ): Promise<ProjectStudyInfo[]> {

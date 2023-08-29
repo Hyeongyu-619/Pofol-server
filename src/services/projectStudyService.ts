@@ -63,6 +63,24 @@ class ProjectStudyService {
       );
     }
   }
+  async findByCategoryAndPosition(
+    category: string,
+    position: string
+  ): Promise<ProjectStudyInfo[]> {
+    try {
+      const query: { [key: string]: string } = {};
+      if (category) query["category"] = category;
+      if (position) query["position"] = position;
+
+      const portfolios = await this.projectStudyModel.findByCategoryAndPosition(
+        query
+      );
+      return portfolios;
+    } catch (error) {
+      throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
   async addCommentToProjectStudy(
     projectStudyId: string,
     comment: CommentInfo

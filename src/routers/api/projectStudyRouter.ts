@@ -22,12 +22,35 @@ projectStudyRouter.get(
   }
 );
 
+// projectStudyRouter.get(
+//   "/",
+//   async (req: any, res: Response, next: NextFunction) => {
+//     try {
+//       const projectStudys = await projectStudyService.findAll();
+//       res.status(200).json(projectStudys);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
+
 projectStudyRouter.get(
   "/",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const projectStudys = await projectStudyService.findAll();
-      res.status(200).json(projectStudys);
+      const { category, position } = req.query;
+      let portfolios;
+
+      if (category || position) {
+        portfolios = await projectStudyService.findByCategoryAndPosition(
+          category,
+          position
+        );
+      } else {
+        portfolios = await projectStudyService.findAll();
+      }
+
+      res.status(200).json(portfolios);
     } catch (error) {
       next(error);
     }
