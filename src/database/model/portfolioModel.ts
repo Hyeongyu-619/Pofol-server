@@ -30,6 +30,17 @@ export class PortfolioModel {
     return portfolio;
   }
 
+  async findByPosition(position: string): Promise<PortfolioInfo[]> {
+    try {
+      const portfolios = await Portfolio.find({ position: position })
+        .sort({ createdAt: -1 })
+        .lean<PortfolioInfo[]>();
+      return portfolios;
+    } catch (error) {
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
   async findAll(): Promise<PortfolioInfo[]> {
     const portfolios: PortfolioInfo[] = await Portfolio.find()
       .sort({ createdAt: -1 })
