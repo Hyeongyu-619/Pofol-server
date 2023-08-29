@@ -78,7 +78,6 @@ adminRouter.get(
 
 adminRouter.get(
   "/portfolio",
-  adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const portfolios = await portfolioService.findAll();

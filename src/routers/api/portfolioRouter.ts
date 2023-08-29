@@ -158,39 +158,39 @@ portfolioRouter.post(
     }
   }
 );
-portfolioRouter.put(
-  "/:portfolioId/mentoringRequests/:requestId/complete",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const { portfolioId, requestId } = req.params;
-      const updatedPortfolio = await portfolioService.completeMentoringRequest(
-        portfolioId,
-        new Types.ObjectId(requestId)
-      );
-      res.status(200).json(updatedPortfolio);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+// portfolioRouter.put(
+//   "/:portfolioId/mentoringRequests/:requestId/complete",
+//   loginRequired,
+//   async (req: any, res: Response, next: NextFunction) => {
+//     try {
+//       const { portfolioId, requestId } = req.params;
+//       const updatedPortfolio = await portfolioService.completeMentoringRequest(
+//         portfolioId,
+//         new Types.ObjectId(requestId)
+//       );
+//       res.status(200).json(updatedPortfolio);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
 
-portfolioRouter.put(
-  "/:portfolioId/mentoringRequests/:requestId/accept",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const { portfolioId, requestId } = req.params;
-      const updatedPortfolio = await portfolioService.acceptMentoringRequest(
-        portfolioId,
-        new Types.ObjectId(requestId)
-      );
-      res.status(200).json(updatedPortfolio);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+// portfolioRouter.put(
+//   "/:portfolioId/mentoringRequests/:requestId/accept",
+//   loginRequired,
+//   async (req: any, res: Response, next: NextFunction) => {
+//     try {
+//       const { portfolioId, requestId } = req.params;
+//       const updatedPortfolio = await portfolioService.acceptMentoringRequest(
+//         portfolioId,
+//         new Types.ObjectId(requestId)
+//       );
+//       res.status(200).json(updatedPortfolio);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
 
 portfolioRouter.get(
   "/recommend/recommendMentor",

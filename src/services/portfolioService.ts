@@ -159,59 +159,31 @@ class PortfolioService {
     return this.portfolioModel.update(portfolioId, portfolio);
   }
 
-  async acceptMentoringRequest(
-    portfolioId: string,
-    requestId: Types.ObjectId
-  ): Promise<PortfolioData> {
-    const portfolio = await this.portfolioModel.findById(portfolioId);
-    if (!portfolio || !portfolio.mentoringRequests) {
-      const error = new Error(
-        "해당 포트폴리오나 멘토링 요청이 존재하지 않습니다."
-      );
-      error.name = "NotFound";
-      throw error;
-    }
+  // async updateMentoringRequestStatus(
+  //   portfolioId: string,
+  //   requestId: Types.ObjectId,
+  //   status: "accepted" | "completed" // 추가로 필요한 status를 여기에 추가하세요
+  // ): Promise<PortfolioData> {
+  //   const portfolio = await this.portfolioModel.findById(portfolioId);
+  //   if (!portfolio || !portfolio.mentoringRequests) {
+  //     const error = new Error("해당 포트폴리오나 멘토링 요청이 존재하지 않습니다.");
+  //     error.name = "NotFound";
+  //     throw error;
+  //   }
 
-    const requestIndex = (portfolio.mentoringRequests as any[]).findIndex(
-      (request) => request._id === requestId
-    );
+  //   const requestIndex = (portfolio.mentoringRequests as any[]).findIndex(
+  //     (request) => request._id === requestId
+  //   );
 
-    if (requestIndex === -1) {
-      const error = new Error("해당 멘토링 요청이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
+  //   if (requestIndex === -1) {
+  //     const error = new Error("해당 멘토링 요청이 존재하지 않습니다.");
+  //     error.name = "NotFound";
+  //     throw error;
+  //   }
 
-    portfolio.mentoringRequests[requestIndex].status = "accepted";
-    return this.portfolioModel.update(portfolioId, portfolio);
-  }
-
-  async completeMentoringRequest(
-    portfolioId: string,
-    requestId: Types.ObjectId
-  ): Promise<PortfolioData> {
-    const portfolio = await this.portfolioModel.findById(portfolioId);
-    if (!portfolio || !portfolio.mentoringRequests) {
-      const error = new Error(
-        "해당 포트폴리오나 멘토링 요청이 존재하지 않습니다."
-      );
-      error.name = "NotFound";
-      throw error;
-    }
-
-    const requestIndex = (portfolio.mentoringRequests as any[]).findIndex(
-      (request) => request._id === requestId
-    );
-
-    if (requestIndex === -1) {
-      const error = new Error("해당 멘토링 요청이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    portfolio.mentoringRequests[requestIndex].status = "completed";
-    return this.portfolioModel.update(portfolioId, portfolio);
-  }
+  //   portfolio.mentoringRequests[requestIndex].status = status;
+  //   return this.portfolioModel.update(portfolioId, portfolio);
+  // }
 }
 
 const portfolioModelInstance = new PortfolioModel();

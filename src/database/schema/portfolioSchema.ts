@@ -50,8 +50,6 @@ const PortfolioSchema = new Schema(
     profileImageUrl: {
       type: String,
       required: false,
-      default:
-        "https://cdn.discordapp.com/attachments/1115922422894440469/1145666135879073882/profileImage.png",
     },
     career: {
       type: Number,

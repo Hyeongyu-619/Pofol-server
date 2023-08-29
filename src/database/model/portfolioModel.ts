@@ -174,7 +174,7 @@ export class PortfolioModel {
   async changeMentoringRequestStatus(
     _id: string,
     requestId: Types.ObjectId,
-    status: "requested" | "accepted" | "completed"
+    status: "requested" | "accepted" | "completed" | "rejected"
   ): Promise<PortfolioData> {
     const portfolio = await Portfolio.findById(_id);
     if (!portfolio || !portfolio.mentoringRequests) {
