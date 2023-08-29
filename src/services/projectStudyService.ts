@@ -126,7 +126,7 @@ class ProjectStudyService {
   async findLatestProjectStudies(): Promise<ProjectStudyInfo[]> {
     try {
       const projectStudies =
-        await this.projectStudyModel.findProjectStudiesByCreatedAt(4);
+        await this.projectStudyModel.findProjectStudiesByCreatedAt(8);
       return projectStudies;
     } catch (error) {
       throw new Error("게시물 목록을 조회하는 중에 오류가 발생했습니다.");
