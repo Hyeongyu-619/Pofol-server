@@ -68,7 +68,7 @@ userRouter.delete(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
+      const userId = req.currentUser._id;
       const deleteResult = await userService.deleteUser(userId);
 
       res.status(200).json(deleteResult);
