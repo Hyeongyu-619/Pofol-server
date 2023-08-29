@@ -199,7 +199,7 @@ portfolioRouter.get(
     try {
       const portfolios =
         await portfolioService.findTopMentorPortfoliosByPosition(
-          req.currentUserId
+          req.currentUser._id
         );
       res.status(200).json({ portfolios, name: req.currentUser.name });
     } catch (error) {
