@@ -22,7 +22,7 @@ userRouter.put(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
+      const userId = req.currentUser._id;
       const update = req.body;
       const updatedUser = await userService.updateUser(userId, update);
 
