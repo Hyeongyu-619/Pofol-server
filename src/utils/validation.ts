@@ -116,7 +116,7 @@ class Validation {
       throw error;
     }
 
-    if (description.length > 500) {
+    if (description.length > 1000) {
       const error = new Error("내용을 1000자 이하로 입력해주세요.");
       error.name = "BadRequest";
       throw error;
