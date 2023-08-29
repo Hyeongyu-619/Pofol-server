@@ -39,7 +39,7 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/myPage",
+  "/mypage",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {

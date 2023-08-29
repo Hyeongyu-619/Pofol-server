@@ -58,7 +58,7 @@ projectStudyRouter.get(
 );
 
 projectStudyRouter.get(
-  "/myPage",
+  "/mypage",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
@@ -183,7 +183,7 @@ projectStudyRouter.put(
 );
 
 projectStudyRouter.get(
-  "/recommend/latestProjectStudy",
+  "/recommend/latestprojectstudy",
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const projectStudies =
