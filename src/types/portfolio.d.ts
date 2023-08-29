@@ -4,7 +4,6 @@ export interface MentoringRequest {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   career: number;
-  authenticationImageUrl: string;
   status: "requested" | "accepted" | "completed" | "rejected";
 }
 
