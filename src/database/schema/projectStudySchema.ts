@@ -62,6 +62,10 @@ const ProjectStudySchema = new Schema(
       enum: ["스터디", "프로젝트"],
       required: true,
     },
+    profileImageUrl: {
+      type: String,
+      required: true,
+    },
     comments: [
       {
         _id: {
