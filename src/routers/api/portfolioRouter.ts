@@ -201,7 +201,7 @@ portfolioRouter.get(
         await portfolioService.findTopMentorPortfoliosByPosition(
           req.currentUser._id
         );
-      res.status(200).json({ portfolios, name: req.currentUser.name });
+      res.status(200).json({ portfolios, nickName: req.currentUser.nickName });
     } catch (error) {
       next(error);
     }
