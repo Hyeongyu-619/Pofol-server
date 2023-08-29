@@ -50,7 +50,8 @@ class Validation {
       !description ||
       !career ||
       !nickName ||
-      !coachingCount
+      coachingCount === null ||
+      coachingCount === undefined
     ) {
       const error = new Error(
         "포트폴리오 멘토링 신청서에 필요한 정보가 모두 입력되지 않았습니다."
