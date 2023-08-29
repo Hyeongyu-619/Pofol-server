@@ -1,6 +1,10 @@
 import mongoose, { model } from "mongoose";
-import { PositionSchema, UserSchema, PortfolioSchema } from "./schema";
-import { ProjectStudySchema } from "./schema/projectStudySchema";
+import {
+  PositionSchema,
+  UserSchema,
+  PortfolioSchema,
+  ProjectStudySchema,
+} from "./schema";
 
 const DB_URL =
   process.env.MONGODB_URL ||

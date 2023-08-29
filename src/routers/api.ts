@@ -7,7 +7,6 @@ import {
   adminRouter,
   positionRouter,
 } from "./api/index";
-import { loginRequired, adminRequired } from "../middlewares";
 
 const apiRouter = Router();
 
