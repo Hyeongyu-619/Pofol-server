@@ -38,6 +38,23 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.get(
+  "/myPage",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ownerId = req.currentUser._id;
+
+      const query = { ownerId };
+
+      const portfolios = await portfolioService.findByQuery(query);
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 portfolioRouter.post(
   "/",
   loginRequired,

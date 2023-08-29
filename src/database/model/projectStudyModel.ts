@@ -38,6 +38,13 @@ export class ProjectStudyModel {
     return projectStudys;
   }
 
+  async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
+    const portfolios: ProjectStudyInfo[] = await ProjectStudy.find({ ownerId })
+      .sort({ createdAt: -1 })
+      .lean<ProjectStudyInfo[]>();
+    return portfolios;
+  }
+
   async findByCategoryAndPosition(query: {
     [key: string]: string;
   }): Promise<ProjectStudyInfo[]> {

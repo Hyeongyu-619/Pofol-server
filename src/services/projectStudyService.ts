@@ -63,6 +63,16 @@ class ProjectStudyService {
       );
     }
   }
+
+  async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
+    try {
+      const portfolios = await this.projectStudyModel.findByOwnerId(ownerId);
+      return portfolios;
+    } catch (error) {
+      throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
   async findByCategoryAndPosition(
     category: string,
     position: string

@@ -55,6 +55,7 @@ class PortfolioService {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
   async findByPosition(position: string): Promise<PortfolioInfo[]> {
     try {
       const portfolios = await this.portfolioModel.findByPosition(position);
@@ -63,6 +64,16 @@ class PortfolioService {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
+  async findByQuery(query: any): Promise<PortfolioInfo[]> {
+    try {
+      const portfolios = await this.portfolioModel.findByQuery(query);
+      return portfolios;
+    } catch (error) {
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
   async addCommentToPortfolio(
     portfolioId: string,
     comment: CommentInfo

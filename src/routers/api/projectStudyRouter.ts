@@ -57,6 +57,21 @@ projectStudyRouter.get(
   }
 );
 
+projectStudyRouter.get(
+  "/myPage",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ownerId = req.currentUser._id;
+      const portfolios = await projectStudyService.findByOwnerId(ownerId);
+
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 projectStudyRouter.post(
   "/",
   loginRequired,

@@ -48,6 +48,17 @@ export class PortfolioModel {
     return portfolios;
   }
 
+  async findByQuery(query: any): Promise<PortfolioInfo[]> {
+    try {
+      const portfolios = await Portfolio.find(query)
+        .sort({ createdAt: -1 })
+        .lean<PortfolioInfo[]>();
+      return portfolios;
+    } catch (error) {
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
   async findPortfoliosByCoachingCountAndPosition(
     position: string,
     limit: number
