@@ -9,7 +9,7 @@ const ownershipRequired = (type: "projectStudy" | "portfolio") => {
         type === "projectStudy"
           ? req.params.projectStudyId
           : req.params.portfolioId;
-      const userId = req.currentUserId;
+      const userId = req.currentUser.id.toString();
       let item;
 
       if (type === "projectStudy") {
