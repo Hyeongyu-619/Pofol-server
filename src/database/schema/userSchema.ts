@@ -27,7 +27,7 @@ const UserSchema = new Schema(
     },
     profileImageUrl: {
       type: String,
-      required: false,
+      required: true,
       default:
         "https://cdn.discordapp.com/attachments/1115922422894440469/1145666135879073882/profileImage.png",
     },
