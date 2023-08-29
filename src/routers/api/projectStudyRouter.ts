@@ -38,12 +38,12 @@ projectStudyRouter.get(
   "/",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const { category, position } = req.query;
+      const { classification, position } = req.query;
       let portfolios;
 
-      if (category || position) {
-        portfolios = await projectStudyService.findByCategoryAndPosition(
-          category,
+      if (classification || position) {
+        portfolios = await projectStudyService.findByClassificationAndPosition(
+          classification,
           position
         );
       } else {

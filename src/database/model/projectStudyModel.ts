@@ -45,7 +45,7 @@ export class ProjectStudyModel {
     return portfolios;
   }
 
-  async findByCategoryAndPosition(query: {
+  async findByClassificationAndPosition(query: {
     [key: string]: string;
   }): Promise<ProjectStudyInfo[]> {
     try {
