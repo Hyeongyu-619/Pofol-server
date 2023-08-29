@@ -25,10 +25,11 @@ const UserSchema = new Schema(
       required: true,
       default: "user",
     },
-    profileImage: {
+    profileImageUrl: {
       type: String,
       required: false,
-      default: "",
+      default:
+        "https://cdn.discordapp.com/attachments/1115922422894440469/1145666135879073882/profileImage.png",
     },
     techStack: {
       type: String,
