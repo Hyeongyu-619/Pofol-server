@@ -39,6 +39,15 @@ const UserSchema = new Schema(
       required: true,
       default: 0,
     },
+    career: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    company: {
+      type: String,
+      requried: false,
+    },
   },
   {
     collection: "users",
