@@ -15,10 +15,6 @@ const MentoringRequestSchema = new Schema({
     type: Number,
     required: true,
   },
-  authenticationImageUrl: {
-    type: String,
-    required: true,
-  },
 });
 
 const PortfolioSchema = new Schema(
