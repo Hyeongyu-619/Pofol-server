@@ -24,7 +24,13 @@ portfolioRouter.get(
   "/",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const portfolios = await portfolioService.findAll();
+      const category = req.query.category;
+      let portfolios;
+      if (category) {
+        portfolios = await portfolioService.findByPosition(category);
+      } else {
+        portfolios = await portfolioService.findAll();
+      }
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);
