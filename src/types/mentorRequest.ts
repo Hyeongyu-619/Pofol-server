@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 
 export interface MentorRequestInfo {
+  userId: Types.ObjectId;
+  status: "requested" | "accepted" | "rejected";
   name: string;
   nickName: string;
   career: number;

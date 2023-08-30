@@ -10,8 +10,9 @@ mentorRequestRouter.post(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const currentUser = req.currentUser;
-      const { career, company, authenticationImageUrl } = req.body;
+      const { career, company, authenticationImageUrl, status } = req.body;
       const { name, nickName, position, email } = currentUser;
+      const userId = currentUser._id;
 
       const newMentorRequest = await mentorRequestService.addMentorRequest({
         name,
@@ -21,6 +22,8 @@ mentorRequestRouter.post(
         company,
         position,
         authenticationImageUrl,
+        userId,
+        status,
       });
 
       res.status(201).json(newMentorRequest);
@@ -34,13 +37,24 @@ mentorRequestRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const MentorRequests = await mentorRequestService.findAllMentorRequests();
-      res.status(200).json(MentorRequests);
+      const status = req.query.status as string;
+
+      let mentorRequests;
+      if (status) {
+        mentorRequests = await mentorRequestService.findMentorRequestsByStatus(
+          status
+        );
+      } else {
+        mentorRequests = await mentorRequestService.findAllMentorRequests();
+      }
+
+      res.status(200).json(mentorRequests);
     } catch (error) {
       next(error);
     }
   }
 );
+
 mentorRequestRouter.get(
   "/:mentorRequestid",
   async (req: Request, res: Response, next: NextFunction) => {

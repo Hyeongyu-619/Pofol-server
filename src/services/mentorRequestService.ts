@@ -48,6 +48,12 @@ class MentorRequestService {
     const user = await this.mentorRequestModel.findById(_id);
     return user;
   }
+
+  async findMentorRequestsByStatus(
+    status: string
+  ): Promise<MentorRequestData[]> {
+    return await this.mentorRequestModel.findMentorRequestsByStatus(status);
+  }
 }
 
 const mentorRequestModelInstance = new MentorRequestModel();
