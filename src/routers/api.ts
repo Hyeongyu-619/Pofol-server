@@ -6,6 +6,7 @@ import {
   projectStudyRouter,
   adminRouter,
   positionRouter,
+  mentorRequestRouter,
 } from "./api/index";
 
 const apiRouter = Router();
@@ -16,5 +17,6 @@ apiRouter.use("/portfolio", portfolioRouter);
 apiRouter.use("/projectStudy", projectStudyRouter);
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/position", positionRouter);
+apiRouter.use("/mentorRequest", mentorRequestRouter);
 
 export { apiRouter };

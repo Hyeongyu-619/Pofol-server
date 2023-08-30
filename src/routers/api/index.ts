@@ -4,3 +4,4 @@ export * from "./portfolioRouter";
 export * from "./projectStudyRouter";
 export * from "./adminRouter";
 export * from "./positionRouter";
+export * from "./mentorRequestRouter";

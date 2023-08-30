@@ -2,16 +2,26 @@ import { Router, Request, Response, NextFunction } from "express";
 import { mentorRequestService } from "../../services";
 import { adminRequired, loginRequired } from "../../middlewares";
 
-const MentorRequestRouter = Router();
+const mentorRequestRouter = Router();
 
-MentorRequestRouter.post(
+mentorRequestRouter.post(
   "/",
   loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: any, res: Response, next: NextFunction) => {
     try {
-      const newMentorRequest = await mentorRequestService.addMentorRequest(
-        req.body
-      );
+      const currentUser = req.currentUser;
+      const { career, company, authenticationImageUrl } = req.body;
+      const { name, nickName, position } = currentUser;
+
+      const newMentorRequest = await mentorRequestService.addMentorRequest({
+        name,
+        nickName,
+        career,
+        company,
+        position,
+        authenticationImageUrl,
+      });
+
       res.status(201).json(newMentorRequest);
     } catch (error) {
       next(error);
@@ -19,7 +29,7 @@ MentorRequestRouter.post(
   }
 );
 
-MentorRequestRouter.get(
+mentorRequestRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -30,7 +40,7 @@ MentorRequestRouter.get(
     }
   }
 );
-MentorRequestRouter.get(
+mentorRequestRouter.get(
   "/:mentorRequestid",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -45,7 +55,7 @@ MentorRequestRouter.get(
   }
 );
 
-MentorRequestRouter.put(
+mentorRequestRouter.put(
   "/:id",
   loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -59,7 +69,7 @@ MentorRequestRouter.put(
   }
 );
 
-MentorRequestRouter.delete(
+mentorRequestRouter.delete(
   "/:id",
   loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -73,4 +83,4 @@ MentorRequestRouter.delete(
   }
 );
 
-export { MentorRequestRouter };
+export { mentorRequestRouter };
