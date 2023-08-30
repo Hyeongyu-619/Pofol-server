@@ -40,6 +40,24 @@ adminRouter.get(
     }
   }
 );
+
+adminRouter.put(
+  "/user/:userId/role",
+  loginRequired,
+  adminRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { userId } = req.params;
+      const { role } = req.body;
+
+      const updatedUser = await userService.updateUserRole(userId, role);
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 adminRouter.delete(
   "/user/:userId",
   loginRequired,

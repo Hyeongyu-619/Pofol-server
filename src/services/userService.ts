@@ -50,6 +50,11 @@ class UserService {
     return updatedUser;
   }
 
+  async updateUserRole(_id: string, newRole: string): Promise<UserData> {
+    const updatedUser = await this.userModel.update(_id, { role: newRole });
+    return updatedUser;
+  }
+
   async deleteUser(_id: string): Promise<UserData | null> {
     const deletedUser = await this.userModel.deleteUser(_id);
     return deletedUser;
