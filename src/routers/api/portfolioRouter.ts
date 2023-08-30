@@ -8,6 +8,23 @@ import isCommentOwner from "../../middlewares/isCommentOwner";
 const portfolioRouter = Router();
 
 portfolioRouter.get(
+  "/mypage",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ownerId = req.currentUser._id;
+
+      const query = { ownerId };
+
+      const portfolios = await portfolioService.findByQuery(query);
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+portfolioRouter.get(
   "/:portfolioId",
   async (req: any, res: Response, next: NextFunction) => {
     try {
@@ -31,23 +48,6 @@ portfolioRouter.get(
       } else {
         portfolios = await portfolioService.findAll();
       }
-      res.status(200).json(portfolios);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-portfolioRouter.get(
-  "/mypage",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const ownerId = req.currentUser._id;
-
-      const query = { ownerId };
-
-      const portfolios = await portfolioService.findByQuery(query);
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);

@@ -8,6 +8,21 @@ import isCommentOwner from "../../middlewares/isCommentOwner";
 const projectStudyRouter = Router();
 
 projectStudyRouter.get(
+  "/mypage",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ownerId = req.currentUser._id;
+      const portfolios = await projectStudyService.findByOwnerId(ownerId);
+
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+projectStudyRouter.get(
   "/:projectStudyId",
   async (req: any, res: Response, next: NextFunction) => {
     try {
@@ -21,18 +36,6 @@ projectStudyRouter.get(
     }
   }
 );
-
-// projectStudyRouter.get(
-//   "/",
-//   async (req: any, res: Response, next: NextFunction) => {
-//     try {
-//       const projectStudys = await projectStudyService.findAll();
-//       res.status(200).json(projectStudys);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
 
 projectStudyRouter.get(
   "/",
@@ -49,21 +52,6 @@ projectStudyRouter.get(
       } else {
         portfolios = await projectStudyService.findAll();
       }
-
-      res.status(200).json(portfolios);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-projectStudyRouter.get(
-  "/mypage",
-  loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const ownerId = req.currentUser._id;
-      const portfolios = await projectStudyService.findByOwnerId(ownerId);
 
       res.status(200).json(portfolios);
     } catch (error) {
