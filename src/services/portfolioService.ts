@@ -50,9 +50,9 @@ class PortfolioService {
 
     const filteredRequests = portfolio.mentoringRequests.filter(
       (request: MentoringRequestInfo) => {
-        console.log("request.userId:", request._id);
+        console.log("request.userId:", request.userId);
 
-        return request._id && request._id.toString() === userId;
+        return request;
       }
     );
 
