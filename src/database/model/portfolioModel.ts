@@ -121,7 +121,6 @@ export class PortfolioModel {
 
     portfolio.comments.push({
       _id: new Types.ObjectId(),
-      requestId: new Types.ObjectId(),
       ...comment,
     });
 
