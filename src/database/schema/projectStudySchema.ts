@@ -72,10 +72,6 @@ const ProjectStudySchema = new Schema(
           required: true,
           auto: true,
         },
-        requestId: {
-          type: Schema.Types.ObjectId,
-          required: true,
-        },
         author: {
           type: String,
           required: true,

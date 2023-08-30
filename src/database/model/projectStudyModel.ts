@@ -131,7 +131,6 @@ export class ProjectStudyModel {
 
     projectStudy.comments.push({
       _id: new Types.ObjectId(),
-      requestId: new Types.ObjectId(),
       ...comment,
     });
 
