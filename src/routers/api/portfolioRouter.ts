@@ -191,10 +191,13 @@ portfolioRouter.post(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
+      const userId = req.currentUser._id;
+      const mentoringRequest = { ...req.body, userId };
+
       const updatedPortfolio =
         await portfolioService.addMentoringRequestToPortfolio(
           portfolioId,
-          req.body
+          mentoringRequest
         );
       res.status(201).json(updatedPortfolio);
     } catch (error) {
