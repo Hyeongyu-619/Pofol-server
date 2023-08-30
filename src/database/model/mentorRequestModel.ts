@@ -13,6 +13,18 @@ export class MentorRequestModel {
     return createdMentorRequest.toObject();
   }
 
+  async findById(_id: string): Promise<MentorRequestData> {
+    const mentorRequest = await MentorRequest.findById({ _id }).lean();
+    if (!mentorRequest) {
+      const error = new Error(
+        "해당하는 id의 멘토 전환 신청서가 존재하지 않습니다."
+      );
+      error.name = "NotFound!";
+      throw error;
+    }
+    return mentorRequest;
+  }
+
   async findAll(): Promise<MentorRequestInfo[]> {
     const mentorRequests = await MentorRequest.find({}).lean();
     return mentorRequests;

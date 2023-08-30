@@ -43,6 +43,11 @@ class MentorRequestService {
       throw new Error("포지션 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
+  async getMentorRequestById(_id: string): Promise<MentorRequestData> {
+    const user = await this.mentorRequestModel.findById(_id);
+    return user;
+  }
 }
 
 const mentorRequestModelInstance = new MentorRequestModel();

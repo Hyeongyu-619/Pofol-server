@@ -30,6 +30,20 @@ MentorRequestRouter.get(
     }
   }
 );
+MentorRequestRouter.get(
+  "/:mentorRequestid",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { mentorRequestId } = req.params;
+      const mentorRequest = await mentorRequestService.getMentorRequestById(
+        mentorRequestId
+      );
+      res.status(200).json(mentorRequest);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 MentorRequestRouter.put(
   "/:id",
