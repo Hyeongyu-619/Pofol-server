@@ -128,7 +128,7 @@ class PortfolioService {
     }
 
     portfolio.comments = (portfolio.comments as CommentData[]).filter(
-      (comment) => comment._id !== commentId
+      (comment) => comment._id.toString() !== commentId.toString()
     );
 
     return this.portfolioModel.update(portfolioId, portfolio);
@@ -147,7 +147,7 @@ class PortfolioService {
     }
 
     const commentIndex = (portfolio.comments as CommentData[]).findIndex(
-      (comment) => comment._id === commentId
+      (comment) => comment._id.toString() === commentId.toString()
     );
 
     if (commentIndex === -1) {

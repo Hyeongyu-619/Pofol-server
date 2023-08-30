@@ -119,7 +119,7 @@ class ProjectStudyService {
     }
 
     projectStudy.comments = (projectStudy.comments as CommentData[]).filter(
-      (comment) => comment._id !== commentId
+      (comment) => comment._id.toString() !== commentId.toString()
     );
 
     return this.projectStudyModel.update(projectStudyId, projectStudy);
