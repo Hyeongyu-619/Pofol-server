@@ -7,7 +7,9 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).currentUser._id;
-      const { resourceId, commentId } = req.params;
+      console.log(req.params);
+      const { projectStudyId, portfolioId, commentId } = req.params;
+      const resourceId = projectStudyId || portfolioId;
       console.log("resourceId:", resourceId, "commentId:", commentId);
 
       let resource;
