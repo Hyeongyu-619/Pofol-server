@@ -29,8 +29,8 @@ export interface CommentInfo {
   author: string;
   content: string;
   ownerId: Types.ObjectId;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CommentData extends CommentInfo {

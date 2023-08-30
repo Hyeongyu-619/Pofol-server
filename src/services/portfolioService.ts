@@ -5,6 +5,7 @@ import {
   PortfolioData,
   CommentData,
   CommentInfo,
+  MentoringRequestData,
 } from "../types/portfolio";
 import { validation } from "../utils/validation";
 import { userService } from "./userService";
@@ -32,6 +33,10 @@ class PortfolioService {
       throw error;
     }
     return portfolio;
+  }
+
+  async getMentoringRequestsById(_id: string): Promise<MentoringRequestData[]> {
+    return await this.portfolioModel.findMentoringRequestsById(_id);
   }
 
   async updatePortfolio(

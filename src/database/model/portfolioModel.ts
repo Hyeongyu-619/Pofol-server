@@ -5,6 +5,8 @@ import {
   PortfolioData,
   CommentData,
   CommentInfo,
+  MentoringRequestInfo,
+  MentoringRequestData,
 } from "../../types/portfolio";
 import { PortfolioSchema } from "../schema/portfolioSchema";
 
@@ -28,6 +30,29 @@ export class PortfolioModel {
       throw error;
     }
     return portfolio;
+  }
+
+  async findMentoringRequestsById(
+    _id: string
+  ): Promise<MentoringRequestData[]> {
+    try {
+      const portfolio = await Portfolio.findById(_id)
+        .select("mentoringRequests")
+        .lean();
+
+      if (!portfolio) {
+        const error = new Error(
+          "해당하는 id의 포트폴리오가 존재하지 않습니다."
+        );
+        error.name = "NotFound!";
+        throw error;
+      }
+
+      return portfolio.mentoringRequests;
+    } catch (error) {
+      console.error(error);
+      throw new Error("멘토링 요청을 불러오는 데 실패했습니다.");
+    }
   }
 
   async findByPosition(position: string): Promise<PortfolioInfo[]> {

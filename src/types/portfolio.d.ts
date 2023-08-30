@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-export interface MentoringRequest {
+export interface MentoringRequestInfo {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   status: "requested" | "accepted" | "completed" | "rejected";
@@ -10,10 +10,14 @@ export interface MentoringRequest {
   content: string;
 }
 
+export interface MentoringRequestData extends MentoringRequestInfo {
+  _id?: Types.ObjectId;
+}
+
 export interface PortfolioInfo {
   _id?: Types.ObjectId;
   ownerId: Types.ObjectId;
-  mentoringRequests: MentoringRequest[];
+  mentoringRequests: MentoringRequestInfo[];
   position: string;
   name: string;
   company: string;
@@ -35,8 +39,8 @@ export interface CommentInfo {
   author: string;
   content: string;
   ownerId: Types.ObjectId;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CommentData extends CommentInfo {
