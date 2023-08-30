@@ -20,6 +20,7 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
       } else {
         return res.status(400).json({ error: "잘못된 리소스 타입입니다." });
       }
+      console.log("resource:" + resource);
 
       if (!resource) {
         return res
@@ -30,6 +31,7 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
       const comment = resource.comments?.find((cmt) =>
         (cmt.ownerId as any).equals(userId)
       );
+      console.log(comment);
 
       if (!comment) {
         return res
