@@ -77,6 +77,12 @@ portfolioRouter.put(
   ownershipRequired("portfolio"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
+      if (req.body.mentoringRequests) {
+        return res
+          .status(400)
+          .json({ message: "mentoringRequests cannot be modified directly." });
+      }
+
       const { portfolioId } = req.params;
       const updatedData = req.body;
       const updatedPortfolio = await portfolioService.updatePortfolio(
