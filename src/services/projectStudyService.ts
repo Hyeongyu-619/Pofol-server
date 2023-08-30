@@ -138,7 +138,7 @@ class ProjectStudyService {
     }
 
     const commentIndex = (projectStudy.comments as CommentData[]).findIndex(
-      (comment) => comment._id === commentId
+      (comment) => comment._id.toString() === commentId.toString()
     );
 
     if (commentIndex === -1) {

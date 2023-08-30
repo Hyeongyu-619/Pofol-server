@@ -7,10 +7,8 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).currentUser._id;
-      console.log(req.params);
       const { projectStudyId, portfolioId, commentId } = req.params;
       const resourceId = projectStudyId || portfolioId;
-      console.log("resourceId:", resourceId, "commentId:", commentId);
 
       let resource;
       if (resourceType === "projectStudy") {
@@ -20,7 +18,6 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
       } else {
         return res.status(400).json({ error: "잘못된 리소스 타입입니다." });
       }
-      console.log("resource:" + resource);
 
       if (!resource) {
         return res
@@ -31,7 +28,6 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
       const comment = resource.comments?.find((cmt) =>
         (cmt.ownerId as any).equals(userId)
       );
-      console.log(comment);
 
       if (!comment) {
         return res
@@ -47,7 +43,6 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
 
       next();
     } catch (error) {
-      console.log("Error:", error);
       res.status(500).json({ error: "서버 에러" });
     }
   };
