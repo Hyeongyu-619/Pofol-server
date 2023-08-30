@@ -4,6 +4,7 @@ import {
   UserSchema,
   PortfolioSchema,
   ProjectStudySchema,
+  mentorRequestSchema,
 } from "./schema";
 
 const DB_URL =
@@ -24,3 +25,4 @@ export const User = model("users", UserSchema);
 export const Portfolio = model("portfolios", PortfolioSchema);
 export const Position = model("position", PositionSchema);
 export const ProjectStudy = model("projectStudy", ProjectStudySchema);
+export const MentorRequest = model("mentoRequest", mentorRequestSchema);
