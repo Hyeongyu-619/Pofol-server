@@ -6,6 +6,7 @@ import {
   CommentData,
   CommentInfo,
   MentoringRequestData,
+  MentoringRequestInfo,
 } from "../types/portfolio";
 import { validation } from "../utils/validation";
 import { userService } from "./userService";
@@ -38,7 +39,7 @@ class PortfolioService {
   async getMentoringRequestsByOwnerAndUser(
     ownerId: string,
     userId: string
-  ): Promise<MentoringRequestData[]> {
+  ): Promise<MentoringRequestInfo[]> {
     const portfolio = await this.portfolioModel.findByOwnerId(ownerId);
 
     if (!portfolio) {
@@ -48,8 +49,7 @@ class PortfolioService {
     }
 
     const filteredRequests = portfolio.mentoringRequests.filter(
-      (request: { userId: { toString: () => string } }) =>
-        request.userId.toString() === userId
+      (request: MentoringRequestInfo) => request.userId.toString() === userId
     );
 
     return filteredRequests;

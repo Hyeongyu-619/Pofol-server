@@ -24,7 +24,7 @@ portfolioRouter.get(
   }
 );
 portfolioRouter.get(
-  "/mentoringRequests",
+  "/user/mentoringRequests",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
