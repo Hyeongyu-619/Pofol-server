@@ -59,6 +59,12 @@ export class MentorRequestModel {
     }
     return deletedMentorRequest;
   }
+
+  async findMentorRequestsByStatus(
+    status: string
+  ): Promise<MentorRequestData[]> {
+    return await MentorRequest.find({ status }).lean();
+  }
 }
 
 const MentorRequest = model<MentorRequestInfo & Document>(
