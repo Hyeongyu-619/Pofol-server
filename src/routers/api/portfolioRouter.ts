@@ -23,6 +23,21 @@ portfolioRouter.get(
     }
   }
 );
+portfolioRouter.get(
+  "/mentoring-requests/:portfolioId",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { portfolioId } = req.params;
+      const mentoringRequests = await portfolioService.getMentoringRequestsById(
+        portfolioId
+      );
+      res.status(200).json(mentoringRequests);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 portfolioRouter.get(
   "/:portfolioId",
