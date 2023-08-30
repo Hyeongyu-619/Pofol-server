@@ -35,8 +35,24 @@ class PortfolioService {
     return portfolio;
   }
 
-  async getMentoringRequestsById(_id: string): Promise<MentoringRequestData[]> {
-    return await this.portfolioModel.findMentoringRequestsById(_id);
+  async getMentoringRequestsByOwnerAndUser(
+    ownerId: string,
+    userId: string
+  ): Promise<MentoringRequestData[]> {
+    const portfolio = await this.portfolioModel.findByOwnerId(ownerId);
+
+    if (!portfolio) {
+      const error = new Error("해당 ownerId의 포트폴리오가 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    const filteredRequests = portfolio.mentoringRequests.filter(
+      (request: { userId: { toString: () => string } }) =>
+        request.userId.toString() === userId
+    );
+
+    return filteredRequests;
   }
 
   async updatePortfolio(

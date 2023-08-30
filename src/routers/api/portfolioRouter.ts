@@ -24,14 +24,19 @@ portfolioRouter.get(
   }
 );
 portfolioRouter.get(
-  "/mentoring-requests/:portfolioId",
+  "/MentoringRequests",
   loginRequired,
-  async (req: any, res: Response, next: NextFunction) => {
+  ownershipRequired("portfolio"),
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { portfolioId } = req.params;
-      const mentoringRequests = await portfolioService.getMentoringRequestsById(
-        portfolioId
-      );
+      const ownerId = req.query.ownerId as string;
+      const userId = req.query.userId as string;
+
+      const mentoringRequests =
+        await portfolioService.getMentoringRequestsByOwnerAndUser(
+          ownerId,
+          userId
+        );
       res.status(200).json(mentoringRequests);
     } catch (error) {
       next(error);
