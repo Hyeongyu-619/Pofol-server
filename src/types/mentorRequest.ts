@@ -6,6 +6,7 @@ export interface MentorRequestInfo {
   career: number;
   company: string;
   position: string;
+  email: string;
   authenticationImageUrl: string;
   _id?: Types.ObjectId;
 }

@@ -11,10 +11,11 @@ mentorRequestRouter.post(
     try {
       const currentUser = req.currentUser;
       const { career, company, authenticationImageUrl } = req.body;
-      const { name, nickName, position } = currentUser;
+      const { name, nickName, position, email } = currentUser;
 
       const newMentorRequest = await mentorRequestService.addMentorRequest({
         name,
+        email,
         nickName,
         career,
         company,
