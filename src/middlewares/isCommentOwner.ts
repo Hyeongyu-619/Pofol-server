@@ -8,6 +8,7 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
     try {
       const userId = (req as any).currentUser._id;
       const { resourceId, commentId } = req.params;
+      console.log("resourceId:", resourceId, "commentId:", commentId);
 
       let resource;
       if (resourceType === "projectStudy") {
