@@ -29,11 +29,13 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUser._id;
+      const status = req.query.status as string;
 
       const mentoringRequests =
         await portfolioService.getMentoringRequestsByOwnerAndUser(
           userId,
-          userId
+          userId,
+          status
         );
 
       res.status(200).json(mentoringRequests);
@@ -49,9 +51,13 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUser._id;
+      const status = req.query.status as string;
+
       const myMentoringRequests = await portfolioService.getMyMentoringRequests(
-        userId
+        userId,
+        status
       );
+
       res.status(200).json(myMentoringRequests);
     } catch (error) {
       next(error);
@@ -234,39 +240,6 @@ portfolioRouter.post(
     }
   }
 );
-// portfolioRouter.put(
-//   "/:portfolioId/mentoringRequests/:requestId/complete",
-//   loginRequired,
-//   async (req: any, res: Response, next: NextFunction) => {
-//     try {
-//       const { portfolioId, requestId } = req.params;
-//       const updatedPortfolio = await portfolioService.completeMentoringRequest(
-//         portfolioId,
-//         new Types.ObjectId(requestId)
-//       );
-//       res.status(200).json(updatedPortfolio);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
-
-// portfolioRouter.put(
-//   "/:portfolioId/mentoringRequests/:requestId/accept",
-//   loginRequired,
-//   async (req: any, res: Response, next: NextFunction) => {
-//     try {
-//       const { portfolioId, requestId } = req.params;
-//       const updatedPortfolio = await portfolioService.acceptMentoringRequest(
-//         portfolioId,
-//         new Types.ObjectId(requestId)
-//       );
-//       res.status(200).json(updatedPortfolio);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
 
 portfolioRouter.get(
   "/recommend/recommendMentor",

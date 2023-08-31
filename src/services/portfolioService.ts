@@ -38,7 +38,8 @@ class PortfolioService {
 
   async getMentoringRequestsByOwnerAndUser(
     ownerId: string,
-    userId: string
+    userId: string,
+    status?: string
   ): Promise<MentoringRequestInfo[]> {
     const portfolio = await this.portfolioModel.findByOwnerId(ownerId);
 
@@ -48,25 +49,36 @@ class PortfolioService {
       throw error;
     }
 
-    const filteredRequests = portfolio.mentoringRequests.filter(
-      (request: MentoringRequestInfo) => {
-        return request;
-      }
-    );
+    let filteredRequests: MentoringRequestInfo[] = portfolio.mentoringRequests;
+
+    if (status) {
+      filteredRequests = portfolio.mentoringRequests.filter(
+        (request: MentoringRequestInfo) => {
+          return request.status === status;
+        }
+      );
+    }
 
     return filteredRequests;
   }
-
-  async getMyMentoringRequests(userId: string): Promise<any[]> {
+  async getMyMentoringRequests(
+    userId: string,
+    status?: string
+  ): Promise<any[]> {
     const portfolios = await this.portfolioModel.findAll();
-
     const myMentoringRequests: any[] = [];
 
     portfolios.forEach((portfolio) => {
-      const userRequests = portfolio.mentoringRequests.filter(
+      let userRequests = portfolio.mentoringRequests.filter(
         (request: MentoringRequestInfo) =>
           request.userId.toString() === userId.toString()
       );
+
+      if (status) {
+        userRequests = userRequests.filter(
+          (request: MentoringRequestInfo) => request.status === status
+        );
+      }
 
       const userRequestsWithPortfolioId = userRequests.map((request) => {
         return {
