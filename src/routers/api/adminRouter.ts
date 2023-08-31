@@ -19,9 +19,14 @@ adminRouter.get(
       const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
-      const allUsers = await userService.findAllWithPagination(skip, limit);
+      const [allUsers, totalCount] =
+        await userService.findAllWithPaginationAndCount(skip, limit);
 
-      res.status(200).json(allUsers);
+      res.status(200).json({
+        users: allUsers,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+      });
     } catch (error) {
       next(error);
     }
