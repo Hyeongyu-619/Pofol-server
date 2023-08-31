@@ -93,6 +93,7 @@ class ProjectStudyService {
       throw error;
     }
   }
+
   async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
     try {
       const portfolios = await this.projectStudyModel.findByOwnerId(ownerId);

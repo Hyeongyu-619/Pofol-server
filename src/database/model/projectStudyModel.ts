@@ -61,9 +61,7 @@ export class ProjectStudyModel {
     try {
       const projectStudy: ProjectStudyData | null = await ProjectStudy.findById(
         id
-      )
-        .slice("comments", [skip, skip + limit])
-        .lean();
+      ).lean();
 
       if (!projectStudy) {
         const error = new Error(
@@ -72,10 +70,13 @@ export class ProjectStudyModel {
         error.name = "NotFound!";
         throw error;
       }
-
       const total = projectStudy.comments ? projectStudy.comments.length : 0;
 
-      return [projectStudy.comments || [], total];
+      const slicedComments = projectStudy.comments
+        ? projectStudy.comments.slice(skip, skip + limit)
+        : [];
+
+      return [slicedComments, total];
     } catch (error) {
       throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
     }
