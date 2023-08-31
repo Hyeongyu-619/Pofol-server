@@ -266,8 +266,7 @@ class PortfolioService {
   async updateMentoringRequest(
     portfolioId: string,
     requestId: Types.ObjectId,
-    status: "requested" | "accepted" | "completed" | "rejected",
-    message: string
+    status: "requested" | "accepted" | "completed" | "rejected"
   ): Promise<PortfolioData> {
     return await this.portfolioModel.updateMentoringRequestStatus(
       portfolioId,

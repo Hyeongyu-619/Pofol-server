@@ -94,14 +94,13 @@ portfolioRouter.post(
   async (req, res) => {
     try {
       const portfolioId = req.params.portfolioId;
-      const mentoringRequestId = new Types.ObjectId(req.params.requestId); // 'new'를 추가
+      const mentoringRequestId = new Types.ObjectId(req.params.requestId);
       const { status, message } = req.body;
 
       const updatedPortfolio = await portfolioService.updateMentoringRequest(
         portfolioId,
         mentoringRequestId,
-        status,
-        message
+        status
       );
 
       res.status(200).json({
