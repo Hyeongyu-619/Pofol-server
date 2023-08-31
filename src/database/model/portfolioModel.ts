@@ -97,6 +97,22 @@ export class PortfolioModel {
     skip: number
   ): Promise<[CommentInfo[], number]> {
     try {
+      const portfolioForTotal: PortfolioData | null = await Portfolio.findById(
+        id
+      ).lean();
+
+      if (!portfolioForTotal) {
+        const error = new Error(
+          "해당하는 id의 포트폴리오가 존재하지 않습니다."
+        );
+        error.name = "NotFound!";
+        throw error;
+      }
+
+      const total = portfolioForTotal.comments
+        ? portfolioForTotal.comments.length
+        : 0;
+
       const portfolio: PortfolioData | null = await Portfolio.findById(id)
         .slice("comments", [skip, skip + limit])
         .lean();
@@ -108,8 +124,6 @@ export class PortfolioModel {
         error.name = "NotFound!";
         throw error;
       }
-
-      const total = portfolio.comments ? portfolio.comments.length : 0;
 
       return [portfolio.comments || [], total];
     } catch (error) {
