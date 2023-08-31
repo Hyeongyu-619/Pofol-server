@@ -7,6 +7,7 @@ import {
   CommentInfo,
 } from "../types/projectStudy";
 import { validation } from "../utils/validation";
+import { userService } from "./userService";
 
 class ProjectStudyService {
   projectStudyModel: ProjectStudyModel;
@@ -157,6 +158,22 @@ class ProjectStudyService {
       return projectStudies;
     } catch (error) {
       throw new Error("게시물 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+  async findTopMentorProjectStudiesByPosition(
+    userId: string
+  ): Promise<ProjectStudyInfo[]> {
+    try {
+      const userPosition = await userService.getUserPositionById(userId);
+      const projectStudies =
+        await this.projectStudyModel.findProjectStudiesByLatestAndPosition(
+          userPosition,
+          8
+        );
+      return projectStudies;
+    } catch (error) {
+      console.error(error);
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
 }

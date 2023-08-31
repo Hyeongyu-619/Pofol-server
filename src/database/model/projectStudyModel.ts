@@ -57,28 +57,15 @@ export class ProjectStudyModel {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
     }
   }
-
-  // async findByCategory(category: string): Promise<ProjectStudyInfo[]> {
-  //   try {
-  //     const portfolios = await ProjectStudy.find({ category: category })
-  //       .sort({ createdAt: -1 })
-  //       .lean<ProjectStudyInfo[]>();
-  //     return portfolios;
-  //   } catch (error) {
-  //     throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
-  //   }
-  // }
-
-  // async findByPosition(position: string): Promise<ProjectStudyInfo[]> {
-  //   try {
-  //     const portfolios = await ProjectStudy.find({ position: position })
-  //       .sort({ createdAt: -1 })
-  //       .lean<ProjectStudyInfo[]>();
-  //     return portfolios;
-  //   } catch (error) {
-  //     throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
-  //   }
-  // }
+  async findProjectStudiesByLatestAndPosition(
+    position: string,
+    limit: number
+  ): Promise<ProjectStudyInfo[]> {
+    return ProjectStudy.find({ position: position })
+      .sort({ coachingCount: -1, createdAt: -1 })
+      .limit(limit)
+      .lean();
+  }
 
   async findProjectStudiesByCreatedAt(
     limit: number

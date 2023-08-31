@@ -183,4 +183,21 @@ projectStudyRouter.get(
   }
 );
 
+projectStudyRouter.get(
+  "/recommend/recommendMentor",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const projectStudies =
+        await projectStudyService.findTopMentorProjectStudiesByPosition(
+          req.currentUser._id
+        );
+      res
+        .status(200)
+        .json({ projectStudies, nickName: req.currentUser.nickName });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 export { projectStudyRouter };
