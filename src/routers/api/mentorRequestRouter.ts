@@ -113,4 +113,17 @@ mentorRequestRouter.delete(
   }
 );
 
+mentorRequestRouter.get("/mentorRequest/status/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const mentorRequest = await mentorRequestService.getMentorRequestById(id);
+    if (mentorRequest) {
+      return res.json({ status: mentorRequest.status });
+    }
+    return res.status(404).json({ message: "Not Found" });
+  } catch (err) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
+
 export { mentorRequestRouter };

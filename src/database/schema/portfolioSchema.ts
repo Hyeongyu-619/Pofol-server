@@ -31,6 +31,10 @@ const MentoringRequestSchema = new Schema({
     type: String,
     required: false,
   },
+  advice: {
+    type: String,
+    required: false,
+  },
 });
 
 const PortfolioSchema = new Schema(

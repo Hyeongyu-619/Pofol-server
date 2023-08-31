@@ -8,10 +8,12 @@ export interface MentoringRequestInfo {
   portfolioAddress: string;
   title: string;
   content: string;
+  message: string;
+  advice: string;
 }
 
 export interface MentoringRequestData extends MentoringRequestInfo {
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId;
 }
 
 export interface PortfolioInfo {

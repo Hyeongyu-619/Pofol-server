@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { loginRequired, ownershipRequired } from "../../middlewares";
 import { portfolioService } from "../../services";
-import { CommentInfo } from "../../types/portfolio";
+import { CommentInfo, MentoringRequestInfo } from "../../types/portfolio";
 import { Types } from "mongoose";
 import isCommentOwner from "../../middlewares/isCommentOwner";
 
@@ -358,6 +358,52 @@ portfolioRouter.get(
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);
+    }
+  }
+);
+
+portfolioRouter.get(
+  "/portfolio/:portfolioId/mentoringRequest/:requestId/status",
+  async (req, res) => {
+    try {
+      const { portfolioId, requestId } = req.params;
+      const portfolio = await portfolioService.getPortfolioById(portfolioId);
+      if (portfolio && portfolio.mentoringRequests) {
+        const mentoringRequest: MentoringRequestInfo | undefined =
+          portfolio.mentoringRequests.find(
+            (req) => req._id?.toString() === requestId
+          );
+
+        if (mentoringRequest) {
+          return res.json({ status: mentoringRequest.status });
+        }
+      }
+      return res.status(404).json({ message: "Not Found" });
+    } catch (err) {
+      return res.status(500).json({ message: "Server Error" });
+    }
+  }
+);
+
+portfolioRouter.get(
+  "/portfolio/:portfolioId/mentoringRequest/:requestId/advice",
+  async (req, res) => {
+    try {
+      const { portfolioId, requestId } = req.params;
+      const portfolio = await portfolioService.getPortfolioById(portfolioId);
+      if (portfolio && portfolio.mentoringRequests) {
+        const mentoringRequest: MentoringRequestInfo | undefined =
+          portfolio.mentoringRequests.find(
+            (req) => req._id?.toString() === requestId
+          );
+
+        if (mentoringRequest) {
+          return res.json({ advice: mentoringRequest.advice });
+        }
+      }
+      return res.status(404).json({ message: "Not Found" });
+    } catch (err) {
+      return res.status(500).json({ message: "Server Error" });
     }
   }
 );
