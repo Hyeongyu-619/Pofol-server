@@ -65,19 +65,21 @@ export class PortfolioModel {
     position: string,
     sortQuery: any = {},
     limit: number,
-    skip: number // 수정
-  ): Promise<PortfolioInfo[]> {
+    skip: number
+  ): Promise<[PortfolioInfo[], number]> {
     try {
-      const portfolios = await Portfolio.find({ position: position })
+      const portfolios = await Portfolio.find({ position })
         .sort({ ...sortQuery, createdAt: -1 })
-        .limit(limit) // 추가
-        .skip(skip) // 추가
+        .limit(limit)
+        .skip(skip)
         .lean<PortfolioInfo[]>();
-      return portfolios;
+      const total = await Portfolio.find({ position }).countDocuments();
+      return [portfolios, total];
     } catch (error) {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
   async findAll(sortQuery: any = {}): Promise<PortfolioInfo[]> {
     try {
       const portfolios = await Portfolio.find()
@@ -93,7 +95,7 @@ export class PortfolioModel {
     id: string,
     limit: number,
     skip: number
-  ): Promise<CommentInfo[]> {
+  ): Promise<[CommentInfo[], number]> {
     try {
       const portfolio: PortfolioData | null = await Portfolio.findById(id)
         .slice("comments", [skip, skip + limit])
@@ -107,7 +109,9 @@ export class PortfolioModel {
         throw error;
       }
 
-      return portfolio.comments || [];
+      const total = portfolio.comments ? portfolio.comments.length : 0;
+
+      return [portfolio.comments || [], total];
     } catch (error) {
       throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
     }
@@ -117,15 +121,15 @@ export class PortfolioModel {
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<PortfolioInfo[]> {
-    // 수정
+  ): Promise<[PortfolioInfo[], number]> {
     try {
       const portfolios = await Portfolio.find()
         .sort({ ...sortQuery, createdAt: -1 })
-        .limit(limit) // 추가
-        .skip(skip) // 추가
+        .limit(limit)
+        .skip(skip)
         .lean<PortfolioInfo[]>();
-      return portfolios;
+      const total = await Portfolio.countDocuments();
+      return [portfolios, total];
     } catch (error) {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }

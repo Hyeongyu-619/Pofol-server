@@ -148,19 +148,30 @@ portfolioRouter.get(
       }
 
       let portfolios;
+      let total;
 
       if (category) {
-        portfolios = await portfolioService.findByPosition(
+        [portfolios, total] = await portfolioService.findByPosition(
           category,
           sortQuery,
           limit,
           skip
         );
       } else {
-        portfolios = await portfolioService.findAll(sortQuery, limit, skip);
+        [portfolios, total] = await portfolioService.findAll(
+          sortQuery,
+          limit,
+          skip
+        );
       }
 
-      res.status(200).json(portfolios);
+      const pages = Math.ceil(total / limit);
+
+      res.status(200).json({
+        data: portfolios,
+        total,
+        pages,
+      });
     } catch (error) {
       next(error);
     }
@@ -175,13 +186,15 @@ portfolioRouter.get(
       const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
-      const comments = await portfolioService.getCommentsByPortfolioId(
+      const [comments, total] = await portfolioService.getCommentsByPortfolioId(
         portfolioId,
         limit,
         skip
       );
 
-      res.status(200).json(comments);
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({ comments, totalPages });
     } catch (error) {
       next(error);
     }
@@ -243,6 +256,7 @@ portfolioRouter.delete(
     }
   }
 );
+
 portfolioRouter.post(
   "/:portfolioId/comments",
   loginRequired,

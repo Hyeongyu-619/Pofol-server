@@ -67,13 +67,11 @@ class ProjectStudyService {
   async findAllProjectStudy(
     limit: number,
     skip: number
-  ): Promise<ProjectStudyInfo[]> {
+  ): Promise<[ProjectStudyInfo[], number]> {
     try {
-      const projectStudies = await this.projectStudyModel.findAllProjectStudy(
-        limit,
-        skip
-      );
-      return projectStudies;
+      const [projectStudies, total] =
+        await this.projectStudyModel.findAllProjectStudy(limit, skip);
+      return [projectStudies, total];
     } catch (error) {
       throw new Error(
         "프로젝트/스터디 목록을 조회하는 중에 오류가 발생했습니다."
@@ -81,21 +79,20 @@ class ProjectStudyService {
     }
   }
 
-  async getCommentsByProjectStudyId(id: string, limit: number, skip: number) {
+  async getCommentsByProjectStudyId(
+    id: string,
+    limit: number,
+    skip: number
+  ): Promise<[CommentInfo[], number]> {
     try {
-      const comments = await projectStudyModelInstance.findCommentsById(
-        id,
-        limit,
-        skip
-      );
-      return comments;
+      const [comments, total] =
+        await projectStudyModelInstance.findCommentsById(id, limit, skip);
+      return [comments, total];
     } catch (error) {
-      // 에러 처리
       console.error("An error occurred while fetching comments:", error);
       throw error;
     }
   }
-
   async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
     try {
       const portfolios = await this.projectStudyModel.findByOwnerId(ownerId);
@@ -104,24 +101,25 @@ class ProjectStudyService {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
   async findByClassificationAndPosition(
     classification: string,
     position: string,
     limit: number,
     skip: number
-  ): Promise<ProjectStudyInfo[]> {
+  ): Promise<[ProjectStudyInfo[], number]> {
     try {
       const query: { [key: string]: string } = {};
       if (classification) query["classification"] = classification;
       if (position) query["position"] = position;
 
-      const portfolios =
+      const [projectStudies, total] =
         await this.projectStudyModel.findByClassificationAndPosition(
           query,
           limit,
           skip
         );
-      return portfolios;
+      return [projectStudies, total];
     } catch (error) {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
     }

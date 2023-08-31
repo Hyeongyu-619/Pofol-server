@@ -109,14 +109,9 @@ class PortfolioService {
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<PortfolioInfo[]> {
+  ): Promise<[PortfolioInfo[], number]> {
     try {
-      const portfolios = await this.portfolioModel.findAllPortfolio(
-        sortQuery,
-        limit,
-        skip
-      );
-      return portfolios;
+      return await this.portfolioModel.findAllPortfolio(sortQuery, limit, skip);
     } catch (error) {
       throw new Error();
     }
@@ -127,15 +122,14 @@ class PortfolioService {
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<PortfolioInfo[]> {
+  ): Promise<[PortfolioInfo[], number]> {
     try {
-      const portfolios = await this.portfolioModel.findByPosition(
+      return await this.portfolioModel.findByPosition(
         position,
         sortQuery,
         limit,
         skip
       );
-      return portfolios;
     } catch (error) {
       throw new Error();
     }
@@ -145,16 +139,15 @@ class PortfolioService {
     id: string,
     limit: number,
     skip: number
-  ): Promise<CommentInfo[]> {
+  ): Promise<[CommentInfo[], number]> {
     try {
-      const comments = await portfolioModelInstance.findCommentsById(
+      const [comments, total] = await portfolioModelInstance.findCommentsById(
         id,
         limit,
         skip
       );
-      return comments;
+      return [comments, total];
     } catch (error) {
-      // 에러 처리
       console.error("An error occurred while fetching comments:", error);
       throw error;
     }

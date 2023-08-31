@@ -37,23 +37,27 @@ export class ProjectStudyModel {
       .lean<ProjectStudyInfo[]>();
     return projectStudies;
   }
+
   async findAllProjectStudy(
     limit: number,
     skip: number
-  ): Promise<ProjectStudyInfo[]> {
+  ): Promise<[ProjectStudyInfo[], number]> {
     const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find()
       .sort({ createdAt: -1 })
       .limit(limit)
       .skip(skip)
       .lean<ProjectStudyInfo[]>();
-    return projectStudies;
+
+    const total = await ProjectStudy.countDocuments();
+
+    return [projectStudies, total];
   }
 
   async findCommentsById(
     id: string,
     limit: number,
     skip: number
-  ): Promise<CommentInfo[]> {
+  ): Promise<[CommentInfo[], number]> {
     try {
       const projectStudy: ProjectStudyData | null = await ProjectStudy.findById(
         id
@@ -69,7 +73,9 @@ export class ProjectStudyModel {
         throw error;
       }
 
-      return projectStudy.comments || [];
+      const total = projectStudy.comments ? projectStudy.comments.length : 0;
+
+      return [projectStudy.comments || [], total];
     } catch (error) {
       throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
     }
@@ -88,14 +94,17 @@ export class ProjectStudyModel {
     query: { [key: string]: string },
     limit: number,
     skip: number
-  ): Promise<ProjectStudyInfo[]> {
+  ): Promise<[ProjectStudyInfo[], number]> {
     try {
-      const projectStudies = await ProjectStudy.find(query)
+      const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find(query)
         .sort({ createdAt: -1 })
         .limit(limit)
         .skip(skip)
         .lean<ProjectStudyInfo[]>();
-      return projectStudies;
+
+      const total = await ProjectStudy.countDocuments(query);
+
+      return [projectStudies, total];
     } catch (error) {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
     }

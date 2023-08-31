@@ -39,14 +39,10 @@ class PositionService {
   async findAllPositionsWithPagination(
     skip: number,
     limit: number
-  ): Promise<PositionInfo[]> {
-    try {
-      const positions = await this.positionModel.findAllPositions(skip, limit);
-      return positions;
-    } catch (error) {
-      console.error("An error occurred while fetching positions:", error);
-      throw error;
-    }
+  ): Promise<[PositionInfo[], number]> {
+    const positions = await this.positionModel.findAllPositions(skip, limit);
+    const total = await this.positionModel.countAllPositions();
+    return [positions, total];
   }
 }
 

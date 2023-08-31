@@ -41,26 +41,35 @@ mentorRequestRouter.get(
       const skip = Number(req.query.skip) || 0;
       const status = req.query.status as string;
 
-      let mentorRequests;
+      let mentorRequests, total;
+
       if (status) {
-        mentorRequests = await mentorRequestService.findMentorRequestsByStatus(
-          status,
-          skip,
-          limit
-        );
+        [mentorRequests, total] =
+          await mentorRequestService.findMentorRequestsByStatus(
+            status,
+            skip,
+            limit
+          );
       } else {
-        mentorRequests = await mentorRequestService.findAllWithPagination(
-          skip,
-          limit
-        );
+        [mentorRequests, total] =
+          await mentorRequestService.findAllWithPagination(skip, limit);
       }
 
-      res.status(200).json(mentorRequests);
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({
+        mentorRequests,
+        total,
+        totalPages,
+        limit,
+        skip,
+      });
     } catch (error) {
       next(error);
     }
   }
 );
+
 mentorRequestRouter.get(
   "/:mentorRequestid",
   async (req: Request, res: Response, next: NextFunction) => {

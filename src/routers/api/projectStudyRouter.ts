@@ -45,9 +45,10 @@ projectStudyRouter.get(
       const limit = Number(req.query.limit) || 6;
       const skip = Number(req.query.skip) || 0;
       let projectStudies;
+      let total;
 
       if (classification || position) {
-        projectStudies =
+        [projectStudies, total] =
           await projectStudyService.findByClassificationAndPosition(
             classification,
             position,
@@ -55,12 +56,15 @@ projectStudyRouter.get(
             skip
           );
       } else {
-        projectStudies = await projectStudyService.findAllProjectStudy(
+        [projectStudies, total] = await projectStudyService.findAllProjectStudy(
           limit,
           skip
         );
       }
-      res.status(200).json(projectStudies);
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({ projectStudies, totalPages });
     } catch (error) {
       next(error);
     }
@@ -75,12 +79,16 @@ projectStudyRouter.get(
       const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
-      const comments = await projectStudyService.getCommentsByProjectStudyId(
-        projectStudyId,
-        limit,
-        skip
-      );
-      res.status(200).json(comments);
+      const [comments, total] =
+        await projectStudyService.getCommentsByProjectStudyId(
+          projectStudyId,
+          limit,
+          skip
+        );
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({ comments, totalPages });
     } catch (error) {
       next(error);
     }

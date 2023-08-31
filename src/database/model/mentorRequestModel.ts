@@ -78,6 +78,14 @@ export class MentorRequestModel {
       .lean()
       .exec();
   }
+
+  async countAllMentorRequests(): Promise<number> {
+    return await MentorRequest.countDocuments().exec();
+  }
+
+  async countMentorRequestsByStatus(status: string): Promise<number> {
+    return await MentorRequest.countDocuments({ status }).exec();
+  }
 }
 
 const MentorRequest = model<MentorRequestInfo & Document>(

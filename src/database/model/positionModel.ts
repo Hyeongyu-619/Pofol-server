@@ -49,6 +49,10 @@ export class PositionModel {
     }
     return deletedPosition;
   }
+
+  async countAllPositions(): Promise<number> {
+    return await Position.countDocuments().exec();
+  }
 }
 
 const Position = model<PositionInfo & Document>("Position", PositionSchema);

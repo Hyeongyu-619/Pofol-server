@@ -25,11 +25,18 @@ positionRouter.get(
       const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
-      const positions = await positionService.findAllPositionsWithPagination(
+      const [positions, total] =
+        await positionService.findAllPositionsWithPagination(skip, limit);
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({
+        positions,
+        total,
+        totalPages,
+        limit,
         skip,
-        limit
-      );
-      res.status(200).json(positions);
+      });
     } catch (error) {
       next(error);
     }
