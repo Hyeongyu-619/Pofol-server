@@ -59,6 +59,24 @@ class PortfolioService {
     return filteredRequests;
   }
 
+  async getMyMentoringRequests(
+    userId: string
+  ): Promise<MentoringRequestInfo[]> {
+    const portfolios = await this.portfolioModel.findAll();
+
+    const myMentoringRequests: MentoringRequestInfo[] = [];
+
+    portfolios.forEach((portfolio) => {
+      const userRequests = portfolio.mentoringRequests.filter(
+        (request: MentoringRequestInfo) =>
+          request.userId.toString() === userId.toString()
+      );
+      myMentoringRequests.push(...userRequests);
+    });
+
+    return myMentoringRequests;
+  }
+
   async updatePortfolio(
     _id: string,
     update: Partial<PortfolioInfo>
