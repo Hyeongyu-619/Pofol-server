@@ -200,4 +200,22 @@ projectStudyRouter.get(
     }
   }
 );
+projectStudyRouter.get(
+  "/recommend/recommendProjectStudyForGuest",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const allPositions = await projectStudyService.getAllPositions();
+      const randomPosition =
+        allPositions[Math.floor(Math.random() * allPositions.length)];
+      const projectStudies =
+        await projectStudyService.findTopMentorProjectStudiesByPosition(
+          null,
+          randomPosition
+        );
+      res.status(200).json({ projectStudies });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 export { projectStudyRouter };

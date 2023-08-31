@@ -161,10 +161,19 @@ class ProjectStudyService {
     }
   }
   async findTopMentorProjectStudiesByPosition(
-    userId: string
+    userId: string | null,
+    position?: string
   ): Promise<ProjectStudyInfo[]> {
     try {
-      const userPosition = await userService.getUserPositionById(userId);
+      let userPosition = position;
+      if (userId) {
+        userPosition = await userService.getUserPositionById(userId);
+      }
+
+      if (!userPosition) {
+        throw new Error("포지션 정보가 없습니다.");
+      }
+
       const projectStudies =
         await this.projectStudyModel.findProjectStudiesByLatestAndPosition(
           userPosition,
@@ -174,6 +183,14 @@ class ProjectStudyService {
     } catch (error) {
       console.error(error);
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+  async getAllPositions(): Promise<string[]> {
+    try {
+      const positions = await this.projectStudyModel.getAllPositions();
+      return positions;
+    } catch (error) {
+      throw new Error("포지션 목록을 불러오는 중 오류가 발생했습니다.");
     }
   }
 }

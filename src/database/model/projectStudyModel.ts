@@ -66,6 +66,25 @@ export class ProjectStudyModel {
       .limit(limit)
       .lean();
   }
+  async getAllPositions(): Promise<string[]> {
+    try {
+      const projectStudies = await ProjectStudy.find().lean();
+      const positions: string[] = [];
+
+      projectStudies.forEach((projectStudy) => {
+        if (Array.isArray(projectStudy.position)) {
+          positions.push(...projectStudy.position);
+        } else {
+          positions.push(projectStudy.position);
+        }
+      });
+
+      const uniquePositions = Array.from(new Set(positions));
+      return uniquePositions;
+    } catch (error) {
+      throw new Error("포지션 목록을 불러오는 중 오류가 발생했습니다.");
+    }
+  }
 
   async findProjectStudiesByCreatedAt(
     limit: number
