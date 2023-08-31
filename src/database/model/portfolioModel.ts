@@ -234,9 +234,15 @@ export class PortfolioModel {
       error.name = "NotFound";
       throw error;
     }
+    if (message !== undefined) {
+      portfolio.mentoringRequests[requestIndex].message = message;
+    }
 
+    if (advice !== undefined) {
+      portfolio.mentoringRequests[requestIndex].advice = advice;
+    }
     portfolio.mentoringRequests[requestIndex].status = status;
-    portfolio.mentoringRequests[requestIndex].message = message;
+
     await portfolio.save();
     return portfolio.toObject();
   }

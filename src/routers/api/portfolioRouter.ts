@@ -1,7 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { loginRequired, ownershipRequired } from "../../middlewares";
 import { portfolioService } from "../../services";
-import { CommentInfo, MentoringRequestInfo } from "../../types/portfolio";
+import {
+  CommentInfo,
+  MentoringRequestInfo,
+  PortfolioInfo,
+} from "../../types/portfolio";
 import { Types } from "mongoose";
 import isCommentOwner from "../../middlewares/isCommentOwner";
 
@@ -401,6 +405,26 @@ portfolioRouter.get(
           return res.json({ advice: mentoringRequest.advice });
         }
       }
+      return res.status(404).json({ message: "Not Found" });
+    } catch (err) {
+      return res.status(500).json({ message: "Server Error" });
+    }
+  }
+);
+
+portfolioRouter.get(
+  "/portfolio/:portfolioId/mentoringRequestCount",
+  async (req, res) => {
+    try {
+      const { portfolioId } = req.params;
+      const portfolio: PortfolioInfo = await portfolioService.getPortfolioById(
+        portfolioId
+      );
+
+      if (portfolio) {
+        return res.json({ count: portfolio.mentoringRequests.length });
+      }
+
       return res.status(404).json({ message: "Not Found" });
     } catch (err) {
       return res.status(500).json({ message: "Server Error" });
