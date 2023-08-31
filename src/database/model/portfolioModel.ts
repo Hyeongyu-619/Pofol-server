@@ -89,6 +89,30 @@ export class PortfolioModel {
     }
   }
 
+  async findCommentsById(
+    id: string,
+    limit: number,
+    skip: number
+  ): Promise<CommentInfo[]> {
+    try {
+      const portfolio: PortfolioData | null = await Portfolio.findById(id)
+        .slice("comments", [skip, skip + limit])
+        .lean();
+
+      if (!portfolio) {
+        const error = new Error(
+          "해당하는 id의 포트폴리오가 존재하지 않습니다."
+        );
+        error.name = "NotFound!";
+        throw error;
+      }
+
+      return portfolio.comments || [];
+    } catch (error) {
+      throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
   async findAllPortfolio(
     sortQuery: any = {},
     limit: number,

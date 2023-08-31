@@ -42,18 +42,45 @@ projectStudyRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { classification, position } = req.query;
-      let portfolios;
+      const limit = Number(req.query.limit) || 6;
+      const skip = Number(req.query.skip) || 0;
+      let projectStudies;
 
       if (classification || position) {
-        portfolios = await projectStudyService.findByClassificationAndPosition(
-          classification,
-          position
-        );
+        projectStudies =
+          await projectStudyService.findByClassificationAndPosition(
+            classification,
+            position,
+            limit,
+            skip
+          );
       } else {
-        portfolios = await projectStudyService.findAll();
+        projectStudies = await projectStudyService.findAllProjectStudy(
+          limit,
+          skip
+        );
       }
+      res.status(200).json(projectStudies);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-      res.status(200).json(portfolios);
+projectStudyRouter.get(
+  "/:projectStudyId/comments",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { projectStudyId } = req.params;
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
+
+      const comments = await projectStudyService.getCommentsByProjectStudyId(
+        projectStudyId,
+        limit,
+        skip
+      );
+      res.status(200).json(comments);
     } catch (error) {
       next(error);
     }

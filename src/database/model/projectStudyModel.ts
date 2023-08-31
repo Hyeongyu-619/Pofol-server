@@ -31,32 +31,76 @@ export class ProjectStudyModel {
   }
 
   async findAll(): Promise<ProjectStudyInfo[]> {
-    const projectStudys: ProjectStudyInfo[] = await projectStudyModel
+    const projectStudies: ProjectStudyInfo[] = await projectStudyModel
       .find()
       .sort({ createdAt: -1 })
       .lean<ProjectStudyInfo[]>();
-    return projectStudys;
+    return projectStudies;
+  }
+  async findAllProjectStudy(
+    limit: number,
+    skip: number
+  ): Promise<ProjectStudyInfo[]> {
+    const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip)
+      .lean<ProjectStudyInfo[]>();
+    return projectStudies;
+  }
+
+  async findCommentsById(
+    id: string,
+    limit: number,
+    skip: number
+  ): Promise<CommentInfo[]> {
+    try {
+      const projectStudy: ProjectStudyData | null = await ProjectStudy.findById(
+        id
+      )
+        .slice("comments", [skip, skip + limit])
+        .lean();
+
+      if (!projectStudy) {
+        const error = new Error(
+          "해당하는 id의 프로젝트/스터디가 존재하지 않습니다."
+        );
+        error.name = "NotFound!";
+        throw error;
+      }
+
+      return projectStudy.comments || [];
+    } catch (error) {
+      throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
+    }
   }
 
   async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
-    const portfolios: ProjectStudyInfo[] = await ProjectStudy.find({ ownerId })
+    const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find({
+      ownerId,
+    })
       .sort({ createdAt: -1 })
       .lean<ProjectStudyInfo[]>();
-    return portfolios;
+    return projectStudies;
   }
 
-  async findByClassificationAndPosition(query: {
-    [key: string]: string;
-  }): Promise<ProjectStudyInfo[]> {
+  async findByClassificationAndPosition(
+    query: { [key: string]: string },
+    limit: number,
+    skip: number
+  ): Promise<ProjectStudyInfo[]> {
     try {
-      const portfolios = await ProjectStudy.find(query)
+      const projectStudies = await ProjectStudy.find(query)
         .sort({ createdAt: -1 })
+        .limit(limit)
+        .skip(skip)
         .lean<ProjectStudyInfo[]>();
-      return portfolios;
+      return projectStudies;
     } catch (error) {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
   async findProjectStudiesByLatestAndPosition(
     position: string,
     limit: number

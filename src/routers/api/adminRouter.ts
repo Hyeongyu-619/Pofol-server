@@ -98,7 +98,12 @@ adminRouter.get(
   "/portfolio",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const portfolios = await portfolioService.findAll();
+      const limit = Number(req.query.limit) || 12;
+      const skip = Number(req.query.skip) || 0;
+      const sortQuery = { createdAt: -1 };
+
+      const portfolios = await portfolioService.findAll(sortQuery, limit, skip);
+
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);
@@ -140,12 +145,21 @@ adminRouter.delete(
 );
 
 adminRouter.get("/", async (req: any, res: Response, next: NextFunction) => {
-  try {
-    const projectStudys = await projectStudyService.findAll();
-    res.status(200).json(projectStudys);
-  } catch (error) {
-    next(error);
-  }
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const limit = Number(req.query.limit) || 12;
+      const skip = Number(req.query.skip) || 0;
+
+      const projectStudies = await projectStudyService.findAllProjectStudy(
+        limit,
+        skip
+      );
+
+      res.status(200).json(projectStudies);
+    } catch (error) {
+      next(error);
+    }
+  };
 });
 
 adminRouter.delete(

@@ -141,6 +141,25 @@ class PortfolioService {
     }
   }
 
+  async getCommentsByPortfolioId(
+    id: string,
+    limit: number,
+    skip: number
+  ): Promise<CommentInfo[]> {
+    try {
+      const comments = await portfolioModelInstance.findCommentsById(
+        id,
+        limit,
+        skip
+      );
+      return comments;
+    } catch (error) {
+      // 에러 처리
+      console.error("An error occurred while fetching comments:", error);
+      throw error;
+    }
+  }
+
   async findByQuery(query: any): Promise<PortfolioInfo[]> {
     try {
       const portfolios = await this.portfolioModel.findByQuery(query);

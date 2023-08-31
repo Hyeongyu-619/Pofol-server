@@ -64,6 +64,37 @@ class ProjectStudyService {
       );
     }
   }
+  async findAllProjectStudy(
+    limit: number,
+    skip: number
+  ): Promise<ProjectStudyInfo[]> {
+    try {
+      const projectStudies = await this.projectStudyModel.findAllProjectStudy(
+        limit,
+        skip
+      );
+      return projectStudies;
+    } catch (error) {
+      throw new Error(
+        "프로젝트/스터디 목록을 조회하는 중에 오류가 발생했습니다."
+      );
+    }
+  }
+
+  async getCommentsByProjectStudyId(id: string, limit: number, skip: number) {
+    try {
+      const comments = await projectStudyModelInstance.findCommentsById(
+        id,
+        limit,
+        skip
+      );
+      return comments;
+    } catch (error) {
+      // 에러 처리
+      console.error("An error occurred while fetching comments:", error);
+      throw error;
+    }
+  }
 
   async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
     try {
@@ -73,10 +104,11 @@ class ProjectStudyService {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
     }
   }
-
   async findByClassificationAndPosition(
     classification: string,
-    position: string
+    position: string,
+    limit: number,
+    skip: number
   ): Promise<ProjectStudyInfo[]> {
     try {
       const query: { [key: string]: string } = {};
@@ -84,7 +116,11 @@ class ProjectStudyService {
       if (position) query["position"] = position;
 
       const portfolios =
-        await this.projectStudyModel.findByClassificationAndPosition(query);
+        await this.projectStudyModel.findByClassificationAndPosition(
+          query,
+          limit,
+          skip
+        );
       return portfolios;
     } catch (error) {
       throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");

@@ -167,6 +167,27 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.get(
+  "/:portfolioId/comments",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { portfolioId } = req.params;
+      const limit = Number(req.query.limit) || 6;
+      const skip = Number(req.query.skip) || 0;
+
+      const comments = await portfolioService.getCommentsByPortfolioId(
+        portfolioId,
+        limit,
+        skip
+      );
+
+      res.status(200).json(comments);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 portfolioRouter.post(
   "/",
   loginRequired,
