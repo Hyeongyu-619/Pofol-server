@@ -184,7 +184,7 @@ projectStudyRouter.get(
 );
 
 projectStudyRouter.get(
-  "/recommend/recommendMentor",
+  "/recommend/recommendProjectStudy",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
