@@ -50,8 +50,6 @@ class PortfolioService {
 
     const filteredRequests = portfolio.mentoringRequests.filter(
       (request: MentoringRequestInfo) => {
-        console.log("request.userId:", request.userId);
-
         return request;
       }
     );
@@ -59,24 +57,29 @@ class PortfolioService {
     return filteredRequests;
   }
 
-  async getMyMentoringRequests(
-    userId: string
-  ): Promise<MentoringRequestInfo[]> {
+  async getMyMentoringRequests(userId: string): Promise<any[]> {
     const portfolios = await this.portfolioModel.findAll();
 
-    const myMentoringRequests: MentoringRequestInfo[] = [];
+    const myMentoringRequests: any[] = [];
 
     portfolios.forEach((portfolio) => {
       const userRequests = portfolio.mentoringRequests.filter(
         (request: MentoringRequestInfo) =>
           request.userId.toString() === userId.toString()
       );
-      myMentoringRequests.push(...userRequests);
+
+      const userRequestsWithPortfolioId = userRequests.map((request) => {
+        return {
+          ...request,
+          portfolioId: portfolio._id,
+        };
+      });
+
+      myMentoringRequests.push(...userRequestsWithPortfolioId);
     });
 
     return myMentoringRequests;
   }
-
   async updatePortfolio(
     _id: string,
     update: Partial<PortfolioInfo>
@@ -90,21 +93,27 @@ class PortfolioService {
     return deletedPortfolio;
   }
 
-  async findAll(): Promise<PortfolioInfo[]> {
+  async findAll(sortQuery: any = {}): Promise<PortfolioInfo[]> {
     try {
-      const portfolios = await this.portfolioModel.findAll();
+      const portfolios = await this.portfolioModel.findAll(sortQuery);
       return portfolios;
     } catch (error) {
-      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error();
     }
   }
 
-  async findByPosition(position: string): Promise<PortfolioInfo[]> {
+  async findByPosition(
+    position: string,
+    sortQuery: any = {}
+  ): Promise<PortfolioInfo[]> {
     try {
-      const portfolios = await this.portfolioModel.findByPosition(position);
+      const portfolios = await this.portfolioModel.findByPosition(
+        position,
+        sortQuery
+      );
       return portfolios;
     } catch (error) {
-      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error();
     }
   }
 

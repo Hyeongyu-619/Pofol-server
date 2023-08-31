@@ -77,12 +77,25 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const category = req.query.category;
-      let portfolios;
-      if (category) {
-        portfolios = await portfolioService.findByPosition(category);
-      } else {
-        portfolios = await portfolioService.findAll();
+      const sort = req.query.sort || "newest";
+
+      let sortQuery: any = {};
+
+      if (sort === "newest") {
+        sortQuery.createdAt = -1;
+      } else if (sort === "popular") {
+        sortQuery.coachingCount = -1;
+        sortQuery.createdAt = -1;
       }
+
+      let portfolios;
+
+      if (category) {
+        portfolios = await portfolioService.findByPosition(category, sortQuery);
+      } else {
+        portfolios = await portfolioService.findAll(sortQuery);
+      }
+
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);
