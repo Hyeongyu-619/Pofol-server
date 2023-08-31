@@ -213,7 +213,8 @@ export class PortfolioModel {
     portfolioId: string,
     requestId: Types.ObjectId,
     status: "completed" | "rejected",
-    message: string
+    message?: string,
+    advice?: string
   ): Promise<PortfolioData> {
     const portfolio = await Portfolio.findById(portfolioId);
     if (!portfolio || !portfolio.mentoringRequests) {

@@ -269,7 +269,8 @@ class PortfolioService {
     portfolioId: string,
     requestId: Types.ObjectId,
     action: "complete" | "reject",
-    message: string
+    message?: string,
+    advice?: string
   ): Promise<PortfolioData> {
     let status: "completed" | "rejected";
     if (action === "complete") {
@@ -284,7 +285,8 @@ class PortfolioService {
       portfolioId,
       requestId,
       status,
-      message
+      message,
+      advice
     );
   }
   async updateMentoringRequest(
