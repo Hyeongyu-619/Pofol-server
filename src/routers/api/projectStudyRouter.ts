@@ -88,7 +88,7 @@ projectStudyRouter.get(
 
       const totalPages = Math.ceil(total / limit);
 
-      res.status(200).json({ comments, totalPages });
+      res.status(200).json({ comments, totalPages, total });
     } catch (error) {
       next(error);
     }
