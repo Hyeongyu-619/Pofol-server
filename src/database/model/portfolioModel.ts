@@ -146,96 +146,13 @@ export class PortfolioModel {
     }
     return deletedPortfolio;
   }
-  async addCommentToPortfolio(
-    _id: string,
-    comment: CommentInfo
-  ): Promise<PortfolioData> {
-    const portfolio = await Portfolio.findById(_id);
-    if (!portfolio) {
-      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    portfolio.comments.push({
-      _id: new Types.ObjectId(),
-      ...comment,
-    });
-
-    await portfolio.save();
-    return portfolio.toObject();
-  }
-
-  async deleteCommentFromPortfolio(
+  async respondToMentoringRequest(
     portfolioId: string,
-    commentId: Types.ObjectId
-  ): Promise<PortfolioData> {
-    const portfolio = await Portfolio.findById(portfolioId);
-    if (!portfolio || !portfolio.comments) {
-      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    portfolio.comments = portfolio.comments.filter(
-      (comment) => !comment._id?.equals(commentId)
-    );
-    await portfolio.save();
-    return portfolio.toObject();
-  }
-
-  async updateCommentInPortfolio(
-    portfolioId: string,
-    commentId: Types.ObjectId,
-    updatedComment: CommentInfo
-  ): Promise<PortfolioData> {
-    const portfolio = await Portfolio.findById(portfolioId);
-    if (!portfolio || !portfolio.comments) {
-      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    const commentIndex = portfolio.comments.findIndex((comment) =>
-      comment._id.equals(commentId)
-    );
-    if (commentIndex === -1) {
-      const error = new Error("해당 댓글이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    portfolio.comments[commentIndex] = {
-      ...portfolio.comments[commentIndex],
-      ...updatedComment,
-    };
-
-    await portfolio.save();
-    return portfolio.toObject();
-  }
-
-  async addMentoringRequestToPortfolio(
-    _id: string,
-    mentoringRequest: any
-  ): Promise<PortfolioData> {
-    const portfolio = await Portfolio.findById(_id);
-    if (!portfolio) {
-      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    portfolio.mentoringRequests.push(mentoringRequest);
-    await portfolio.save();
-    return portfolio.toObject();
-  }
-
-  async changeMentoringRequestStatus(
-    _id: string,
     requestId: Types.ObjectId,
-    status: "requested" | "accepted" | "completed" | "rejected"
+    status: "completed" | "rejected",
+    message: string
   ): Promise<PortfolioData> {
-    const portfolio = await Portfolio.findById(_id);
+    const portfolio = await Portfolio.findById(portfolioId);
     if (!portfolio || !portfolio.mentoringRequests) {
       const error = new Error(
         "해당 포트폴리오나 멘토링 요청이 존재하지 않습니다."
@@ -255,11 +172,35 @@ export class PortfolioModel {
     }
 
     portfolio.mentoringRequests[requestIndex].status = status;
+    portfolio.mentoringRequests[requestIndex].message = message;
+    await portfolio.save();
+    return portfolio.toObject();
+  }
+  async updateMentoringRequestStatus(
+    portfolioId: string,
+    requestId: Types.ObjectId,
+    newStatus: "requested" | "accepted" | "completed" | "rejected"
+  ): Promise<PortfolioData> {
+    const portfolio = await Portfolio.findById(portfolioId);
+    if (!portfolio) {
+      const error = new Error("Portfolio not found");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    const request = portfolio.mentoringRequests.id(requestId);
+    if (!request) {
+      const error = new Error("Mentoring request not found");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    request.status = newStatus;
+
     await portfolio.save();
     return portfolio.toObject();
   }
 }
-
 const portfolioModel = model<PortfolioInfo & Document>(
   "Portfolio",
   PortfolioSchema

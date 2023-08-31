@@ -65,6 +65,58 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.post(
+  "/mentor/respondToMentoringRequest/:portfolioId/:requestId",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const portfolioId = req.params.portfolioId;
+      const mentoringRequestId = req.params.requestid;
+      const message = req.body.message;
+      const action = req.body.action;
+
+      await portfolioService.respondToMentoringRequest(
+        portfolioId,
+        mentoringRequestId,
+        message,
+        action
+      );
+
+      res.status(200).json({ message: `Successfully ${action}ed the request` });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+portfolioRouter.post(
+  "/updateMentoringRequest/:portfolioId/:requestId",
+  async (req, res) => {
+    try {
+      const portfolioId = req.params.portfolioId;
+      const mentoringRequestId = new Types.ObjectId(req.params.requestId); // 'new'를 추가
+      const { status, message } = req.body;
+
+      const updatedPortfolio = await portfolioService.updateMentoringRequest(
+        portfolioId,
+        mentoringRequestId,
+        status,
+        message
+      );
+
+      res.status(200).json({
+        message: "Mentoring request updated successfully",
+        data: updatedPortfolio,
+      });
+    } catch (error) {
+      const err = error as Error;
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  }
+);
+
 portfolioRouter.get(
   "/:portfolioId",
   async (req: any, res: Response, next: NextFunction) => {
