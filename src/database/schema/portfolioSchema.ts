@@ -6,6 +6,11 @@ const MentoringRequestSchema = new Schema({
     required: true,
     ref: "User",
   },
+  portfolioId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Portfolio",
+  },
   status: {
     type: String,
     enum: ["requested", "accepted", "completed", "rejected"],
