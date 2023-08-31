@@ -181,6 +181,46 @@ adminRouter.get(
   }
 );
 
+adminRouter.get(
+  "/projectStudies",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { classification, position } = req.query;
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
+
+      let projectStudies;
+      let total;
+
+      if (classification || position) {
+        [projectStudies, total] =
+          await projectStudyService.findByClassificationAndPosition(
+            classification,
+            position,
+            limit,
+            skip
+          );
+      } else {
+        [projectStudies, total] = await projectStudyService.findAllProjectStudy(
+          limit,
+          skip
+        );
+      }
+
+      const totalCount = total;
+      const totalPages = Math.ceil(totalCount / limit);
+
+      res.status(200).json({
+        projectStudies: projectStudies,
+        totalCount,
+        totalPages,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 adminRouter.delete(
   "/:projectStudyId",
   loginRequired,
