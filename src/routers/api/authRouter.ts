@@ -29,7 +29,6 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
       const existingUser = await userService.getUserByEmail(
         user.emails[0].value
       );
-      // const userName = user.displayName;
       const email = user.emails[0].value;
 
       if (existingUser) {

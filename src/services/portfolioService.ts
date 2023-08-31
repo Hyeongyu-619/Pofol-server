@@ -105,9 +105,17 @@ class PortfolioService {
     return deletedPortfolio;
   }
 
-  async findAll(sortQuery: any = {}): Promise<PortfolioInfo[]> {
+  async findAll(
+    sortQuery: any = {},
+    limit: number,
+    skip: number
+  ): Promise<PortfolioInfo[]> {
     try {
-      const portfolios = await this.portfolioModel.findAll(sortQuery);
+      const portfolios = await this.portfolioModel.findAllPortfolio(
+        sortQuery,
+        limit,
+        skip
+      );
       return portfolios;
     } catch (error) {
       throw new Error();
@@ -116,12 +124,16 @@ class PortfolioService {
 
   async findByPosition(
     position: string,
-    sortQuery: any = {}
+    sortQuery: any = {},
+    limit: number,
+    skip: number
   ): Promise<PortfolioInfo[]> {
     try {
       const portfolios = await this.portfolioModel.findByPosition(
         position,
-        sortQuery
+        sortQuery,
+        limit,
+        skip
       );
       return portfolios;
     } catch (error) {

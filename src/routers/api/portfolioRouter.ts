@@ -135,6 +135,8 @@ portfolioRouter.get(
     try {
       const category = req.query.category;
       const sort = req.query.sort || "newest";
+      const limit = Number(req.query.limit) || 12;
+      const skip = Number(req.query.skip) || 0;
 
       let sortQuery: any = {};
 
@@ -148,9 +150,14 @@ portfolioRouter.get(
       let portfolios;
 
       if (category) {
-        portfolios = await portfolioService.findByPosition(category, sortQuery);
+        portfolios = await portfolioService.findByPosition(
+          category,
+          sortQuery,
+          limit,
+          skip
+        );
       } else {
-        portfolios = await portfolioService.findAll(sortQuery);
+        portfolios = await portfolioService.findAll(sortQuery, limit, skip);
       }
 
       res.status(200).json(portfolios);

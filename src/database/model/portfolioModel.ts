@@ -63,10 +63,24 @@ export class PortfolioModel {
 
   async findByPosition(
     position: string,
-    sortQuery: any = {}
+    sortQuery: any = {},
+    limit: number,
+    skip: number // 수정
   ): Promise<PortfolioInfo[]> {
     try {
       const portfolios = await Portfolio.find({ position: position })
+        .sort({ ...sortQuery, createdAt: -1 })
+        .limit(limit) // 추가
+        .skip(skip) // 추가
+        .lean<PortfolioInfo[]>();
+      return portfolios;
+    } catch (error) {
+      throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+  async findAll(sortQuery: any = {}): Promise<PortfolioInfo[]> {
+    try {
+      const portfolios = await Portfolio.find()
         .sort({ ...sortQuery, createdAt: -1 })
         .lean<PortfolioInfo[]>();
       return portfolios;
@@ -75,10 +89,17 @@ export class PortfolioModel {
     }
   }
 
-  async findAll(sortQuery: any = {}): Promise<PortfolioInfo[]> {
+  async findAllPortfolio(
+    sortQuery: any = {},
+    limit: number,
+    skip: number
+  ): Promise<PortfolioInfo[]> {
+    // 수정
     try {
       const portfolios = await Portfolio.find()
         .sort({ ...sortQuery, createdAt: -1 })
+        .limit(limit) // 추가
+        .skip(skip) // 추가
         .lean<PortfolioInfo[]>();
       return portfolios;
     } catch (error) {
