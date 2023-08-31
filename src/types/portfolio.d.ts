@@ -36,6 +36,7 @@ export interface PortfolioInfo {
 
 export interface PortfolioData extends PortfolioInfo {
   _id: Types.ObjectId;
+  populate: (path: string) => Promise<PortfolioData>;
 }
 
 export interface CommentInfo {

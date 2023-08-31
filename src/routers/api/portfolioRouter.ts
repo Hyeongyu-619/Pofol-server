@@ -432,4 +432,15 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.get("/portfolios/:id/comments", async (req, res) => {
+  const portfolioId = req.params.id;
+  const portfolio = await portfolioService.getPortfolioById(portfolioId);
+
+  if (!portfolio) {
+    return res.status(404).send("Portfolio not found");
+  }
+
+  res.status(200).json(portfolio.comments);
+});
+
 export { portfolioRouter };

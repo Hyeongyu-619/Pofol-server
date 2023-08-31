@@ -31,6 +31,7 @@ export class PortfolioModel {
     }
     return portfolio;
   }
+
   async findByOwnerId(ownerId: string): Promise<PortfolioData | null> {
     const portfolio: PortfolioData | null = await Portfolio.findOne({
       ownerId,

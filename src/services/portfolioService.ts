@@ -36,6 +36,18 @@ class PortfolioService {
     return portfolio;
   }
 
+  async getPortfolioByIdPopulate(_id: string): Promise<PortfolioData> {
+    const portfolio = await (
+      await this.portfolioModel.findById(_id)
+    ).populate("comments");
+    if (!portfolio) {
+      const error = new Error("해당 멘토가 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+    return portfolio;
+  }
+
   async getMentoringRequestsByOwnerAndUser(
     ownerId: string,
     userId: string,

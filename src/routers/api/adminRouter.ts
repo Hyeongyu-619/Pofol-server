@@ -110,9 +110,17 @@ adminRouter.get(
       const skip = Number(req.query.skip) || 0;
       const sortQuery = { createdAt: -1 };
 
-      const portfolios = await portfolioService.findAll(sortQuery, limit, skip);
+      const [allPortfolios, totalCount] = await portfolioService.findAll(
+        sortQuery,
+        limit,
+        skip
+      );
 
-      res.status(200).json(portfolios);
+      res.status(200).json({
+        portfolios: allPortfolios,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+      });
     } catch (error) {
       next(error);
     }
