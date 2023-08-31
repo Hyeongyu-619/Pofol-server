@@ -13,6 +13,15 @@ export class PositionModel {
     return positions;
   }
 
+  async findAllPositions(skip: number, limit: number): Promise<PositionInfo[]> {
+    try {
+      const positions = await Position.find().skip(skip).limit(limit).lean();
+      return positions;
+    } catch (error) {
+      throw new Error("Positions could not be retrieved.");
+    }
+  }
+
   async update(
     _id: string,
     update: Partial<PositionInfo>

@@ -22,6 +22,13 @@ export class UserModel {
     const users = await User.find({}).lean();
     return users;
   }
+  async findUsersWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<UserInfo[]> {
+    return await User.find().skip(skip).limit(limit).exec();
+  }
+
   async create(userInfo: UserInfo): Promise<UserData> {
     const createdUser = await User.create(userInfo);
     return createdUser.toObject();

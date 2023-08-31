@@ -37,15 +37,22 @@ mentorRequestRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
       const status = req.query.status as string;
 
       let mentorRequests;
       if (status) {
         mentorRequests = await mentorRequestService.findMentorRequestsByStatus(
-          status
+          status,
+          skip,
+          limit
         );
       } else {
-        mentorRequests = await mentorRequestService.findAllMentorRequests();
+        mentorRequests = await mentorRequestService.findAllWithPagination(
+          skip,
+          limit
+        );
       }
 
       res.status(200).json(mentorRequests);
@@ -54,7 +61,6 @@ mentorRequestRouter.get(
     }
   }
 );
-
 mentorRequestRouter.get(
   "/:mentorRequestid",
   async (req: Request, res: Response, next: NextFunction) => {

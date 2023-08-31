@@ -30,6 +30,13 @@ export class MentorRequestModel {
     return mentorRequests;
   }
 
+  async findMentorRequestsWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<MentorRequestInfo[]> {
+    return await MentorRequest.find().skip(skip).limit(limit).exec();
+  }
+
   async update(
     _id: string,
     update: Partial<MentorRequestInfo>
@@ -61,9 +68,15 @@ export class MentorRequestModel {
   }
 
   async findMentorRequestsByStatus(
-    status: string
+    status: string,
+    skip: number,
+    limit: number
   ): Promise<MentorRequestData[]> {
-    return await MentorRequest.find({ status }).lean();
+    return await MentorRequest.find({ status })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+      .exec();
   }
 }
 

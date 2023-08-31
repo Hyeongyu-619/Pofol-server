@@ -69,6 +69,19 @@ class UserService {
     }
   }
 
+  async findAllWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<UserInfo[]> {
+    try {
+      const users = await this.userModel.findUsersWithPagination(skip, limit);
+      return users;
+    } catch (error) {
+      console.error("An error occurred while fetching users:", error);
+      throw error;
+    }
+  }
+
   async incrementCoachingCount(userId: string): Promise<UserInfo> {
     try {
       const user = await this.userModel.incrementCoachingCount(userId);

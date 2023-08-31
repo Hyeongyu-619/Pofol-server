@@ -22,7 +22,13 @@ positionRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const positions = await positionService.findAllPositions();
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
+
+      const positions = await positionService.findAllPositionsWithPagination(
+        skip,
+        limit
+      );
       res.status(200).json(positions);
     } catch (error) {
       next(error);

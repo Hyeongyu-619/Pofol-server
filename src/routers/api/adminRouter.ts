@@ -16,8 +16,11 @@ adminRouter.get(
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const allUsers = await userService.findAll();
-      console.log(allUsers);
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
+
+      const allUsers = await userService.findAllWithPagination(skip, limit);
+
       res.status(200).json(allUsers);
     } catch (error) {
       next(error);
@@ -98,7 +101,7 @@ adminRouter.get(
   "/portfolio",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const limit = Number(req.query.limit) || 12;
+      const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
       const sortQuery = { createdAt: -1 };
 

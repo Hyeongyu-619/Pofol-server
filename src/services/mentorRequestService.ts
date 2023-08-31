@@ -50,9 +50,41 @@ class MentorRequestService {
   }
 
   async findMentorRequestsByStatus(
-    status: string
+    status: string,
+    skip: number,
+    limit: number
   ): Promise<MentorRequestData[]> {
-    return await this.mentorRequestModel.findMentorRequestsByStatus(status);
+    try {
+      const mentorRequests =
+        await this.mentorRequestModel.findMentorRequestsByStatus(
+          status,
+          skip,
+          limit
+        );
+      return mentorRequests;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching mentor requests by status:",
+        error
+      );
+      throw error;
+    }
+  }
+  async findAllWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<MentorRequestInfo[]> {
+    try {
+      const mentorRequests =
+        await this.mentorRequestModel.findMentorRequestsWithPagination(
+          skip,
+          limit
+        );
+      return mentorRequests;
+    } catch (error) {
+      console.error("An error occurred while fetching mentor requests:", error);
+      throw error;
+    }
   }
 }
 

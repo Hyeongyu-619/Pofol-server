@@ -172,7 +172,7 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
-      const limit = Number(req.query.limit) || 6;
+      const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
       const comments = await portfolioService.getCommentsByPortfolioId(
