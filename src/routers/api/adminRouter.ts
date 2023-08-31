@@ -160,23 +160,26 @@ adminRouter.delete(
   }
 );
 
-adminRouter.get("/", async (req: any, res: Response, next: NextFunction) => {
+adminRouter.get(
+  "/projectStudy",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const limit = Number(req.query.limit) || 12;
+      const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
-      const projectStudies = await projectStudyService.findAllProjectStudy(
-        limit,
-        skip
-      );
+      const [projectStudies, totalCount] =
+        await projectStudyService.findAllProjectStudy(limit, skip);
 
-      res.status(200).json(projectStudies);
+      res.status(200).json({
+        projectStudies: projectStudies,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+      });
     } catch (error) {
       next(error);
     }
-  };
-});
+  }
+);
 
 adminRouter.delete(
   "/:projectStudyId",
