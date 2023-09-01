@@ -4,36 +4,6 @@ import { adminRequired, loginRequired } from "../../middlewares";
 
 const notificationRouter = Router();
 
-// notificationRouter.get(
-//   "/",
-//   loginRequired,
-//   async (req: any, res: Response, next: NextFunction) => {
-//     try {
-//       const limit = Number(req.query.limit) || 5;
-//       const skip = Number(req.query.skip) || 0;
-
-//       const [notifications, total] =
-//         await notificationService.findAllNotificationsWithPagination(
-//           req.currentUser._id,
-//           skip,
-//           limit
-//         );
-
-//       const totalPages = Math.ceil(total / limit);
-
-//       res.status(200).json({
-//         notifications,
-//         total,
-//         totalPages,
-//         limit,
-//         skip,
-//       });
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
-
 notificationRouter.get("/", loginRequired, async (req: any, res) => {
   try {
     const userId = req.currentUser._id;

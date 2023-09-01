@@ -72,8 +72,12 @@ export class ProjectStudyModel {
       }
       const total = projectStudy.comments ? projectStudy.comments.length : 0;
 
-      const slicedComments = projectStudy.comments
-        ? projectStudy.comments.slice(skip, skip + limit)
+      const reversedComments = projectStudy.comments
+        ? [...projectStudy.comments].reverse()
+        : [];
+
+      const slicedComments = reversedComments
+        ? reversedComments.slice(skip, skip + limit)
         : [];
 
       return [slicedComments, total];
