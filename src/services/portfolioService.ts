@@ -286,9 +286,10 @@ class PortfolioService {
     if (!portfolio.mentoringRequests) {
       portfolio.mentoringRequests = [];
     }
+    const ownerId = portfolio.ownerId;
 
     await this.notificationModel.create({
-      userId,
+      userId: ownerId,
       content: "멘토링 신청 요청이 왔습니다!",
       portfolioId,
     });
@@ -315,13 +316,6 @@ class PortfolioService {
       throw new Error("Invalid action");
     }
 
-    const portfolio = await this.portfolioModel.findById(portfolioId);
-    if (!portfolio) {
-      throw new Error("Portfolio not found");
-    }
-
-    const ownerId = portfolio.ownerId;
-
     const updatedPortfolio =
       await this.portfolioModel.respondToMentoringRequest(
         portfolioId,
@@ -332,7 +326,7 @@ class PortfolioService {
       );
 
     await this.notificationModel.create({
-      userId: ownerId,
+      userId,
       content: `Your mentoring request has been ${action}ed.`,
       mentoringRequestStatus: action,
       mentoringRequestId: requestId.toString(),
