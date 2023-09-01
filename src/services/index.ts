@@ -3,3 +3,4 @@ export * from "./portfolioService";
 export * from "./positionService";
 export * from "./projectStudyService";
 export * from "./mentorRequestService";
+export * from "./notificationService";

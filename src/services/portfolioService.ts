@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { PortfolioModel } from "../database/model/portfolioModel";
+import { NotificationModel } from "../database/model/notificationModel";
 import {
   PortfolioInfo,
   PortfolioData,
@@ -13,9 +14,14 @@ import { userService } from "./userService";
 
 class PortfolioService {
   portfolioModel: PortfolioModel;
+  notificationModel: NotificationModel;
 
-  constructor(portfolioModelArg: PortfolioModel) {
+  constructor(
+    portfolioModelArg: PortfolioModel,
+    notificationModelArg: NotificationModel
+  ) {
     this.portfolioModel = portfolioModelArg;
+    this.notificationModel = notificationModelArg;
   }
 
   async addPortfolioApplication(
@@ -313,15 +319,31 @@ class PortfolioService {
   async updateMentoringRequest(
     portfolioId: string,
     requestId: Types.ObjectId,
-    status: "requested" | "accepted" | "completed" | "rejected"
+    status: "requested" | "accepted" | "completed" | "rejected",
+    userId: Types.ObjectId
   ): Promise<PortfolioData> {
-    return await this.portfolioModel.updateMentoringRequestStatus(
-      portfolioId,
-      requestId,
-      status
-    );
+    const updatedPortfolio =
+      await this.portfolioModel.updateMentoringRequestStatus(
+        portfolioId,
+        requestId,
+        status
+      );
+
+    await this.notificationModel.create({
+      userId,
+      content: `멘토링 신청서 상태가 변경되었습니다 상태: ${status}.`,
+      mentoringRequestStatus: status,
+      mentoringRequestId: requestId.toString(),
+      portfolioId: portfolioId,
+    });
+
+    return updatedPortfolio;
   }
 }
 
 const portfolioModelInstance = new PortfolioModel();
-export const portfolioService = new PortfolioService(portfolioModelInstance);
+const notificationModelInstance = new NotificationModel();
+export const portfolioService = new PortfolioService(
+  portfolioModelInstance,
+  notificationModelInstance
+);

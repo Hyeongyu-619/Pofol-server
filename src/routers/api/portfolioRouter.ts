@@ -97,16 +97,19 @@ portfolioRouter.post(
 
 portfolioRouter.post(
   "/updateMentoringRequest/:portfolioId/:requestId",
-  async (req, res) => {
+  loginRequired,
+  async (req: any, res) => {
     try {
       const portfolioId = req.params.portfolioId;
       const mentoringRequestId = new Types.ObjectId(req.params.requestId);
       const { status } = req.body;
+      const userId = req.currentUser._id;
 
       const updatedPortfolio = await portfolioService.updateMentoringRequest(
         portfolioId,
         mentoringRequestId,
-        status
+        status,
+        userId
       );
 
       res.status(200).json({
