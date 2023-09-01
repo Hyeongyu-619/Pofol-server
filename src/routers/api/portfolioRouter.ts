@@ -99,7 +99,7 @@ portfolioRouter.post(
     try {
       const portfolioId = req.params.portfolioId;
       const mentoringRequestId = new Types.ObjectId(req.params.requestId);
-      const { status, message } = req.body;
+      const { status } = req.body;
 
       const updatedPortfolio = await portfolioService.updateMentoringRequest(
         portfolioId,

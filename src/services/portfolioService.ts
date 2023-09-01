@@ -61,10 +61,19 @@ class PortfolioService {
       throw error;
     }
 
-    let filteredRequests: MentoringRequestInfo[] = portfolio.mentoringRequests;
+    const portfolioId = portfolio._id.toString();
+
+    let filteredRequests: MentoringRequestInfo[] =
+      portfolio.mentoringRequests.map((request) => {
+        const requestObject = (request as any).toObject();
+        return {
+          ...requestObject,
+          portfolioId,
+        };
+      });
 
     if (status) {
-      filteredRequests = portfolio.mentoringRequests.filter(
+      filteredRequests = filteredRequests.filter(
         (request: MentoringRequestInfo) => {
           return request.status === status;
         }
@@ -73,6 +82,7 @@ class PortfolioService {
 
     return filteredRequests;
   }
+
   async getMyMentoringRequests(
     userId: string,
     status?: string
