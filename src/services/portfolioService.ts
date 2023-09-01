@@ -314,7 +314,14 @@ class PortfolioService {
     } else {
       throw new Error("Invalid action");
     }
-    console.log("User ID inside the function:", userId);
+
+    const portfolio = await this.portfolioModel.findById(portfolioId);
+    if (!portfolio) {
+      throw new Error("Portfolio not found");
+    }
+
+    const ownerId = portfolio.ownerId;
+
     const updatedPortfolio =
       await this.portfolioModel.respondToMentoringRequest(
         portfolioId,
@@ -325,7 +332,7 @@ class PortfolioService {
       );
 
     await this.notificationModel.create({
-      userId,
+      userId: ownerId,
       content: `Your mentoring request has been ${action}ed.`,
       mentoringRequestStatus: action,
       mentoringRequestId: requestId.toString(),
