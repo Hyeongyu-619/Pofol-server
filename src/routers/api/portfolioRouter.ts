@@ -80,7 +80,8 @@ portfolioRouter.post(
       const message = req.body.message;
       const action = req.body.action;
       const advice = req.body.advice;
-      const userId = req.currentUser._id;
+      const portfolio = await portfolioService.getPortfolioById(portfolioId);
+      const userId = portfolio.ownerId;
 
       await portfolioService.respondToMentoringRequest(
         portfolioId,
@@ -106,7 +107,8 @@ portfolioRouter.post(
       const portfolioId = req.params.portfolioId;
       const mentoringRequestId = new Types.ObjectId(req.params.requestId);
       const { status } = req.body;
-      const userId = req.currentUser._id;
+      const portfolio = await portfolioService.getPortfolioById(portfolioId);
+      const userId = portfolio.ownerId;
 
       const updatedPortfolio = await portfolioService.updateMentoringRequest(
         portfolioId,
