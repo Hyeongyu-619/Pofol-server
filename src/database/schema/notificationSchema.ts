@@ -26,6 +26,14 @@ const NotificationSchema = new Schema({
     type: String,
     required: false,
   },
+  mentorRequestStatus: {
+    type: String,
+    required: false,
+  },
+  mentorRequestId: {
+    type: String,
+    required: false,
+  },
 });
 
 export { NotificationSchema };

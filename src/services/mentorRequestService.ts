@@ -1,12 +1,18 @@
 import { Types } from "mongoose";
 import { MentorRequestModel } from "../database/model/mentorRequestModel";
 import { MentorRequestInfo, MentorRequestData } from "../types/mentorRequest";
+import { NotificationModel } from "../database/model/notificationModel";
 
 class MentorRequestService {
   mentorRequestModel: MentorRequestModel;
+  notificationModel: NotificationModel;
 
-  constructor(mentorRequestModelArg: MentorRequestModel) {
+  constructor(
+    mentorRequestModelArg: MentorRequestModel,
+    notificationModelArg: NotificationModel
+  ) {
     this.mentorRequestModel = mentorRequestModelArg;
+    this.notificationModel = notificationModelArg;
   }
 
   async addMentorRequest(
@@ -20,12 +26,21 @@ class MentorRequestService {
 
   async updateMentorRequest(
     _id: string,
-    update: Partial<MentorRequestInfo>
+    update: Partial<MentorRequestInfo>,
+    userId: Types.ObjectId
   ): Promise<MentorRequestData> {
     const updatedMentorRequest = await this.mentorRequestModel.update(
       _id,
       update
     );
+
+    await this.notificationModel.create({
+      userId,
+      content: "Your mentor request has been updated.",
+      mentorRequestStatus: update.status?.toString(),
+      mentorRequestId: _id,
+    });
+
     return updatedMentorRequest;
   }
 
@@ -81,6 +96,8 @@ class MentorRequestService {
 }
 
 const mentorRequestModelInstance = new MentorRequestModel();
+const notificationModelInstance = new NotificationModel();
 export const mentorRequestService = new MentorRequestService(
-  mentorRequestModelInstance
+  mentorRequestModelInstance,
+  notificationModelInstance
 );

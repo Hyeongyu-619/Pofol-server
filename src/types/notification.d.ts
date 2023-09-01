@@ -7,6 +7,8 @@ export interface NotificationInfo {
   mentoringRequestId?: string;
   projectStudyId?: string;
   portfolioId?: string;
+  mentorRequestStatus?: string;
+  mentorRequestId?: string;
   content: string;
 }
 

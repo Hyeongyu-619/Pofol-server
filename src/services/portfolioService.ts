@@ -274,7 +274,8 @@ class PortfolioService {
 
   async addMentoringRequestToPortfolio(
     portfolioId: string,
-    mentoringRequest: any
+    mentoringRequest: any,
+    userId: Types.ObjectId
   ): Promise<PortfolioData> {
     const portfolio = await this.portfolioModel.findById(portfolioId);
     if (!portfolio) {
@@ -286,6 +287,12 @@ class PortfolioService {
       portfolio.mentoringRequests = [];
     }
 
+    await this.notificationModel.create({
+      userId,
+      content: "멘토링 신청 요청이 왔습니다!",
+      portfolioId,
+    });
+
     mentoringRequest.portfolioId = portfolioId;
     portfolio.mentoringRequests.push(mentoringRequest);
     return this.portfolioModel.update(portfolioId, portfolio);
@@ -295,6 +302,7 @@ class PortfolioService {
     portfolioId: string,
     requestId: Types.ObjectId,
     action: "complete" | "reject",
+    userId: Types.ObjectId,
     message?: string,
     advice?: string
   ): Promise<PortfolioData> {
@@ -307,15 +315,25 @@ class PortfolioService {
       throw new Error("Invalid action");
     }
 
-    return await this.portfolioModel.respondToMentoringRequest(
-      portfolioId,
-      requestId,
-      status,
-      message,
-      advice
-    );
-  }
+    const updatedPortfolio =
+      await this.portfolioModel.respondToMentoringRequest(
+        portfolioId,
+        requestId,
+        status,
+        message,
+        advice
+      );
 
+    await this.notificationModel.create({
+      userId,
+      content: `Your mentoring request has been ${action}ed.`,
+      mentoringRequestStatus: action,
+      mentoringRequestId: requestId.toString(),
+      portfolioId: portfolioId,
+    });
+
+    return updatedPortfolio;
+  }
   async updateMentoringRequest(
     portfolioId: string,
     requestId: Types.ObjectId,

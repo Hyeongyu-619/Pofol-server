@@ -27,6 +27,7 @@ portfolioRouter.get(
     }
   }
 );
+
 portfolioRouter.get(
   "/mentor/mentoringRequests",
   loginRequired,
@@ -79,13 +80,15 @@ portfolioRouter.post(
       const message = req.body.message;
       const action = req.body.action;
       const advice = req.body.advice;
+      const userId = req.currentUser._id;
 
       await portfolioService.respondToMentoringRequest(
         portfolioId,
         mentoringRequestId,
         action,
         message,
-        advice
+        advice,
+        userId
       );
 
       res.status(200).json({ message: `Successfully ${action}ed the request` });
@@ -334,7 +337,8 @@ portfolioRouter.post(
       const updatedPortfolio =
         await portfolioService.addMentoringRequestToPortfolio(
           portfolioId,
-          mentoringRequest
+          mentoringRequest,
+          userId
         );
       res.status(201).json(updatedPortfolio);
     } catch (error) {
