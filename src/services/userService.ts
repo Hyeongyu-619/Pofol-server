@@ -1,12 +1,19 @@
+import { Types } from "mongoose";
+import { NotificationModel } from "../database/model/notificationModel";
 import { UserModel } from "../database/model/userModel";
 import { UserInfo, UserData } from "../types/user";
 import { validation } from "../utils/validation";
 
 class UserService {
   userModel: UserModel;
+  notificationModel: NotificationModel;
 
-  constructor(userModelArg: UserModel) {
+  constructor(
+    userModelArg: UserModel,
+    notificationModelArg: NotificationModel
+  ) {
     this.userModel = userModelArg;
+    this.notificationModel = notificationModelArg;
   }
 
   async addUser(userInfo: UserInfo): Promise<UserData> {
@@ -47,6 +54,13 @@ class UserService {
 
   async updateUser(_id: string, update: Partial<UserInfo>): Promise<UserData> {
     const updatedUser = await this.userModel.update(_id, update);
+
+    await this.notificationModel.create({
+      userId: new Types.ObjectId(_id),
+      content: `회원 정보가 업데이트되었습니다.`,
+      mentorRequestStatus: update.role?.toString(),
+    });
+
     return updatedUser;
   }
 
@@ -115,4 +129,8 @@ class UserService {
 }
 
 const userModelInstance = new UserModel();
-export const userService = new UserService(userModelInstance);
+const notificationModelInstance = new NotificationModel();
+export const userService = new UserService(
+  userModelInstance,
+  notificationModelInstance
+);
