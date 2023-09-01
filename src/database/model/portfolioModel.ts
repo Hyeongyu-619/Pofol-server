@@ -265,6 +265,9 @@ export class PortfolioModel {
       error.name = "NotFound";
       throw error;
     }
+    if (!request.portfolioId) {
+      request.portfolioId = new Types.ObjectId(portfolioId);
+    }
 
     request.status = newStatus;
 

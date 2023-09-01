@@ -75,15 +75,17 @@ portfolioRouter.post(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const portfolioId = req.params.portfolioId;
-      const mentoringRequestId = req.params.requestid;
+      const mentoringRequestId = req.params.requestId;
       const message = req.body.message;
       const action = req.body.action;
+      const advice = req.body.advice;
 
       await portfolioService.respondToMentoringRequest(
         portfolioId,
         mentoringRequestId,
         message,
-        action
+        action,
+        advice
       );
 
       res.status(200).json({ message: `Successfully ${action}ed the request` });
