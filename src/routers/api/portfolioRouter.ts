@@ -34,6 +34,8 @@ portfolioRouter.get(
     try {
       const userId = req.currentUser._id;
       const status = req.query.status as string;
+      const userName = req.currentUser.name;
+      const profileImageUrl = req.currentUser.profileImageUrl;
 
       const mentoringRequests =
         await portfolioService.getMentoringRequestsByOwnerAndUser(
@@ -42,7 +44,7 @@ portfolioRouter.get(
           status
         );
 
-      res.status(200).json(mentoringRequests);
+      res.status(200).json({ mentoringRequests, userName, profileImageUrl });
     } catch (error) {
       next(error);
     }
@@ -50,19 +52,23 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/user/myMentoringRequests",
+  "/mentor/mentoringRequests",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUser._id;
+      const userName = req.currentUser.name;
+      const profileImageUrl = req.currentUser.profileImageUrl;
       const status = req.query.status as string;
 
-      const myMentoringRequests = await portfolioService.getMyMentoringRequests(
-        userId,
-        status
-      );
+      const mentoringRequests =
+        await portfolioService.getMentoringRequestsByOwnerAndUser(
+          userId,
+          userId,
+          status
+        );
 
-      res.status(200).json(myMentoringRequests);
+      res.status(200).json({ mentoringRequests, userName, profileImageUrl });
     } catch (error) {
       next(error);
     }
