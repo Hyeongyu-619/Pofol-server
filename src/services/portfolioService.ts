@@ -27,6 +27,16 @@ class PortfolioService {
   async addPortfolioApplication(
     portfolioInfo: PortfolioInfo
   ): Promise<PortfolioData> {
+    const existingPortfolio = await this.portfolioModel.findByOwnerId(
+      portfolioInfo.ownerId.toString()
+    );
+
+    if (existingPortfolio) {
+      const error = new Error("이미 포트폴리오가 존재합니다.");
+      error.name = "Conflict";
+      throw error;
+    }
+
     validation.addPortfolioApplication(portfolioInfo);
     const createdNewPortfolio = await this.portfolioModel.create(portfolioInfo);
     return createdNewPortfolio;
