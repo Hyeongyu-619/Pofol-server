@@ -36,7 +36,7 @@ class MentorRequestService {
 
     await this.notificationModel.create({
       userId,
-      content: "Your mentor request has been updated.",
+      content: `멘토 전환 신청 상태가 변경되었습니다 상태: ${update.status?.toString()}`,
       mentorRequestStatus: update.status?.toString(),
       mentorRequestId: _id,
     });

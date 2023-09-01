@@ -34,9 +34,9 @@ const notificationRouter = Router();
 //   }
 // );
 
-notificationRouter.get("/", async (req, res) => {
+notificationRouter.get("/", loginRequired, async (req: any, res) => {
   try {
-    const userId = req.query.userId as string;
+    const userId = req.currentUser._id;
     const skip = parseInt(req.query.skip as string, 10);
     const limit = parseInt(req.query.limit as string, 10);
 
