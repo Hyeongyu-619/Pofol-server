@@ -32,7 +32,7 @@ class PortfolioService {
     );
 
     if (existingPortfolio) {
-      const error = new Error("이미 포트폴리오가 존재합니다.");
+      const error = new Error("멘토링 신청 게시물은 하나만 작성 가능합니다.");
       error.name = "Conflict";
       throw error;
     }
