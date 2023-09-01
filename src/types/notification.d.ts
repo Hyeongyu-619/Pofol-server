@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface NotificationInfo {
-  userId: Types.ObjectId;
+  userId?: Types.ObjectId;
   _id?: Types.ObjectId;
   mentoringRequestStatus?: string;
   mentoringRequestId?: string;
