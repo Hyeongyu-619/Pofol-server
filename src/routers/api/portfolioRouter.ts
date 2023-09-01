@@ -116,8 +116,18 @@ portfolioRouter.post(
       const portfolioId = req.params.portfolioId;
       const mentoringRequestId = new Types.ObjectId(req.params.requestId);
       const { status } = req.body;
-      const portfolio = await portfolioService.getPortfolioById(portfolioId);
-      const userId = portfolio.ownerId;
+
+      const mentoringRequest = await portfolioService.getMentoringById(
+        portfolioId,
+        req.params.requestId
+      );
+
+      if (mentoringRequest === null) {
+        res.status(404).json({ message: "mentoringRequestnot found" });
+        return;
+      }
+
+      const userId = mentoringRequest.userId;
 
       const updatedPortfolio = await portfolioService.updateMentoringRequest(
         portfolioId,
