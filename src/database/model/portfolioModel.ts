@@ -113,6 +113,7 @@ export class PortfolioModel {
       const total = portfolioForTotal.comments
         ? portfolioForTotal.comments.length
         : 0;
+
       const portfolio: PortfolioData | null = await Portfolio.findById(
         id
       ).lean();
@@ -126,9 +127,9 @@ export class PortfolioModel {
       }
 
       const sortedComments = portfolio.comments.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       );
+
       const slicedComments = sortedComments.slice(skip, skip + limit);
 
       return [slicedComments, total];
