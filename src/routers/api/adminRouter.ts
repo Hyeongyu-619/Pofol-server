@@ -56,9 +56,14 @@ adminRouter.put(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params;
-      const { role } = req.body;
+      const { role, company, career } = req.body;
 
-      const updatedUser = await userService.updateUserRole(userId, role);
+      const updatedUser = await userService.updateUser(userId, {
+        role,
+        company,
+        career,
+      });
+
       res.status(200).json(updatedUser);
     } catch (error) {
       next(error);
