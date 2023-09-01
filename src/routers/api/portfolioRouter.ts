@@ -275,7 +275,7 @@ portfolioRouter.post(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
-      const userId = req.currentUser._id;
+      const userId = portfolioId.ownerId;
       const comment: CommentInfo = req.body;
       const updatedPortfolio = await portfolioService.addCommentToPortfolio(
         portfolioId,
