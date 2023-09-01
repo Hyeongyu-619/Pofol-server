@@ -113,7 +113,6 @@ export class PortfolioModel {
       const total = portfolioForTotal.comments
         ? portfolioForTotal.comments.length
         : 0;
-
       const portfolio: PortfolioData | null = await Portfolio.findById(
         id
       ).lean();
@@ -125,11 +124,11 @@ export class PortfolioModel {
         error.name = "NotFound!";
         throw error;
       }
+
       const sortedComments = portfolio.comments.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-
       const slicedComments = sortedComments.slice(skip, skip + limit);
 
       return [slicedComments, total];
