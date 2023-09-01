@@ -50,21 +50,19 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/mentor/mentoringRequests",
+  "/user/myMentoringRequests",
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUser._id;
       const status = req.query.status as string;
 
-      const mentoringRequests =
-        await portfolioService.getMentoringRequestsByOwnerAndUser(
-          userId,
-          userId,
-          status
-        );
+      const myMentoringRequests = await portfolioService.getMyMentoringRequests(
+        userId,
+        status
+      );
 
-      res.status(200).json(mentoringRequests);
+      res.status(200).json(myMentoringRequests);
     } catch (error) {
       next(error);
     }
