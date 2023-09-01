@@ -277,10 +277,14 @@ portfolioRouter.post(
       const { portfolioId } = req.params;
       const userId = req.currentUser._id;
       const comment: CommentInfo = req.body;
+      const portfolio = await portfolioService.getPortfolioById(portfolioId);
+      const ownerId = portfolio.ownerId;
+
       const updatedPortfolio = await portfolioService.addCommentToPortfolio(
         portfolioId,
         comment,
-        userId
+        userId,
+        ownerId
       );
       res.status(201).json(updatedPortfolio);
     } catch (error) {
