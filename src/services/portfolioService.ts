@@ -106,6 +106,7 @@ class PortfolioService {
         return {
           ...request,
           portfolioId: portfolio._id,
+          message: request.message,
         };
       });
 
@@ -114,6 +115,7 @@ class PortfolioService {
 
     return myMentoringRequests;
   }
+
   async updatePortfolio(
     _id: string,
     update: Partial<PortfolioInfo>
@@ -351,7 +353,7 @@ class PortfolioService {
 
     await this.notificationModel.create({
       userId,
-      content: `멘토링 신청서 상태가 변경되었습니다 상태: ${status}.`,
+      content: `멘토링 신청서 상태가 변경되었습니다.`,
       mentoringRequestStatus: status,
       mentoringRequestId: requestId.toString(),
       portfolioId: portfolioId,

@@ -41,7 +41,7 @@ class NotificationService {
       const notifications = await this.notificationModel.findAll();
       return notifications;
     } catch (error) {
-      throw new Error("포지션 목록을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error("알람 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
 
