@@ -7,8 +7,8 @@ const notificationRouter = Router();
 notificationRouter.get("/", loginRequired, async (req: any, res) => {
   try {
     const userId = req.currentUser._id;
-    const skip = parseInt(req.query.skip as string, 10);
-    const limit = parseInt(req.query.limit as string, 10);
+    const skip = (req.query.skip, 10);
+    const limit = (req.query.limit, 10);
 
     if (!userId || isNaN(skip) || isNaN(limit)) {
       return res.status(400).json({ error: "Invalid query parameters" });
