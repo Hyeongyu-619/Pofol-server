@@ -241,7 +241,7 @@ export class PortfolioModel {
   async updateMentoringRequestStatus(
     portfolioId: string,
     requestId: Types.ObjectId,
-    newStatus: "requested" | "accepted" | "completed" | "rejected"
+    newStatus: "requested" | "accepted" | "completed" | "rejected" | "canceled"
   ): Promise<PortfolioData> {
     const portfolio = await Portfolio.findById(portfolioId);
     if (!portfolio) {

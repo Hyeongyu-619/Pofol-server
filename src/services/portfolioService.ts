@@ -339,7 +339,7 @@ class PortfolioService {
   async updateMentoringRequest(
     portfolioId: string,
     requestId: Types.ObjectId,
-    status: "requested" | "accepted" | "completed" | "rejected",
+    status: "requested" | "accepted" | "completed" | "rejected" | "canceled",
     userId: Types.ObjectId
   ): Promise<PortfolioData> {
     const updatedPortfolio =

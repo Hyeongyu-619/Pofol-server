@@ -13,7 +13,7 @@ const MentoringRequestSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["requested", "accepted", "completed", "rejected"],
+    enum: ["requested", "accepted", "completed", "rejected", "canceled"],
     default: "requested",
   },
   email: {

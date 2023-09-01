@@ -4,7 +4,7 @@ export interface MentoringRequestInfo {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   portfolioId: Types.ObjectId;
-  status: "requested" | "accepted" | "completed" | "rejected";
+  status: "requested" | "accepted" | "completed" | "rejected" | "canceled";
   email: string;
   portfolioAddress: string;
   title: string;
