@@ -265,6 +265,7 @@ class PortfolioService {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
   async addMentoringRequestToPortfolio(
     portfolioId: string,
     mentoringRequest: any
@@ -278,9 +279,12 @@ class PortfolioService {
     if (!portfolio.mentoringRequests) {
       portfolio.mentoringRequests = [];
     }
+
+    mentoringRequest.portfolioId = portfolioId;
     portfolio.mentoringRequests.push(mentoringRequest);
     return this.portfolioModel.update(portfolioId, portfolio);
   }
+
   async respondToMentoringRequest(
     portfolioId: string,
     requestId: Types.ObjectId,
