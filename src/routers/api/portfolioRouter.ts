@@ -86,9 +86,9 @@ portfolioRouter.post(
         portfolioId,
         mentoringRequestId,
         action,
+        userId,
         message,
-        advice,
-        userId
+        advice
       );
 
       res.status(200).json({ message: `Successfully ${action}ed the request` });

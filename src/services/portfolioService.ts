@@ -314,7 +314,7 @@ class PortfolioService {
     } else {
       throw new Error("Invalid action");
     }
-
+    console.log("User ID inside the function:", userId);
     const updatedPortfolio =
       await this.portfolioModel.respondToMentoringRequest(
         portfolioId,
@@ -334,6 +334,7 @@ class PortfolioService {
 
     return updatedPortfolio;
   }
+
   async updateMentoringRequest(
     portfolioId: string,
     requestId: Types.ObjectId,
