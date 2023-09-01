@@ -7,7 +7,7 @@ const notificationRouter = Router();
 notificationRouter.get("/", loginRequired, async (req: any, res) => {
   try {
     const userId = req.currentUser._id;
-    const skip = (req.query.skip, 10);
+    const skip = (req.query.skip, 0);
     const limit = (req.query.limit, 10);
 
     if (!userId || isNaN(skip) || isNaN(limit)) {
