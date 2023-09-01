@@ -68,7 +68,7 @@ adminRouter.put(
       await notificationModel.create({
         content: `회원 역할이 업데이트되었습니다.`,
         mentorRequestStatus: role?.toString(),
-        mentorRequestId: userId,
+        userId: userId,
       });
 
       res.status(200).json(updatedUser);
