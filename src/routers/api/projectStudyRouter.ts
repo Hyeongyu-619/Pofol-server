@@ -153,10 +153,13 @@ projectStudyRouter.post(
     try {
       const { projectStudyId } = req.params;
       const comment: CommentInfo = req.body;
+      const userId = req.currentUser._id;
+
       const updatedprojectStudy =
         await projectStudyService.addCommentToProjectStudy(
           projectStudyId,
-          comment
+          comment,
+          userId
         );
       res.status(201).json(updatedprojectStudy);
     } catch (error) {

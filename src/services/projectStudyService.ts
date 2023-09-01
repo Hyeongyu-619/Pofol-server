@@ -8,12 +8,18 @@ import {
 } from "../types/projectStudy";
 import { validation } from "../utils/validation";
 import { userService } from "./userService";
+import { NotificationModel } from "../database/model/notificationModel";
 
 class ProjectStudyService {
   projectStudyModel: ProjectStudyModel;
+  notificationModel: NotificationModel;
 
-  constructor(projectStudyModelArg: ProjectStudyModel) {
+  constructor(
+    projectStudyModelArg: ProjectStudyModel,
+    notificationModelArg: NotificationModel
+  ) {
     this.projectStudyModel = projectStudyModelArg;
+    this.notificationModel = notificationModelArg;
   }
 
   async addProjectStudyApplication(
@@ -128,7 +134,8 @@ class ProjectStudyService {
 
   async addCommentToProjectStudy(
     projectStudyId: string,
-    comment: CommentInfo
+    comment: CommentInfo,
+    userId: Types.ObjectId
   ): Promise<ProjectStudyData> {
     const projectStudy = await this.projectStudyModel.findById(projectStudyId);
     if (!projectStudy) {
@@ -140,6 +147,13 @@ class ProjectStudyService {
       projectStudy.comments = [];
     }
     projectStudy.comments.push(comment);
+
+    await this.notificationModel.create({
+      userId,
+      content: "프로젝트/스터디 게시글에 새로운 댓글이 작성되었습니다.",
+      projectStudyId: projectStudyId,
+    });
+
     return this.projectStudyModel.update(projectStudyId, projectStudy);
   }
 
@@ -231,6 +245,8 @@ class ProjectStudyService {
 }
 
 const projectStudyModelInstance = new ProjectStudyModel();
+const notificationModelInstance = new NotificationModel();
 export const projectStudyService = new ProjectStudyService(
-  projectStudyModelInstance
+  projectStudyModelInstance,
+  notificationModelInstance
 );
