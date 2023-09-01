@@ -18,7 +18,7 @@ class Validation {
       error.name = "BadRequest";
       throw error;
     }
-    const nickNamePattern = /^[가-힣a-zA-Z0-9]+$/;
+    const nickNamePattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣\s]{2,10}$/;
     if (!nickNamePattern.test(nickName)) {
       const error = new Error("닉네임은 한글, 숫자, 영어만 입력 가능합니다.");
       error.name = "BadRequest";
