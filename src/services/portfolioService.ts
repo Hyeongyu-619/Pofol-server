@@ -61,24 +61,18 @@ class PortfolioService {
       throw error;
     }
 
-    const portfolioId = portfolio._id.toString();
-
-    let filteredRequests: MentoringRequestInfo[] =
-      portfolio.mentoringRequests.map((request) => {
-        const requestObject = (request as any).toObject();
-        return {
-          ...requestObject,
-          portfolioId,
-        };
-      });
+    let filteredRequests: MentoringRequestInfo[] = portfolio.mentoringRequests;
 
     if (status) {
-      filteredRequests = filteredRequests.filter(
+      filteredRequests = portfolio.mentoringRequests.filter(
         (request: MentoringRequestInfo) => {
           return request.status === status;
         }
       );
     }
+    filteredRequests.forEach((request) => {
+      request.portfolioId = portfolio._id;
+    });
 
     return filteredRequests;
   }
