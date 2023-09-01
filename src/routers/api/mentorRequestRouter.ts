@@ -90,11 +90,16 @@ mentorRequestRouter.put(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
+      const mentorRequest = await mentorRequestService.getMentorRequestById(
+        req.params.id
+      );
+      const userId = mentorRequest.userId;
+
       const updatedMentorRequest =
         await mentorRequestService.updateMentorRequest(
           req.params.id,
           req.body,
-          req.params.id
+          userId
         );
       res.status(200).json(updatedMentorRequest);
     } catch (error) {
