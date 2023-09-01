@@ -65,11 +65,11 @@ adminRouter.put(
         career,
       });
 
-      await notificationModel.create({
-        content: `회원 역할이 업데이트되었습니다.`,
-        mentorRequestStatus: role?.toString(),
-        userId: userId,
-      });
+      // await notificationModel.create({
+      //   content: `회원 역할이 업데이트되었습니다.`,
+      //   mentorRequestStatus: role?.toString(),
+      //   userId: userId,
+      // });
 
       res.status(200).json(updatedUser);
     } catch (error) {
