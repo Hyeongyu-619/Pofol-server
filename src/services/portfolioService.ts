@@ -348,13 +348,40 @@ class PortfolioService {
 
     await this.notificationModel.create({
       userId,
-      content: `Your mentoring request has been ${action}ed.`,
+      content: `Your mentoring request has been ${action}d.`,
       mentoringRequestStatus: action,
       mentoringRequestId: requestId.toString(),
       portfolioId: portfolioId,
     });
 
     return updatedPortfolio;
+  }
+
+  async getMentoringById(
+    portfolioId: string,
+    requestId: Types.ObjectId
+  ): Promise<MentoringRequestInfo | null> {
+    const portfolio = await this.portfolioModel.findById(portfolioId);
+    if (!portfolio) {
+      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+    if (!portfolio.mentoringRequests) {
+      const error = new Error("이 포트폴리오에는 멘토링 요청이 없습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+    const mentoringRequest = portfolio.mentoringRequests.find(
+      (request) => request?._id?.toString() === requestId.toString()
+    );
+    if (!mentoringRequest) {
+      const error = new Error("해당 멘토링 요청을 찾을 수 없습니다.");
+      error.name = "NotFound";
+      throw error;
+    }
+
+    return mentoringRequest;
   }
 
   async updateMentoringRequest(

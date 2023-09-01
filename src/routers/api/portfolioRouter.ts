@@ -80,8 +80,17 @@ portfolioRouter.post(
       const message = req.body.message;
       const action = req.body.action;
       const advice = req.body.advice;
-      const portfolio = await portfolioService.getPortfolioById(portfolioId);
-      const userId = portfolio.ownerId;
+      const portfolio = await portfolioService.getMentoringById(
+        portfolioId,
+        mentoringRequestId
+      );
+
+      if (portfolio === null) {
+        res.status(404).json({ message: "Portfolio not found" });
+        return;
+      }
+
+      const userId = portfolio.userId;
 
       await portfolioService.respondToMentoringRequest(
         portfolioId,
@@ -92,7 +101,7 @@ portfolioRouter.post(
         advice
       );
 
-      res.status(200).json({ message: `Successfully ${action}ed the request` });
+      res.status(200).json({ message: `Successfully ${action}d the request` });
     } catch (error) {
       next(error);
     }
