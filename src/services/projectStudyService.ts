@@ -135,7 +135,8 @@ class ProjectStudyService {
   async addCommentToProjectStudy(
     projectStudyId: string,
     comment: CommentInfo,
-    userId: Types.ObjectId
+    userId: Types.ObjectId,
+    ownerId: Types.ObjectId
   ): Promise<ProjectStudyData> {
     const projectStudy = await this.projectStudyModel.findById(projectStudyId);
     if (!projectStudy) {
@@ -149,7 +150,7 @@ class ProjectStudyService {
     projectStudy.comments.push(comment);
 
     await this.notificationModel.create({
-      userId,
+      userId: ownerId,
       content: "프로젝트/스터디 게시글에 새로운 댓글이 작성되었습니다.",
       projectStudyId: projectStudyId,
     });

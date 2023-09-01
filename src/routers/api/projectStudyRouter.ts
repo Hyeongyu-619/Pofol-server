@@ -153,13 +153,18 @@ projectStudyRouter.post(
     try {
       const { projectStudyId } = req.params;
       const comment: CommentInfo = req.body;
-      const userId = req.projectStudyId.ownerId;
+      const userId = req.currentUser._id;
+      const projectStudy = await projectStudyService.getProjectStudyById(
+        projectStudyId
+      );
+      const ownerId = projectStudy.ownerId;
 
       const updatedprojectStudy =
         await projectStudyService.addCommentToProjectStudy(
           projectStudyId,
           comment,
-          userId
+          userId,
+          ownerId
         );
       res.status(201).json(updatedprojectStudy);
     } catch (error) {

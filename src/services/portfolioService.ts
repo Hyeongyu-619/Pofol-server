@@ -199,7 +199,8 @@ class PortfolioService {
   async addCommentToPortfolio(
     portfolioId: string,
     comment: CommentInfo,
-    userId: Types.ObjectId
+    userId: Types.ObjectId,
+    ownerId: Types.ObjectId
   ): Promise<PortfolioData> {
     const portfolio = await this.portfolioModel.findById(portfolioId);
     if (!portfolio) {
@@ -213,7 +214,7 @@ class PortfolioService {
     portfolio.comments.push(comment);
 
     await this.notificationModel.create({
-      userId,
+      userId: ownerId,
       content: "멘토링 신청서에 새로운 리뷰가 작성되었습니다.",
       portfolioId: portfolioId,
     });
