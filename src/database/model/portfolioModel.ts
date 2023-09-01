@@ -1,4 +1,4 @@
-import { Document, Types, model } from "mongoose";
+import mongoose, { Document, Types, model } from "mongoose";
 import { Portfolio } from "..";
 import {
   PortfolioInfo,
@@ -98,41 +98,26 @@ export class PortfolioModel {
     skip: number
   ): Promise<[CommentInfo[], number]> {
     try {
-      const portfolioForTotal: PortfolioData | null = await Portfolio.findById(
-        id
-      ).lean();
+      const totalAggregation = await Portfolio.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(id) } },
+        { $unwind: "$comments" },
+        { $count: "total" },
+      ]);
 
-      if (!portfolioForTotal) {
-        const error = new Error(
-          "해당하는 id의 포트폴리오가 존재하지 않습니다."
-        );
-        error.name = "NotFound!";
-        throw error;
-      }
+      const total = totalAggregation[0]?.total || 0;
 
-      const total = portfolioForTotal.comments
-        ? portfolioForTotal.comments.length
-        : 0;
+      const commentsAggregation = await Portfolio.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(id) } },
+        { $unwind: "$comments" },
+        { $sort: { "comments.createdAt": -1 } },
+        { $skip: skip },
+        { $limit: limit },
+        { $group: { _id: "$_id", comments: { $push: "$comments" } } },
+      ]);
 
-      const portfolio: PortfolioData | null = await Portfolio.findById(
-        id
-      ).lean();
+      const comments = commentsAggregation[0]?.comments || [];
 
-      if (!portfolio || !portfolio.comments) {
-        const error = new Error(
-          "해당하는 id의 포트폴리오가 존재하지 않습니다."
-        );
-        error.name = "NotFound!";
-        throw error;
-      }
-
-      const sortedComments = portfolio.comments.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
-
-      const slicedComments = sortedComments.slice(skip, skip + limit);
-
-      return [slicedComments, total];
+      return [comments, total];
     } catch (error) {
       throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
     }
