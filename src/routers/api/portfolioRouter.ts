@@ -83,8 +83,8 @@ portfolioRouter.post(
       await portfolioService.respondToMentoringRequest(
         portfolioId,
         mentoringRequestId,
-        message,
         action,
+        message,
         advice
       );
 

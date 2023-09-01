@@ -114,19 +114,25 @@ export class PortfolioModel {
         ? portfolioForTotal.comments.length
         : 0;
 
-      const portfolio: PortfolioData | null = await Portfolio.findById(id)
-        .slice("comments", [skip, skip + limit])
-        .lean();
+      const portfolio: PortfolioData | null = await Portfolio.findById(
+        id
+      ).lean();
 
-      if (!portfolio) {
+      if (!portfolio || !portfolio.comments) {
         const error = new Error(
           "해당하는 id의 포트폴리오가 존재하지 않습니다."
         );
         error.name = "NotFound!";
         throw error;
       }
+      const sortedComments = portfolio.comments.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
 
-      return [portfolio.comments || [], total];
+      const slicedComments = sortedComments.slice(skip, skip + limit);
+
+      return [slicedComments, total];
     } catch (error) {
       throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
     }
