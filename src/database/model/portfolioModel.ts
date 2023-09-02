@@ -57,7 +57,6 @@ export class PortfolioModel {
 
       return portfolio.mentoringRequests as MentoringRequestData[];
     } catch (error) {
-      console.error(error);
       throw new Error("멘토링 요청을 불러오는 데 실패했습니다.");
     }
   }

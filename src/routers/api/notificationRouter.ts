@@ -23,7 +23,6 @@ notificationRouter.get("/", loginRequired, async (req: any, res) => {
 
     res.status(200).json({ notifications, total });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

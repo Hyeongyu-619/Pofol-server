@@ -89,7 +89,6 @@ class UserService {
       const users = await this.userModel.findUsersWithPagination(skip, limit);
       return users;
     } catch (error) {
-      console.error("An error occurred while fetching users:", error);
       throw error;
     }
   }

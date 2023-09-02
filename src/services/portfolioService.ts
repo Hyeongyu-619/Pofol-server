@@ -182,7 +182,6 @@ class PortfolioService {
       );
       return [comments, total];
     } catch (error) {
-      console.error("An error occurred while fetching comments:", error);
       throw error;
     }
   }
@@ -278,7 +277,6 @@ class PortfolioService {
         );
       return portfolios;
     } catch (error) {
-      console.error(error);
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
