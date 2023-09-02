@@ -79,7 +79,7 @@ userRouter.delete(
 );
 userRouter.put(
   "/:userId/completeMentoring",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params;

@@ -16,10 +16,9 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    // 개발환경에서만 등록해서 사용
     origin: [
       "http://34.64.245.195:8080",
-      "kdt-sw-5-2-team01.elicecoding.com",
+      "http://kdt-sw-5-2-team01.elicecoding.com",
       "http://34.64.245.195",
       "http://localhost:8080",
       "http://localhost:3000",
