@@ -33,16 +33,10 @@ export class PortfolioModel {
   }
 
   async findByOwnerId(ownerId: string): Promise<PortfolioData | null> {
-    try {
-      const portfolio: PortfolioData | null = await Portfolio.findOne({
-        ownerId,
-      }).lean();
-      const resultPortfolio = portfolio || ({} as PortfolioData);
-      console.log(resultPortfolio);
-      return resultPortfolio;
-    } catch (error) {
-      return {} as PortfolioData;
-    }
+    const portfolio: PortfolioData | null = await Portfolio.findOne({
+      ownerId,
+    }).lean();
+    return portfolio;
   }
 
   async findMentoringRequestsById(

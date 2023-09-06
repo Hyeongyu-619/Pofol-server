@@ -74,7 +74,7 @@ class PortfolioService {
     if (!portfolio) {
       const error = new Error("해당 ownerId의 포트폴리오가 존재하지 않습니다.");
       error.name = "NotFound";
-      throw error;
+      return [];
     }
 
     let filteredRequests: MentoringRequestInfo[] = portfolio.mentoringRequests;
