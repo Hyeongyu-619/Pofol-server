@@ -37,7 +37,9 @@ export class PortfolioModel {
       const portfolio: PortfolioData | null = await Portfolio.findOne({
         ownerId,
       }).lean();
-      return portfolio || ({} as PortfolioData);
+      const resultPortfolio = portfolio || ({} as PortfolioData);
+      console.log(resultPortfolio);
+      return resultPortfolio;
     } catch (error) {
       return {} as PortfolioData;
     }
