@@ -51,7 +51,7 @@ app.use(express.static(__dirname));
 const swaggerSpec: any = YAML.load(path.join(__dirname, "./swagger.yaml"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.listen(PORT, () => console.log(`server is running ${PORT}! `));
+app.listen(PORT, () => console.log(`server is running ${PORT} `));
 app.use(errorHandler);
 
 export { app };
