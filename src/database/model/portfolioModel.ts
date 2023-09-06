@@ -39,7 +39,7 @@ export class PortfolioModel {
       }).lean();
       return portfolio;
     } catch (error) {
-      throw error;
+      return {} as PortfolioData;
     }
   }
 
