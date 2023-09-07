@@ -11,15 +11,19 @@ import {
 } from "../types/portfolio";
 import { validation } from "../utils/validation";
 import { userService } from "./userService";
+import { UserModel } from "../database/model/userModel";
 
 class PortfolioService {
   portfolioModel: PortfolioModel;
   notificationModel: NotificationModel;
+  userModel: UserModel;
 
   constructor(
     portfolioModelArg: PortfolioModel,
-    notificationModelArg: NotificationModel
+    notificationModelArg: NotificationModel,
+    userModelArg: UserModel
   ) {
+    this.userModel = userModelArg;
     this.portfolioModel = portfolioModelArg;
     this.notificationModel = notificationModelArg;
   }
@@ -388,7 +392,8 @@ class PortfolioService {
     portfolioId: string,
     requestId: Types.ObjectId,
     status: "requested" | "accepted" | "completed" | "rejected" | "canceled",
-    userId: Types.ObjectId
+    userId: Types.ObjectId,
+    mentorId: Types.ObjectId
   ): Promise<PortfolioData> {
     const updatedPortfolio =
       await this.portfolioModel.updateMentoringRequestStatus(
@@ -396,6 +401,16 @@ class PortfolioService {
         requestId,
         status
       );
+
+    if (status === "completed") {
+      const mentor = await this.userModel.findById(mentorId.toString());
+      if (mentor && mentor.coachingCount !== undefined) {
+        mentor.coachingCount += 1;
+        await this.userModel.update(mentorId.toString(), {
+          coachingCount: mentor.coachingCount,
+        });
+      }
+    }
 
     await this.notificationModel.create({
       userId,
@@ -411,7 +426,9 @@ class PortfolioService {
 
 const portfolioModelInstance = new PortfolioModel();
 const notificationModelInstance = new NotificationModel();
+const userModelInstance = new UserModel();
 export const portfolioService = new PortfolioService(
   portfolioModelInstance,
-  notificationModelInstance
+  notificationModelInstance,
+  userModelInstance
 );

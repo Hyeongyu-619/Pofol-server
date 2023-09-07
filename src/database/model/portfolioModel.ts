@@ -243,10 +243,17 @@ export class PortfolioModel {
     newStatus: "requested" | "accepted" | "completed" | "rejected" | "canceled"
   ): Promise<PortfolioData> {
     const portfolio = await Portfolio.findById(portfolioId);
+
     if (!portfolio) {
       const error = new Error("Portfolio not found");
       error.name = "NotFound";
       throw error;
+    }
+
+    if (newStatus === "completed") {
+      if (portfolio.coachingCount) {
+        portfolio.coachingCount += 1;
+      }
     }
 
     const request = portfolio.mentoringRequests.id(requestId);

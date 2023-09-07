@@ -132,6 +132,7 @@ portfolioRouter.post(
   loginRequired,
   async (req: any, res) => {
     try {
+      const mentorId = req.currentUser._id;
       const portfolioId = req.params.portfolioId;
       const mentoringRequestId = new Types.ObjectId(req.params.requestId);
       const { status } = req.body;
@@ -152,7 +153,8 @@ portfolioRouter.post(
         portfolioId,
         mentoringRequestId,
         status,
-        userId
+        userId,
+        mentorId
       );
 
       res.status(200).json({
