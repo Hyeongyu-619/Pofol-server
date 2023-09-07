@@ -69,8 +69,6 @@ portfolioRouter.get(
         status
       );
 
-      console.log(myMentoringRequests);
-
       const ownerIds = await Promise.all(
         myMentoringRequests.map(async (request) => {
           const portfolio = await portfolioService.getPortfolioById(
@@ -80,13 +78,9 @@ portfolioRouter.get(
         })
       );
 
-      console.log(ownerIds);
-
       const UserInfos = await Promise.all(
         ownerIds.map((ownerId) => userService.getUserById(ownerId))
       );
-
-      console.log(UserInfos);
 
       res.status(200).json({ myMentoringRequests, UserInfos });
     } catch (error) {
