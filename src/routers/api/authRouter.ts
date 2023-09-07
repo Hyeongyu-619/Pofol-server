@@ -40,6 +40,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
         res.cookie("token", token, { httpOnly: true, maxAge: 21600000 });
         res.cookie("isToken", "true", { maxAge: 21600000 });
         res.cookie("email", email, { maxAge: 21600000 });
+        res.cookie("isUser", 1, { maxAge: 21600000 });
         return res.redirect("/");
       } else {
         res.cookie("email", email);
@@ -73,6 +74,7 @@ authRouter.post("/signup", async (req, res, next) => {
       { expiresIn: "6h" }
     );
 
+    res.cookie("isUser", 1, { maxAge: 21600000 });
     res.cookie("token", token, { maxAge: 21600000 });
     return res.redirect("/");
   } catch (error) {
@@ -84,6 +86,7 @@ authRouter.get("/logout", function (req, res) {
   res.clearCookie("token");
   res.clearCookie("email");
   res.clearCookie("isToken");
+  res.clearCookie("isUser");
   res.redirect("/");
 });
 
