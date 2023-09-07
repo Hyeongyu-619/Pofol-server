@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { loginRequired, ownershipRequired } from "../../middlewares";
-import { portfolioService } from "../../services";
+import { portfolioService, userService } from "../../services";
 import {
   CommentInfo,
   MentoringRequestInfo,
@@ -33,17 +33,30 @@ portfolioRouter.get(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUser._id;
+      const currentUserId = req.currentUser._id;
       const status = req.query.status as string;
 
       const mentoringRequests =
         await portfolioService.getMentoringRequestsByOwnerAndUser(
-          userId,
-          userId,
+          currentUserId,
+          currentUserId,
           status
         );
 
-      res.status(200).json(mentoringRequests);
+      const userId = mentoringRequests.map((request) => request.userId);
+
+      const userInfos = await Promise.all(
+        userId.map((userId) => userService.getUserById(userId.toString()))
+      );
+
+      const result = mentoringRequests.map((request, index) => {
+        return {
+          mentoringRequest: request,
+          userInfo: userInfos[index],
+        };
+      });
+
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
