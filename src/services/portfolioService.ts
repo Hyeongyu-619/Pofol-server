@@ -404,20 +404,21 @@ class PortfolioService {
 
     if (status === "completed") {
       const mentor = await this.userModel.findById(mentorId.toString());
+      const portfolio = await this.portfolioModel.findById(portfolioId);
       if (mentor && mentor.coachingCount !== undefined) {
+        console.log("멘토 코칭카운트 이전", mentor.coachingCount);
         mentor.coachingCount += 1;
+        console.log("멘토 코칭카운트 이후", mentor.coachingCount);
         await this.userModel.update(mentorId.toString(), {
           coachingCount: mentor.coachingCount,
         });
       }
-
-      const portfolio = await this.portfolioModel.findById(portfolioId);
-      if (portfolio && portfolio.coachingCount !== undefined) {
-        portfolio.coachingCount += 1;
-        await this.portfolioModel.update(portfolioId, {
-          coachingCount: portfolio.coachingCount,
-        });
-      }
+      console.log("포트폴리오 코칭카운트 이전", portfolio.coachingCount);
+      portfolio.coachingCount += 1;
+      console.log("포트폴리오 코칭카운트 이후", portfolio.coachingCount);
+      await this.portfolioModel.update(portfolioId, {
+        coachingCount: portfolio.coachingCount,
+      });
     }
 
     await this.notificationModel.create({
