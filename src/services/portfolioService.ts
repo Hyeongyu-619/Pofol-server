@@ -348,7 +348,7 @@ class PortfolioService {
 
     await this.notificationModel.create({
       userId,
-      content: `멘토링 신청이 수락/거절`,
+      content: `멘토링 신청이 ${actionComment}되었습니다.`,
       mentoringRequestStatus: action,
       mentoringRequestId: requestId.toString(),
       portfolioId: portfolioId,
