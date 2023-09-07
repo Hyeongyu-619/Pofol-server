@@ -2,6 +2,10 @@ import { Document, model } from "mongoose";
 import { NotificationInfo, NotificationData } from "../../types/notification";
 import { NotificationSchema } from "../schema/notificationSchema";
 
+const Notification = model<NotificationInfo & Document>(
+  "Notification",
+  NotificationSchema
+);
 export class NotificationModel {
   async create(notificationInfo: NotificationInfo): Promise<NotificationData> {
     const createdNotification = await Notification.create(notificationInfo);
@@ -88,8 +92,4 @@ export class NotificationModel {
   }
 }
 
-const Notification = model<NotificationInfo & Document>(
-  "Notification",
-  NotificationSchema
-);
 export default Notification;
