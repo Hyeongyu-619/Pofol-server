@@ -404,12 +404,18 @@ class PortfolioService {
 
     if (status === "completed") {
       const mentor = await this.userModel.findById(mentorId.toString());
-      const portfolio = await this.portfolioModel.findById(portfolioId);
       if (mentor && mentor.coachingCount !== undefined) {
         mentor.coachingCount += 1;
-        portfolio.coachingCount += 1;
         await this.userModel.update(mentorId.toString(), {
           coachingCount: mentor.coachingCount,
+        });
+      }
+
+      const portfolio = await this.portfolioModel.findById(portfolioId);
+      if (portfolio && portfolio.coachingCount !== undefined) {
+        portfolio.coachingCount += 1;
+        await this.portfolioModel.update(portfolioId, {
+          coachingCount: portfolio.coachingCount,
         });
       }
     }
