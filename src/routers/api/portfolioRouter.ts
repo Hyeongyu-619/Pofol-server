@@ -49,13 +49,6 @@ portfolioRouter.get(
         userId.map((userId) => userService.getUserById(userId.toString()))
       );
 
-      const result = mentoringRequests.map((request, index) => {
-        return {
-          mentoringRequest: request,
-          userInfo: userInfos[index],
-        };
-      });
-
       res.status(200).json({ mentoringRequests, userInfos });
     } catch (error) {
       next(error);
@@ -75,6 +68,8 @@ portfolioRouter.get(
         userId,
         status
       );
+
+      console.log(myMentoringRequests);
 
       const ownerIds = myMentoringRequests.map((request) => request.ownerId);
 
