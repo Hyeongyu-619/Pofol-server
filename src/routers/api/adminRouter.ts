@@ -7,7 +7,6 @@ import {
 } from "../../services";
 import { CommentInfo } from "../../types/portfolio";
 import { Types } from "mongoose";
-import notificationModel from "../../database/model/notificationModel";
 
 const adminRouter = Router();
 

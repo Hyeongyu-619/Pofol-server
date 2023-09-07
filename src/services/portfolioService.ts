@@ -344,9 +344,11 @@ class PortfolioService {
         advice
       );
 
+    const actionComment = action === "complete" ? "수락" : "거절";
+
     await this.notificationModel.create({
       userId,
-      content: `Your mentoring request has been ${action}d.`,
+      content: `멘토링 신청이 수락/거절`,
       mentoringRequestStatus: action,
       mentoringRequestId: requestId.toString(),
       portfolioId: portfolioId,
