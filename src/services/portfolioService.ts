@@ -403,7 +403,7 @@ class PortfolioService {
       );
     console.log(status);
 
-    if (status === "completed") {
+    if (status === "accepted") {
       const mentor = await this.userModel.findById(mentorId.toString());
       const portfolio = await this.portfolioModel.findById(portfolioId);
       if (mentor && mentor.coachingCount !== undefined) {
