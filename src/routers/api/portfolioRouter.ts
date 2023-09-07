@@ -71,7 +71,9 @@ portfolioRouter.get(
 
       console.log(myMentoringRequests);
 
-      const ownerIds = myMentoringRequests.map((request) => request.ownerId);
+      const ownerIds = myMentoringRequests.map(
+        (request) => request.portfolioId
+      );
 
       const UserInfos = await Promise.all(
         ownerIds.map((ownerId) => userService.getUserById(ownerId))
