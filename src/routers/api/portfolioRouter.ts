@@ -81,6 +81,8 @@ portfolioRouter.get(
         ownerIds.map((ownerId) => userService.getUserById(ownerId))
       );
 
+      console.log(UserInfos);
+
       res.status(200).json({ myMentoringRequests, UserInfos });
     } catch (error) {
       next(error);
