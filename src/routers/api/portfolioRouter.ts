@@ -64,13 +64,13 @@ portfolioRouter.get(
       const userId = req.currentUser._id;
       const status = req.query.status as string;
 
-      const MentoringRequests = await portfolioService.getMyMentoringRequests(
+      const mentoringRequests = await portfolioService.getMyMentoringRequests(
         userId,
         status
       );
 
       const ownerIds = await Promise.all(
-        MentoringRequests.map(async (request) => {
+        mentoringRequests.map(async (request) => {
           const portfolio = await portfolioService.getPortfolioById(
             request.portfolioId.toString()
           );
@@ -82,7 +82,7 @@ portfolioRouter.get(
         ownerIds.map((ownerId) => userService.getUserById(ownerId))
       );
 
-      res.status(200).json({ MentoringRequests, UserInfos });
+      res.status(200).json({ mentoringRequests, UserInfos });
     } catch (error) {
       next(error);
     }
