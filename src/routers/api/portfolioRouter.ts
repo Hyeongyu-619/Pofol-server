@@ -56,7 +56,7 @@ portfolioRouter.get(
         };
       });
 
-      res.status(200).json(result);
+      res.status(200).json({ mentoringRequests, userInfos });
     } catch (error) {
       next(error);
     }
