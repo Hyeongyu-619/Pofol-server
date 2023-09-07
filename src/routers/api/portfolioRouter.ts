@@ -71,8 +71,8 @@ portfolioRouter.get(
 
       console.log(myMentoringRequests);
 
-      const ownerIds = myMentoringRequests.map(
-        (request) => request.portfolioId
+      const ownerIds = myMentoringRequests.map((request) =>
+        request.portfolioId.toString()
       );
 
       console.log(ownerIds);
