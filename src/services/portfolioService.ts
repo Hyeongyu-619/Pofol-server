@@ -401,6 +401,7 @@ class PortfolioService {
         requestId,
         status
       );
+    console.log(status);
 
     if (status === "completed") {
       const mentor = await this.userModel.findById(mentorId.toString());
