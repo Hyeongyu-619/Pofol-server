@@ -75,6 +75,8 @@ portfolioRouter.get(
         (request) => request.portfolioId
       );
 
+      console.log(ownerIds);
+
       const UserInfos = await Promise.all(
         ownerIds.map((ownerId) => userService.getUserById(ownerId))
       );
