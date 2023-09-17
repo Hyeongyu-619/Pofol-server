@@ -22,7 +22,7 @@ userRouter.put(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
+      const userId = req.currentUser._id;
       const update = req.body;
       const updatedUser = await userService.updateUser(userId, update);
 
@@ -68,7 +68,7 @@ userRouter.delete(
   loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
+      const userId = req.currentUser._id;
       const deleteResult = await userService.deleteUser(userId);
 
       res.status(200).json(deleteResult);
@@ -79,7 +79,7 @@ userRouter.delete(
 );
 userRouter.put(
   "/:userId/completeMentoring",
-  // loginRequired,
+  loginRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params;

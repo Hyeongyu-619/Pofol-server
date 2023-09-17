@@ -1,10 +1,26 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { loginRequired } from "../../middlewares";
+import { loginRequired, ownershipRequired } from "../../middlewares";
 import { projectStudyService } from "../../services";
 import { CommentInfo } from "../../types/projectStudy";
 import { Types } from "mongoose";
+import isCommentOwner from "../../middlewares/isCommentOwner";
 
 const projectStudyRouter = Router();
+
+projectStudyRouter.get(
+  "/mypage",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ownerId = req.currentUser._id;
+      const portfolios = await projectStudyService.findByOwnerId(ownerId);
+
+      res.status(200).json(portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 projectStudyRouter.get(
   "/:projectStudyId",
@@ -25,8 +41,54 @@ projectStudyRouter.get(
   "/",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const projectStudys = await projectStudyService.findAll();
-      res.status(200).json(projectStudys);
+      const { classification, position } = req.query;
+      const limit = Number(req.query.limit) || 6;
+      const skip = Number(req.query.skip) || 0;
+      let projectStudies;
+      let total;
+
+      if (classification || position) {
+        [projectStudies, total] =
+          await projectStudyService.findByClassificationAndPosition(
+            classification,
+            position,
+            limit,
+            skip
+          );
+      } else {
+        [projectStudies, total] = await projectStudyService.findAllProjectStudy(
+          limit,
+          skip
+        );
+      }
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({ projectStudies, totalPages });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+projectStudyRouter.get(
+  "/:projectStudyId/comments",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { projectStudyId } = req.params;
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
+
+      const [comments, total] =
+        await projectStudyService.getCommentsByProjectStudyId(
+          projectStudyId,
+          limit,
+          skip
+        );
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({ comments, totalPages, total });
     } catch (error) {
       next(error);
     }
@@ -51,6 +113,7 @@ projectStudyRouter.post(
 projectStudyRouter.put(
   "/:projectStudyId",
   loginRequired,
+  ownershipRequired("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId } = req.params;
@@ -69,6 +132,7 @@ projectStudyRouter.put(
 projectStudyRouter.delete(
   "/:projectStudyId",
   loginRequired,
+  ownershipRequired("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId } = req.params;
@@ -89,10 +153,18 @@ projectStudyRouter.post(
     try {
       const { projectStudyId } = req.params;
       const comment: CommentInfo = req.body;
+      const userId = req.currentUser._id;
+      const projectStudy = await projectStudyService.getProjectStudyById(
+        projectStudyId
+      );
+      const ownerId = projectStudy.ownerId;
+
       const updatedprojectStudy =
         await projectStudyService.addCommentToProjectStudy(
           projectStudyId,
-          comment
+          comment,
+          userId,
+          ownerId
         );
       res.status(201).json(updatedprojectStudy);
     } catch (error) {
@@ -104,6 +176,7 @@ projectStudyRouter.post(
 projectStudyRouter.delete(
   "/:projectStudyId/comments/:commentId",
   loginRequired,
+  isCommentOwner("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId, commentId } = req.params;
@@ -122,6 +195,7 @@ projectStudyRouter.delete(
 projectStudyRouter.put(
   "/:projectStudyId/comments/:commentId",
   loginRequired,
+  isCommentOwner("projectStudy"),
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId, commentId } = req.params;
@@ -140,7 +214,7 @@ projectStudyRouter.put(
 );
 
 projectStudyRouter.get(
-  "/recommend/latestProjectStudy",
+  "/recommend/latestprojectstudy",
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const projectStudies =
@@ -152,4 +226,39 @@ projectStudyRouter.get(
   }
 );
 
+projectStudyRouter.get(
+  "/recommend/recommendProjectStudy",
+  loginRequired,
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const projectStudies =
+        await projectStudyService.findTopMentorProjectStudiesByPosition(
+          req.currentUser._id
+        );
+      res
+        .status(200)
+        .json({ projectStudies, nickName: req.currentUser.nickName });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+projectStudyRouter.get(
+  "/recommend/recommendProjectStudyForGuest",
+  async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const allPositions = await projectStudyService.getAllPositions();
+      const randomPosition =
+        allPositions[Math.floor(Math.random() * allPositions.length)];
+      const projectStudies =
+        await projectStudyService.findTopMentorProjectStudiesByPosition(
+          null,
+          randomPosition
+        );
+      res.status(200).json({ projectStudies });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 export { projectStudyRouter };

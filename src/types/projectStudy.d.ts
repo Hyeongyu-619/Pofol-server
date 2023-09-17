@@ -8,10 +8,12 @@ export interface ProjectStudyInfo {
   nickName: string;
   title: string;
   description: string;
+  ownerId: Types.ObjectId;
   howContactTitle: "디스코드" | "오픈채팅" | "기타";
   howContactContent: string;
   process: "온라인" | "오프라인" | "온/오프라인";
   recruits: string;
+  recruitsStatus: "모집중" | "모집마감";
   classification: "스터디" | "프로젝트";
   deadline: Date;
   comments?: CommentInfo[];
@@ -26,8 +28,9 @@ export interface ProjectStudyData extends ProjectStudyInfo {
 export interface CommentInfo {
   author: string;
   content: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  ownerId: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CommentData extends CommentInfo {

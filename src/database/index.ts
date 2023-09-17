@@ -1,6 +1,12 @@
 import mongoose, { model } from "mongoose";
-import { PositionSchema, UserSchema, PortfolioSchema } from "./schema";
-import { ProjectStudySchema } from "./schema/projectStudySchema";
+import {
+  PositionSchema,
+  UserSchema,
+  PortfolioSchema,
+  ProjectStudySchema,
+  MentorRequestSchema,
+  NotificationSchema,
+} from "./schema";
 
 const DB_URL =
   process.env.MONGODB_URL ||
@@ -20,3 +26,5 @@ export const User = model("users", UserSchema);
 export const Portfolio = model("portfolios", PortfolioSchema);
 export const Position = model("position", PositionSchema);
 export const ProjectStudy = model("projectStudy", ProjectStudySchema);
+export const MentorRequest = model("mentoRequest", MentorRequestSchema);
+export const Notification = model("notification", NotificationSchema);

@@ -5,10 +5,14 @@ const ProjectStudySchema = new Schema(
     position: [
       {
         type: String,
-        enum: ["백엔드", "프론트엔드", "웹퍼블리셔", "안드로이드", "IOS"],
         required: true,
       },
     ],
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     nickName: {
       type: String,
       required: true,
@@ -47,9 +51,18 @@ const ProjectStudySchema = new Schema(
       type: String,
       required: true,
     },
+    recruitsStatus: {
+      type: String,
+      enum: ["모집중", "모집마감"],
+      required: true,
+    },
     classification: {
       type: String,
       enum: ["스터디", "프로젝트"],
+      required: true,
+    },
+    profileImageUrl: {
+      type: String,
       required: true,
     },
     comments: [
@@ -59,10 +72,6 @@ const ProjectStudySchema = new Schema(
           required: true,
           auto: true,
         },
-        requestId: {
-          type: Schema.Types.ObjectId,
-          required: true,
-        },
         author: {
           type: String,
           required: true,
@@ -70,6 +79,19 @@ const ProjectStudySchema = new Schema(
         content: {
           type: String,
           required: true,
+        },
+        ownerId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+        updatedAt: {
+          type: Date,
+          default: Date.now,
         },
       },
     ],

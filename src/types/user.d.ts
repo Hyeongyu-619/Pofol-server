@@ -6,6 +6,8 @@ export interface UserInfo {
   role: string;
   profileImageUrl?: string;
   techStack?: string;
+  career?: number;
+  company?: string;
   _id?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;

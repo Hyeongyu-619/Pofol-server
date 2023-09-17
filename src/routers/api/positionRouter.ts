@@ -5,7 +5,7 @@ import { adminRequired, loginRequired } from "../../middlewares";
 const positionRouter = Router();
 
 positionRouter.post(
-  "/add",
+  "/",
   loginRequired,
   adminRequired,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -22,8 +22,21 @@ positionRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const positions = await positionService.findAllPositions();
-      res.status(200).json(positions);
+      const limit = Number(req.query.limit) || 10;
+      const skip = Number(req.query.skip) || 0;
+
+      const [positions, total] =
+        await positionService.findAllPositionsWithPagination(skip, limit);
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({
+        positions,
+        total,
+        totalPages,
+        limit,
+        skip,
+      });
     } catch (error) {
       next(error);
     }
@@ -31,7 +44,7 @@ positionRouter.get(
 );
 
 positionRouter.put(
-  "/update/:id",
+  "/:id",
   loginRequired,
   adminRequired,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -48,7 +61,7 @@ positionRouter.put(
 );
 
 positionRouter.delete(
-  "/delete/:id",
+  "/:id",
   loginRequired,
   adminRequired,
   async (req: Request, res: Response, next: NextFunction) => {

@@ -35,6 +35,15 @@ class PositionService {
       throw new Error("포지션 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
+
+  async findAllPositionsWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<[PositionInfo[], number]> {
+    const positions = await this.positionModel.findAllPositions(skip, limit);
+    const total = await this.positionModel.countAllPositions();
+    return [positions, total];
+  }
 }
 
 const positionModelInstance = new PositionModel();

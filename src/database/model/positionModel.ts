@@ -13,6 +13,15 @@ export class PositionModel {
     return positions;
   }
 
+  async findAllPositions(skip: number, limit: number): Promise<PositionInfo[]> {
+    try {
+      const positions = await Position.find().skip(skip).limit(limit).lean();
+      return positions;
+    } catch (error) {
+      throw new Error("Positions could not be retrieved.");
+    }
+  }
+
   async update(
     _id: string,
     update: Partial<PositionInfo>
@@ -39,6 +48,10 @@ export class PositionModel {
       throw new Error(`${_id}가 DB에 존재하지 않습니다!`);
     }
     return deletedPosition;
+  }
+
+  async countAllPositions(): Promise<number> {
+    return await Position.countDocuments().exec();
   }
 }
 

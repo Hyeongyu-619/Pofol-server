@@ -1,17 +1,26 @@
 import { Types } from "mongoose";
 
-export interface MentoringRequest {
+export interface MentoringRequestInfo {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
-  career: number;
-  authenticationImageUrl: string;
-  status: "requested" | "accepted" | "completed";
+  portfolioId: Types.ObjectId;
+  status: "requested" | "accepted" | "completed" | "rejected" | "canceled";
+  email: string;
+  portfolioAddress: string;
+  title: string;
+  content: string;
+  message: string;
+  advice: string;
+}
+
+export interface MentoringRequestData extends MentoringRequestInfo {
+  _id: Types.ObjectId;
 }
 
 export interface PortfolioInfo {
   _id?: Types.ObjectId;
-  ownerId: string;
-  mentoringRequests: MentoringRequest[];
+  ownerId: Types.ObjectId;
+  mentoringRequests: MentoringRequestInfo[];
   position: string;
   name: string;
   company: string;
@@ -27,14 +36,15 @@ export interface PortfolioInfo {
 
 export interface PortfolioData extends PortfolioInfo {
   _id: Types.ObjectId;
+  populate: (path: string) => Promise<PortfolioData>;
 }
 
 export interface CommentInfo {
   author: string;
   content: string;
-  ownerId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  ownerId: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CommentData extends CommentInfo {

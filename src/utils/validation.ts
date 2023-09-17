@@ -18,7 +18,7 @@ class Validation {
       error.name = "BadRequest";
       throw error;
     }
-    const nickNamePattern = /^[가-힣a-zA-Z0-9]+$/;
+    const nickNamePattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣\s]{2,10}$/;
     if (!nickNamePattern.test(nickName)) {
       const error = new Error("닉네임은 한글, 숫자, 영어만 입력 가능합니다.");
       error.name = "BadRequest";
@@ -50,7 +50,8 @@ class Validation {
       !description ||
       !career ||
       !nickName ||
-      !coachingCount
+      coachingCount === null ||
+      coachingCount === undefined
     ) {
       const error = new Error(
         "포트폴리오 멘토링 신청서에 필요한 정보가 모두 입력되지 않았습니다."
@@ -84,6 +85,7 @@ class Validation {
       process,
       deadline,
       recruits,
+      recruitsStatus,
       classification,
     } = projectStudyInfo;
 
@@ -98,6 +100,7 @@ class Validation {
       !process ||
       !deadline ||
       !recruits ||
+      !recruitsStatus ||
       !classification
     ) {
       const error = new Error(
@@ -113,7 +116,7 @@ class Validation {
       throw error;
     }
 
-    if (description.length > 500) {
+    if (description.length > 1000) {
       const error = new Error("내용을 1000자 이하로 입력해주세요.");
       error.name = "BadRequest";
       throw error;

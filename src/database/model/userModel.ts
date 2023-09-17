@@ -22,6 +22,22 @@ export class UserModel {
     const users = await User.find({}).lean();
     return users;
   }
+  async findUsersWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<UserInfo[]> {
+    return await User.find().skip(skip).limit(limit).exec();
+  }
+
+  async countAllUsers(): Promise<number> {
+    try {
+      const count = await User.countDocuments();
+      return count;
+    } catch (error) {
+      throw new Error("Could not count users");
+    }
+  }
+
   async create(userInfo: UserInfo): Promise<UserData> {
     const createdUser = await User.create(userInfo);
     return createdUser.toObject();

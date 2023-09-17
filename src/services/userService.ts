@@ -50,6 +50,11 @@ class UserService {
     return updatedUser;
   }
 
+  async updateUserRole(_id: string, newRole: string): Promise<UserData> {
+    const updatedUser = await this.userModel.update(_id, { role: newRole });
+    return updatedUser;
+  }
+
   async deleteUser(_id: string): Promise<UserData | null> {
     const deletedUser = await this.userModel.deleteUser(_id);
     return deletedUser;
@@ -61,6 +66,30 @@ class UserService {
       return users;
     } catch (error) {
       throw new Error("유저 목록을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+  async findAllWithPaginationAndCount(
+    skip: number,
+    limit: number
+  ): Promise<[UserInfo[], number]> {
+    try {
+      const users = await this.userModel.findUsersWithPagination(skip, limit);
+      const total = await this.userModel.countAllUsers();
+      return [users, total];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAllWithPagination(
+    skip: number,
+    limit: number
+  ): Promise<UserInfo[]> {
+    try {
+      const users = await this.userModel.findUsersWithPagination(skip, limit);
+      return users;
+    } catch (error) {
+      throw error;
     }
   }
 

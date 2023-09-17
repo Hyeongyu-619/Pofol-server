@@ -6,18 +6,39 @@ const MentoringRequestSchema = new Schema({
     required: true,
     ref: "User",
   },
+  portfolioId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Portfolio",
+  },
   status: {
     type: String,
-    enum: ["requested", "accepted", "completed"],
+    enum: ["requested", "accepted", "completed", "rejected", "canceled"],
     default: "requested",
   },
-  career: {
-    type: Number,
-    required: true,
-  },
-  authenticationImageUrl: {
+  email: {
     type: String,
     required: true,
+  },
+  portfolioAddress: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: false,
+  },
+  advice: {
+    type: String,
+    required: false,
   },
 });
 
@@ -50,8 +71,6 @@ const PortfolioSchema = new Schema(
     profileImageUrl: {
       type: String,
       required: false,
-      default:
-        "https://cdn.discordapp.com/attachments/1115922422894440469/1145666135879073882/profileImage.png",
     },
     career: {
       type: Number,
@@ -77,10 +96,6 @@ const PortfolioSchema = new Schema(
           required: true,
           auto: true,
         },
-        requestId: {
-          type: Schema.Types.ObjectId,
-          required: true,
-        },
         author: {
           type: String,
           required: true,
@@ -94,14 +109,14 @@ const PortfolioSchema = new Schema(
           required: true,
           ref: "User",
         },
-        // createdAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
-        // updatedAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+        updatedAt: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },

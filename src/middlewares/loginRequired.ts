@@ -14,8 +14,6 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
 
   try {
     const decodedEmail = decodeURIComponent(req.cookies.email);
-    // const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-    // const decoded = jwt.verify(token, secretKey) as any;
     const user = await userService.getUserByEmail(decodedEmail);
 
     if (!user) {
@@ -25,10 +23,8 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     }
 
     req.currentUser = user;
-
     next();
   } catch (error) {
-    console.error(error);
     return res.status(401).json({
       result: "Unauthorized",
       reason: "정상적인 토큰이 아닙니다.",

@@ -31,10 +31,117 @@ export class ProjectStudyModel {
   }
 
   async findAll(): Promise<ProjectStudyInfo[]> {
-    const projectStudys: ProjectStudyInfo[] = await projectStudyModel
-      .find({})
+    const projectStudies: ProjectStudyInfo[] = await projectStudyModel
+      .find()
+      .sort({ createdAt: -1 })
       .lean<ProjectStudyInfo[]>();
-    return projectStudys;
+    return projectStudies;
+  }
+
+  async findAllProjectStudy(
+    limit: number,
+    skip: number
+  ): Promise<[ProjectStudyInfo[], number]> {
+    const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip)
+      .lean<ProjectStudyInfo[]>();
+
+    const total = await ProjectStudy.countDocuments();
+
+    return [projectStudies, total];
+  }
+
+  async findCommentsById(
+    id: string,
+    limit: number,
+    skip: number
+  ): Promise<[CommentInfo[], number]> {
+    try {
+      const projectStudy: ProjectStudyData | null = await ProjectStudy.findById(
+        id
+      ).lean();
+
+      if (!projectStudy) {
+        const error = new Error(
+          "해당하는 id의 프로젝트/스터디가 존재하지 않습니다."
+        );
+        error.name = "NotFound!";
+        throw error;
+      }
+      const total = projectStudy.comments ? projectStudy.comments.length : 0;
+
+      const reversedComments = projectStudy.comments
+        ? [...projectStudy.comments].reverse()
+        : [];
+
+      const slicedComments = reversedComments
+        ? reversedComments.slice(skip, skip + limit)
+        : [];
+
+      return [slicedComments, total];
+    } catch (error) {
+      throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
+  async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
+    const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find({
+      ownerId,
+    })
+      .sort({ createdAt: -1 })
+      .lean<ProjectStudyInfo[]>();
+    return projectStudies;
+  }
+
+  async findByClassificationAndPosition(
+    query: { [key: string]: string },
+    limit: number,
+    skip: number
+  ): Promise<[ProjectStudyInfo[], number]> {
+    try {
+      const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find(query)
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .skip(skip)
+        .lean<ProjectStudyInfo[]>();
+
+      const total = await ProjectStudy.countDocuments(query);
+
+      return [projectStudies, total];
+    } catch (error) {
+      throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+    }
+  }
+
+  async findProjectStudiesByLatestAndPosition(
+    position: string,
+    limit: number
+  ): Promise<ProjectStudyInfo[]> {
+    return ProjectStudy.find({ position: position })
+      .sort({ coachingCount: -1, createdAt: -1 })
+      .limit(limit)
+      .lean();
+  }
+  async getAllPositions(): Promise<string[]> {
+    try {
+      const projectStudies = await ProjectStudy.find().lean();
+      const positions: string[] = [];
+
+      projectStudies.forEach((projectStudy) => {
+        if (Array.isArray(projectStudy.position)) {
+          positions.push(...projectStudy.position);
+        } else {
+          positions.push(projectStudy.position);
+        }
+      });
+
+      const uniquePositions = Array.from(new Set(positions));
+      return uniquePositions;
+    } catch (error) {
+      throw new Error("포지션 목록을 불러오는 중 오류가 발생했습니다.");
+    }
   }
 
   async findProjectStudiesByCreatedAt(
@@ -88,7 +195,6 @@ export class ProjectStudyModel {
 
     projectStudy.comments.push({
       _id: new Types.ObjectId(),
-      requestId: new Types.ObjectId(),
       ...comment,
     });
 
