@@ -78,6 +78,11 @@ export class UserModel {
     await user.save();
     return user.toObject();
   }
+
+  async findByNickName(nickname: string): Promise<UserData | null> {
+    const user = await User.findOne({ nickname }).lean();
+    return user;
+  }
 }
 
 const userModel = model<UserInfo & Document>("User", UserSchema);

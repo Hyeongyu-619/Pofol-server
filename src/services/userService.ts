@@ -111,6 +111,11 @@ class UserService {
     }
     return updatedUser;
   }
+
+  async checkNicknameDuplication(nickname: string): Promise<boolean> {
+    const user = await this.userModel.findByNickName(nickname);
+    return !!user;
+  }
 }
 
 const userModelInstance = new UserModel();

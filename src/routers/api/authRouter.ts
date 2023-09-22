@@ -90,4 +90,18 @@ authRouter.get("/logout", function (req, res) {
   res.redirect("/");
 });
 
+authRouter.get("/validate-nickname/:nickname", async (req, res, next) => {
+  try {
+    const { nickname } = req.params;
+    const isDuplicated = await userService.checkNicknameDuplication(nickname);
+
+    if (isDuplicated) {
+      return res.status(409).json({ error: "닉네임이 이미 사용 중입니다." });
+    }
+
+    return res.status(200).json({ message: "사용 가능한 닉네임입니다." });
+  } catch (error) {
+    next(error);
+  }
+});
 export { authRouter };
