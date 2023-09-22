@@ -80,7 +80,7 @@ export class UserModel {
   }
 
   async findByNickName(nickname: string): Promise<UserData | null> {
-    const user = await User.findOne({ nickname }).lean();
+    const user = await User.findOne({ nickName: nickname }).lean();
     return user;
   }
 }
