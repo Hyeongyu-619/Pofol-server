@@ -102,4 +102,5 @@ authRouter.get("/validate-nickname/:nickname", async (req, res, next) => {
     next(error);
   }
 });
+
 export { authRouter };
