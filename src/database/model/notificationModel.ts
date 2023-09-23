@@ -85,11 +85,6 @@ export class NotificationModel {
   async countNotificationsByUserId(userId: string): Promise<number> {
     return await Notification.countDocuments({ userId }).exec();
   }
-
-  async createNotification(data: NotificationInfo): Promise<void> {
-    const notification = new Notification(data);
-    await notification.save();
-  }
 }
 
 export default Notification;
