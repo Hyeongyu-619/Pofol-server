@@ -18,10 +18,17 @@ export class PortfolioModel {
     return portfolio;
   }
 
-  async findById(_id: string): Promise<PortfolioData | null> {
+  async findById(_id: string): Promise<PortfolioData> {
     const portfolio: PortfolioData | null = await Portfolio.findById({
       _id,
     }).lean();
+    if (!portfolio) {
+      const error = new Error(
+        "해당하는 id의 포트폴리오 멘토링 신청서가 존재하지 않습니다."
+      );
+      error.name = "NotFound!";
+      throw error;
+    }
 
     return portfolio;
   }

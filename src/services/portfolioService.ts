@@ -404,20 +404,11 @@ class PortfolioService {
 
     if (status === "accepted") {
       const mentor = await this.userModel.findById(mentorId.toString());
-      if (!mentor) {
-        throw new Error("Mentor not found");
-      }
-      if (mentor.coachingCount !== undefined) {
-        mentor.coachingCount += 1;
-        await this.userModel.update(mentorId.toString(), {
-          coachingCount: mentor.coachingCount,
-        });
-      }
-
       const portfolio = await this.portfolioModel.findById(portfolioId);
-      if (!portfolio) {
-        throw new Error("Portfolio not found");
-      }
+      if (mentor && mentor.coachingCount !== undefined)
+        if (!portfolio) {
+          throw new Error("Portfolio not found");
+        }
       portfolio.coachingCount += 1;
       await this.portfolioModel.update(portfolioId, {
         coachingCount: portfolio.coachingCount,
