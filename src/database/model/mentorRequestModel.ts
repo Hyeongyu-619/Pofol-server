@@ -119,7 +119,15 @@ export class MentorRequestModel {
       );
     }
   }
-
+  async deleteMentorRequest(_id: string): Promise<MentorRequestData | null> {
+    const deletedMentorRequest = await MentorRequest.findOneAndDelete({
+      _id,
+    }).lean();
+    if (!deletedMentorRequest) {
+      throw new Error(`${_id}가 DB에 존재하지 않습니다!`);
+    }
+    return deletedMentorRequest;
+  }
   async countMentorRequestsByStatus(status: string): Promise<number> {
     try {
       return await MentorRequest.countDocuments({ status }).exec();
