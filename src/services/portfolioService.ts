@@ -57,14 +57,13 @@ class PortfolioService {
   }
 
   async getPortfolioByIdPopulate(_id: string): Promise<PortfolioData> {
-    const portfolio = await (
-      await this.portfolioModel.findById(_id)
-    ).populate("comments");
-    if (!portfolio) {
+    const portfolioDoc = await this.portfolioModel.findById(_id);
+    if (!portfolioDoc) {
       const error = new Error("해당 멘토가 존재하지 않습니다.");
       error.name = "NotFound";
       throw error;
     }
+    const portfolio = await portfolioDoc.populate("comments");
     return portfolio;
   }
 
@@ -405,12 +404,19 @@ class PortfolioService {
 
     if (status === "accepted") {
       const mentor = await this.userModel.findById(mentorId.toString());
-      const portfolio = await this.portfolioModel.findById(portfolioId);
-      if (mentor && mentor.coachingCount !== undefined) {
+      if (!mentor) {
+        throw new Error("Mentor not found");
+      }
+      if (mentor.coachingCount !== undefined) {
         mentor.coachingCount += 1;
         await this.userModel.update(mentorId.toString(), {
           coachingCount: mentor.coachingCount,
         });
+      }
+
+      const portfolio = await this.portfolioModel.findById(portfolioId);
+      if (!portfolio) {
+        throw new Error("Portfolio not found");
       }
       portfolio.coachingCount += 1;
       await this.portfolioModel.update(portfolioId, {
