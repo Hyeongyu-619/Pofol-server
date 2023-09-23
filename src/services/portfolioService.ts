@@ -339,7 +339,7 @@ class PortfolioService {
     }
 
     const updatedPortfolio =
-      await this.portfolioModel.respondToMentoringRequest(
+      await this.portfolioModel.handleMentoringRequestResponse(
         portfolioId,
         requestId,
         status,

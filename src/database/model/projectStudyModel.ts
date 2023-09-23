@@ -10,47 +10,77 @@ import { ProjectStudySchema } from "../schema/projectStudySchema";
 
 export class ProjectStudyModel {
   async findByTitle(title: string): Promise<ProjectStudyData | null> {
-    const projectStudy: ProjectStudyData | null = await ProjectStudy.findOne({
-      title,
-    }).lean();
-    return projectStudy;
+    try {
+      const projectStudy: ProjectStudyData | null = await ProjectStudy.findOne({
+        title,
+      }).lean();
+      return projectStudy;
+    } catch (error) {
+      throw new Error("프로젝트/스터디를 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async findById(_id: string): Promise<ProjectStudyData> {
-    const projectStudy: ProjectStudyData | null = await ProjectStudy.findById({
-      _id,
-    }).lean();
-    if (!projectStudy) {
-      const error = new Error(
-        "해당하는 id의 포트폴리오 멘토링 신청서가 존재하지 않습니다."
-      );
-      error.name = "NotFound!";
-      throw error;
+    try {
+      const projectStudy: ProjectStudyData | null = await ProjectStudy.findById(
+        {
+          _id,
+        }
+      ).lean();
+      if (!projectStudy) {
+        const error = new Error(
+          "해당하는 id의 프로젝트/스터디가 존재하지 않습니다."
+        );
+        error.name = "NotFound!";
+        throw error;
+      }
+      return projectStudy;
+    } catch (error) {
+      throw new Error("프로젝트/스터디를 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
-    return projectStudy;
   }
 
   async findAll(): Promise<ProjectStudyInfo[]> {
-    const projectStudies: ProjectStudyInfo[] = await projectStudyModel
-      .find()
-      .sort({ createdAt: -1 })
-      .lean<ProjectStudyInfo[]>();
-    return projectStudies;
+    try {
+      const projectStudies: ProjectStudyInfo[] = await projectStudyModel
+        .find()
+        .sort({ createdAt: -1 })
+        .lean<ProjectStudyInfo[]>();
+      return projectStudies;
+    } catch (error) {
+      throw new Error(
+        "모든 프로젝트/스터디를 조회하는 중에 오류가 발생했습니다.",
+        { cause: error }
+      );
+    }
   }
 
   async findAllProjectStudy(
     limit: number,
     skip: number
   ): Promise<[ProjectStudyInfo[], number]> {
-    const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find()
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .skip(skip)
-      .lean<ProjectStudyInfo[]>();
+    try {
+      const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find()
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .skip(skip)
+        .lean<ProjectStudyInfo[]>();
 
-    const total = await ProjectStudy.countDocuments();
+      const total = await ProjectStudy.countDocuments();
 
-    return [projectStudies, total];
+      return [projectStudies, total];
+    } catch (error) {
+      throw new Error(
+        "모든 프로젝트/스터디를 페이징 조회하는 중에 오류가 발생했습니다.",
+        {
+          cause: error,
+        }
+      );
+    }
   }
 
   async findCommentsById(
@@ -82,17 +112,25 @@ export class ProjectStudyModel {
 
       return [slicedComments, total];
     } catch (error) {
-      throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
   }
 
   async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
-    const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find({
-      ownerId,
-    })
-      .sort({ createdAt: -1 })
-      .lean<ProjectStudyInfo[]>();
-    return projectStudies;
+    try {
+      const projectStudies: ProjectStudyInfo[] = await ProjectStudy.find({
+        ownerId,
+      })
+        .sort({ createdAt: -1 })
+        .lean<ProjectStudyInfo[]>();
+      return projectStudies;
+    } catch (error) {
+      throw new Error("프로젝트/스터디를 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async findByClassificationAndPosition(
@@ -111,7 +149,9 @@ export class ProjectStudyModel {
 
       return [projectStudies, total];
     } catch (error) {
-      throw new Error("게시물을 조회하는 중에 오류가 발생했습니다.");
+      throw new Error("프로젝트/스터디를 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
   }
 
@@ -119,10 +159,16 @@ export class ProjectStudyModel {
     position: string,
     limit: number
   ): Promise<ProjectStudyInfo[]> {
-    return ProjectStudy.find({ position: position })
-      .sort({ coachingCount: -1, createdAt: -1 })
-      .limit(limit)
-      .lean();
+    try {
+      return ProjectStudy.find({ position: position })
+        .sort({ coachingCount: -1, createdAt: -1 })
+        .limit(limit)
+        .lean();
+    } catch (error) {
+      throw new Error("프로젝트/스터디를 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
   async getAllPositions(): Promise<string[]> {
     try {
@@ -140,38 +186,61 @@ export class ProjectStudyModel {
       const uniquePositions = Array.from(new Set(positions));
       return uniquePositions;
     } catch (error) {
-      throw new Error("포지션 목록을 불러오는 중 오류가 발생했습니다.");
+      throw new Error("직무 목록을 불러오는 중 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
   }
 
   async findProjectStudiesByCreatedAt(
     limit: number
   ): Promise<ProjectStudyInfo[]> {
-    return ProjectStudy.find().sort({ createdAt: -1 }).limit(limit).lean();
+    try {
+      return ProjectStudy.find().sort({ createdAt: -1 }).limit(limit).lean();
+    } catch (error) {
+      throw new Error("프로젝트/스터디를 생성하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async create(projectStudyInfo: ProjectStudyInfo): Promise<ProjectStudyData> {
-    const createdprojectStudy = await ProjectStudy.create(projectStudyInfo);
-    return createdprojectStudy.toObject();
+    try {
+      const createdprojectStudy = await ProjectStudy.create(projectStudyInfo);
+      return createdprojectStudy.toObject();
+    } catch (error) {
+      throw new Error("프로젝트/스터디를 생성하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async update(
     _id: string,
     update: Partial<ProjectStudyInfo>
   ): Promise<ProjectStudyData> {
-    const filter = { _id };
-    const option = { returnOriginal: false, new: true };
-    const updatedprojectStudy: ProjectStudyData | null =
-      await ProjectStudy.findOneAndUpdate(filter, update, option).lean();
+    try {
+      const filter = { _id };
+      const option = { returnOriginal: false, new: true };
+      const updatedprojectStudy: ProjectStudyData | null =
+        await ProjectStudy.findOneAndUpdate(filter, update, option).lean();
 
-    if (!updatedprojectStudy) {
-      const error = new Error(
-        "포트폴리오 멘토링 신청서 정보 업데이트에 실패하였습니다."
+      if (!updatedprojectStudy) {
+        const error = new Error(
+          "포트폴리오 멘토링 신청서 정보 업데이트에 실패하였습니다."
+        );
+        error.name = "NotFound";
+        throw error;
+      }
+      return updatedprojectStudy;
+    } catch (error) {
+      throw new Error(
+        "프로젝트/스터디를 업데이트하는 중에 오류가 발생했습니다.",
+        {
+          cause: error,
+        }
       );
-      error.name = "NotFound";
-      throw error;
     }
-    return updatedprojectStudy;
   }
 
   async deleteProjectStudy(_id: string): Promise<ProjectStudyData | null> {
@@ -186,38 +255,56 @@ export class ProjectStudyModel {
     _id: string,
     comment: CommentInfo
   ): Promise<ProjectStudyData> {
-    const projectStudy = await ProjectStudy.findById(_id);
-    if (!projectStudy) {
-      const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
+    try {
+      const projectStudy = await ProjectStudy.findById(_id);
+      if (!projectStudy) {
+        const error = new Error("해당 포트폴리오가 존재하지 않습니다.");
+        error.name = "NotFound";
+        throw error;
+      }
+
+      projectStudy.comments.push({
+        _id: new Types.ObjectId(),
+        ...comment,
+      });
+
+      await projectStudy.save();
+      return projectStudy.toObject();
+    } catch (error) {
+      throw new Error(
+        "프로젝트/스터디에 댓글을 생성하는 중에 오류가 발생했습니다.",
+        {
+          cause: error,
+        }
+      );
     }
-
-    projectStudy.comments.push({
-      _id: new Types.ObjectId(),
-      ...comment,
-    });
-
-    await projectStudy.save();
-    return projectStudy.toObject();
   }
 
   async deleteCommentFromProjectStudy(
     projectStudyId: string,
     commentId: Types.ObjectId
   ): Promise<ProjectStudyData> {
-    const projectStudy = await ProjectStudy.findById(projectStudyId);
-    if (!projectStudy || !projectStudy.comments) {
-      const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
+    try {
+      const projectStudy = await ProjectStudy.findById(projectStudyId);
+      if (!projectStudy || !projectStudy.comments) {
+        const error = new Error("해당 포트폴리오나 댓글이 존재하지 않습니다.");
+        error.name = "NotFound";
+        throw error;
+      }
 
-    projectStudy.comments = projectStudy.comments.filter(
-      (comment) => !comment._id?.equals(commentId)
-    );
-    await projectStudy.save();
-    return projectStudy.toObject();
+      projectStudy.comments = projectStudy.comments.filter(
+        (comment) => !comment._id?.equals(commentId)
+      );
+      await projectStudy.save();
+      return projectStudy.toObject();
+    } catch (error) {
+      throw new Error(
+        "프로젝트/스터디에 댓글을 삭제하는 중에 오류가 발생했습니다.",
+        {
+          cause: error,
+        }
+      );
+    }
   }
 
   async updateCommentInprojectStudy(
@@ -225,29 +312,38 @@ export class ProjectStudyModel {
     commentId: Types.ObjectId,
     updatedComment: CommentInfo
   ): Promise<ProjectStudyData> {
-    const projectStudy = await ProjectStudy.findById(projectStudyId);
-    if (!projectStudy || !projectStudy.comments) {
-      const error = new Error("해당 게시물이나 댓글이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
+    try {
+      const projectStudy = await ProjectStudy.findById(projectStudyId);
+      if (!projectStudy || !projectStudy.comments) {
+        const error = new Error("해당 게시물이나 댓글이 존재하지 않습니다.");
+        error.name = "NotFound";
+        throw error;
+      }
+
+      const commentIndex = projectStudy.comments.findIndex((comment) =>
+        comment._id.equals(commentId)
+      );
+      if (commentIndex === -1) {
+        const error = new Error("해당 댓글이 존재하지 않습니다.");
+        error.name = "NotFound";
+        throw error;
+      }
+
+      projectStudy.comments[commentIndex] = {
+        ...projectStudy.comments[commentIndex],
+        ...updatedComment,
+      };
+
+      await projectStudy.save();
+      return projectStudy.toObject();
+    } catch (error) {
+      throw new Error(
+        "프로젝트/스터디에 댓글을 업데이트하는 중에 오류가 발생했습니다.",
+        {
+          cause: error,
+        }
+      );
     }
-
-    const commentIndex = projectStudy.comments.findIndex((comment) =>
-      comment._id.equals(commentId)
-    );
-    if (commentIndex === -1) {
-      const error = new Error("해당 댓글이 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-
-    projectStudy.comments[commentIndex] = {
-      ...projectStudy.comments[commentIndex],
-      ...updatedComment,
-    };
-
-    await projectStudy.save();
-    return projectStudy.toObject();
   }
 }
 

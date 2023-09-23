@@ -2,19 +2,27 @@ import { Document, model } from "mongoose";
 import { NotificationInfo, NotificationData } from "../../types/notification";
 import { NotificationSchema } from "../schema/notificationSchema";
 
-const Notification = model<NotificationInfo & Document>(
-  "Notification",
-  NotificationSchema
-);
 export class NotificationModel {
   async create(notificationInfo: NotificationInfo): Promise<NotificationData> {
-    const createdNotification = await Notification.create(notificationInfo);
-    return createdNotification.toObject();
+    try {
+      const createdNotification = await Notification.create(notificationInfo);
+      return createdNotification.toObject();
+    } catch (error) {
+      throw new Error("알림을 생성하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async findAll(): Promise<NotificationInfo[]> {
-    const notifications = await Notification.find({}).lean();
-    return notifications;
+    try {
+      const notifications = await Notification.find({}).lean();
+      return notifications;
+    } catch (error) {
+      throw new Error("모든 알림을 불러오는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async findAllNotifications(
@@ -28,7 +36,9 @@ export class NotificationModel {
         .lean();
       return notifications;
     } catch (error) {
-      throw new Error("Notifications could not be retrieved.");
+      throw new Error("알림을 페이징 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
   }
 
@@ -44,7 +54,9 @@ export class NotificationModel {
         .lean();
       return notifications;
     } catch (error) {
-      throw new Error("Notifications could not be retrieved.");
+      throw new Error("사용자 ID로 알림을 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
   }
 
@@ -52,39 +64,70 @@ export class NotificationModel {
     _id: string,
     update: Partial<NotificationInfo>
   ): Promise<NotificationData> {
-    const filter = { _id };
-    const option = { returnOriginal: false, new: true };
-    const updatedNotification = await Notification.findOneAndUpdate(
-      filter,
-      update,
-      option
-    ).lean();
+    try {
+      const filter = { _id };
+      const option = { returnOriginal: false, new: true };
+      const updatedNotification = await Notification.findOneAndUpdate(
+        filter,
+        update,
+        option
+      ).lean();
 
-    if (!updatedNotification) {
-      const error = new Error("알림 정보 업데이트에 실패하였습니다.");
-      error.name = "NotFound";
-      throw error;
+      if (!updatedNotification) {
+        throw new Error("알림 정보 업데이트에 실패하였습니다.");
+      }
+
+      return updatedNotification;
+    } catch (error) {
+      throw new Error("알림을 업데이트하는 중에 오류가 발생했습니다", {
+        cause: error,
+      });
     }
-    return updatedNotification;
   }
 
   async deleteNotification(_id: string): Promise<NotificationData | null> {
-    const deletedNotification = await Notification.findOneAndDelete({
-      _id,
-    }).lean();
-    if (!deletedNotification) {
-      throw new Error(`${_id}가 DB에 존재하지 않습니다!`);
+    try {
+      const deletedNotification = await Notification.findOneAndDelete({
+        _id,
+      }).lean();
+      if (!deletedNotification) {
+        throw new Error(`${_id}가 DB에 존재하지 않습니다!`);
+      }
+      return deletedNotification;
+    } catch (error) {
+      throw new Error("알림을 삭제하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
     }
-    return deletedNotification;
   }
 
   async countAllNotifications(): Promise<number> {
-    return await Notification.countDocuments().exec();
+    try {
+      return await Notification.countDocuments().exec();
+    } catch (error) {
+      throw new Error("모든 알림의 개수를 조회하는 중에 오류가 발생했습니다.", {
+        cause: error,
+      });
+    }
   }
 
   async countNotificationsByUserId(userId: string): Promise<number> {
-    return await Notification.countDocuments({ userId }).exec();
+    try {
+      return await Notification.countDocuments({ userId }).exec();
+    } catch (error) {
+      throw new Error(
+        "사용자 ID로 알림 개수를 조회하는 중에 오류가 발생했습니다.",
+        {
+          cause: error,
+        }
+      );
+    }
   }
 }
+
+const Notification = model<NotificationInfo & Document>(
+  "Notification",
+  NotificationSchema
+);
 
 export default Notification;
