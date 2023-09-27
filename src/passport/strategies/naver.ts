@@ -1,8 +1,5 @@
 import { Strategy as NaverStrategy } from "passport-naver";
 import passport from "passport";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const naverStrategy = new NaverStrategy(
   {

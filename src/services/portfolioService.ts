@@ -336,7 +336,7 @@ class PortfolioService {
     const status = statusMap[action];
 
     if (status === undefined) {
-      throw new Error("Invalid action");
+      throw new Error("유효하지 않은 작업입니다.");
     }
 
     const updatedPortfolio =
@@ -408,7 +408,7 @@ class PortfolioService {
       const portfolio = await this.portfolioModel.findById(portfolioId);
       if (mentor && mentor.coachingCount !== undefined)
         if (!portfolio) {
-          throw new Error("Portfolio not found");
+          throw new Error("포트폴리오를 찾을 수 없습니다.");
         }
       portfolio.coachingCount += 1;
       await this.portfolioModel.update(portfolioId, {
