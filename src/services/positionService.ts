@@ -27,16 +27,7 @@ class PositionService {
     return deletedPosition;
   }
 
-  async findAllPositions(): Promise<PositionInfo[]> {
-    try {
-      const positions = await this.positionModel.findAll();
-      return positions;
-    } catch (error) {
-      throw new Error("포지션 목록을 조회하는 중에 오류가 발생했습니다.");
-    }
-  }
-
-  async findAllPositionsWithPagination(
+  async getAllPositionsWithPagination(
     skip: number,
     limit: number
   ): Promise<[PositionInfo[], number]> {

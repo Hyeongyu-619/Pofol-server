@@ -87,7 +87,7 @@ export class PortfolioModel {
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<[PortfolioInfo[], number]> {
+  ): Promise<{ portfolios: PortfolioInfo[]; total: number }> {
     try {
       const portfolios = await Portfolio.find({ position })
         .sort({ ...sortQuery, createdAt: -1 })
@@ -95,7 +95,7 @@ export class PortfolioModel {
         .skip(skip)
         .lean<PortfolioInfo[]>();
       const total = await Portfolio.find({ position }).countDocuments();
-      return [portfolios, total];
+      return { portfolios, total };
     } catch (error) {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.", {
         cause: error,
@@ -120,7 +120,7 @@ export class PortfolioModel {
     id: string,
     limit: number,
     skip: number
-  ): Promise<[CommentInfo[], number]> {
+  ): Promise<{ comments: CommentInfo[]; total: number }> {
     try {
       const totalAggregation = await Portfolio.aggregate([
         { $match: { _id: new mongoose.Types.ObjectId(id) } },
@@ -128,7 +128,7 @@ export class PortfolioModel {
         { $count: "total" },
       ]);
 
-      const total = totalAggregation[0]?.total || 0;
+      const total = totalAggregation[0]?.total ?? 0;
 
       const commentsAggregation = await Portfolio.aggregate([
         { $match: { _id: new mongoose.Types.ObjectId(id) } },
@@ -139,9 +139,9 @@ export class PortfolioModel {
         { $group: { _id: "$_id", comments: { $push: "$comments" } } },
       ]);
 
-      const comments = commentsAggregation[0]?.comments || [];
+      const comments = commentsAggregation[0]?.comments ?? [];
 
-      return [comments, total];
+      return { comments, total };
     } catch (error) {
       throw new Error("댓글을 조회하는 중에 오류가 발생했습니다.", {
         cause: error,
@@ -153,7 +153,7 @@ export class PortfolioModel {
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<[PortfolioInfo[], number]> {
+  ): Promise<{ portfolios: PortfolioInfo[]; total: number }> {
     try {
       const portfolios = await Portfolio.find()
         .sort({ ...sortQuery, createdAt: -1 })
@@ -161,7 +161,7 @@ export class PortfolioModel {
         .skip(skip)
         .lean<PortfolioInfo[]>();
       const total = await Portfolio.countDocuments();
-      return [portfolios, total];
+      return { portfolios, total };
     } catch (error) {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.", {
         cause: error,
@@ -169,7 +169,7 @@ export class PortfolioModel {
     }
   }
 
-  async findByQuery(query: any): Promise<PortfolioInfo[]> {
+  async findPortfoliosByOwnerId(query: any): Promise<PortfolioInfo[]> {
     try {
       const portfolios = await Portfolio.find(query)
         .sort({ createdAt: -1 })
@@ -228,7 +228,7 @@ export class PortfolioModel {
   ): Promise<PortfolioData> {
     try {
       const filter = { _id };
-      const option = { returnOriginal: false, new: true };
+      const option = { new: true };
       const updatedPortfolio: PortfolioData | null =
         await Portfolio.findOneAndUpdate(filter, update, option).lean();
 

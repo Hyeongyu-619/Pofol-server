@@ -50,21 +50,12 @@ class MentorRequestService {
     return deletedMentorRequest;
   }
 
-  async findAllMentorRequests(): Promise<MentorRequestInfo[]> {
-    try {
-      const mentorRequests = await this.mentorRequestModel.findAll();
-      return mentorRequests;
-    } catch (error) {
-      throw new Error("포지션 목록을 조회하는 중에 오류가 발생했습니다.");
-    }
-  }
-
   async getMentorRequestById(_id: string): Promise<MentorRequestData> {
     const user = await this.mentorRequestModel.findById(_id);
     return user;
   }
 
-  async findMentorRequestsByStatus(
+  async getMentorRequestsByStatus(
     status: string,
     skip: number,
     limit: number
@@ -81,7 +72,7 @@ class MentorRequestService {
     return [mentorRequests, total];
   }
 
-  async findAllWithPagination(
+  async getAllWithPagination(
     skip: number,
     limit: number
   ): Promise<[MentorRequestInfo[], number]> {

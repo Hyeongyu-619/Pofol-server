@@ -14,15 +14,11 @@ import "./passport";
 const app = express();
 
 app.use(cookieParser());
+const corsOrigins = process.env.CORS_ORIGINS?.split(",") || [];
+
 app.use(
   cors({
-    origin: [
-      "http://34.64.245.195:8080",
-      "http://kdt-sw-5-2-team01.elicecoding.com",
-      "http://34.64.245.195",
-      "http://localhost:8080",
-      "http://localhost:3000",
-    ],
+    origin: corsOrigins,
     credentials: true,
   })
 );
@@ -31,14 +27,10 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
-    secret: "your-secret-key",
-    resave: false,
+    secret: process.env.SESSION_SECRET_KEY as string,
+    resave: true,
     saveUninitialized: true,
   })
-);
-
-app.use(
-  session({ secret: "your_secret", resave: true, saveUninitialized: true })
 );
 app.use(passport.initialize());
 app.use(passport.session());

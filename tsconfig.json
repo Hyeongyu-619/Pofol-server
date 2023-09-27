@@ -8,11 +8,5 @@
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./src/types", "./node_modules/@types"]
   },
-  "include": [
-    "src/**/*",
-    "src/swagger.yaml",
-    "src/swagger/auth.yaml",
-    "src/swagger/openapi.yaml",
-    "src/swagger/user.yaml"
-  ]
+  "include": ["src/**/*"]
 }

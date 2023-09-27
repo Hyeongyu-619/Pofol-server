@@ -3,9 +3,6 @@ import "passport-naver";
 import { NextFunction, Request, Response, Router } from "express";
 import { userService } from "../../services";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const authRouter = Router();
 

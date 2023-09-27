@@ -13,7 +13,7 @@ projectStudyRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const ownerId = req.currentUser._id;
-      const portfolios = await projectStudyService.findByOwnerId(ownerId);
+      const portfolios = await projectStudyService.getByOwnerId(ownerId);
 
       res.status(200).json(portfolios);
     } catch (error) {
@@ -49,14 +49,14 @@ projectStudyRouter.get(
 
       if (classification || position) {
         [projectStudies, total] =
-          await projectStudyService.findByClassificationAndPosition(
+          await projectStudyService.getByClassificationAndPosition(
             classification,
             position,
             limit,
             skip
           );
       } else {
-        [projectStudies, total] = await projectStudyService.findAllProjectStudy(
+        [projectStudies, total] = await projectStudyService.getAllProjectStudy(
           limit,
           skip
         );
@@ -218,7 +218,7 @@ projectStudyRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const projectStudies =
-        await projectStudyService.findLatestProjectStudies();
+        await projectStudyService.getLatestProjectStudies();
       res.status(200).json(projectStudies);
     } catch (error) {
       next(error);
@@ -232,7 +232,7 @@ projectStudyRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const projectStudies =
-        await projectStudyService.findTopMentorProjectStudiesByPosition(
+        await projectStudyService.getTopMentorProjectStudiesByPosition(
           req.currentUser._id
         );
       res
@@ -251,7 +251,7 @@ projectStudyRouter.get(
       const randomPosition =
         allPositions[Math.floor(Math.random() * allPositions.length)];
       const projectStudies =
-        await projectStudyService.findTopMentorProjectStudiesByPosition(
+        await projectStudyService.getTopMentorProjectStudiesByPosition(
           null,
           randomPosition
         );

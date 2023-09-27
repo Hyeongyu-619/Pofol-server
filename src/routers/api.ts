@@ -12,13 +12,13 @@ import {
 
 const apiRouter = Router();
 
-apiRouter.use("/user", userRouter);
+apiRouter.use("/users", userRouter);
 apiRouter.use("/auth", authRouter);
-apiRouter.use("/portfolio", portfolioRouter);
-apiRouter.use("/projectStudy", projectStudyRouter);
-apiRouter.use("/admin", adminRouter);
-apiRouter.use("/position", positionRouter);
-apiRouter.use("/mentorRequest", mentorRequestRouter);
-apiRouter.use("/notification", notificationRouter);
+apiRouter.use("/portfolios", portfolioRouter);
+apiRouter.use("/projectStudies", projectStudyRouter);
+apiRouter.use("/admins", adminRouter);
+apiRouter.use("/positions", positionRouter);
+apiRouter.use("/mentorRequests", mentorRequestRouter);
+apiRouter.use("/notifications", notificationRouter);
 
 export { apiRouter };

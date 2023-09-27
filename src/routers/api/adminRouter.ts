@@ -11,16 +11,16 @@ import { Types } from "mongoose";
 const adminRouter = Router();
 
 adminRouter.get(
-  "/user",
+  "/users",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const limit = Number(req.query.limit) || 10;
-      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) ?? 10;
+      const skip = Number(req.query.skip) ?? 0;
 
       const [allUsers, totalCount] =
-        await userService.findAllWithPaginationAndCount(skip, limit);
+        await userService.getAllWithPaginationAndCount(skip, limit);
 
       res.status(200).json({
         users: allUsers,
@@ -108,18 +108,15 @@ adminRouter.get(
 );
 
 adminRouter.get(
-  "/portfolio",
+  "/portfolios",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const limit = Number(req.query.limit) || 10;
-      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) ?? 10;
+      const skip = Number(req.query.skip) ?? 0;
       const sortQuery = { createdAt: -1 };
 
-      const [allPortfolios, totalCount] = await portfolioService.findAll(
-        sortQuery,
-        limit,
-        skip
-      );
+      const { portfolios: allPortfolios, total: totalCount } =
+        await portfolioService.getAllPortfolio(sortQuery, limit, skip);
 
       res.status(200).json({
         portfolios: allPortfolios,
@@ -170,22 +167,22 @@ adminRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { classification, position } = req.query;
-      const limit = Number(req.query.limit) || 10;
-      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) ?? 10;
+      const skip = Number(req.query.skip) ?? 0;
 
       let projectStudies;
       let total;
 
-      if (classification || position) {
+      if (classification ?? position) {
         [projectStudies, total] =
-          await projectStudyService.findByClassificationAndPosition(
+          await projectStudyService.getByClassificationAndPosition(
             classification,
             position,
             limit,
             skip
           );
       } else {
-        [projectStudies, total] = await projectStudyService.findAllProjectStudy(
+        [projectStudies, total] = await projectStudyService.getAllProjectStudy(
           limit,
           skip
         );
@@ -206,7 +203,7 @@ adminRouter.get(
 );
 
 adminRouter.delete(
-  "/:projectStudyId",
+  "/projectStudies/:projectStudyId",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
@@ -223,7 +220,7 @@ adminRouter.delete(
 );
 
 adminRouter.put(
-  "/:projectStudyId/comments/:commentId",
+  "/projectStudies/:projectStudyId/comments/:commentId",
   loginRequired,
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {

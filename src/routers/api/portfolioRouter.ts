@@ -8,6 +8,7 @@ import {
 } from "../../types/portfolio";
 import { Types } from "mongoose";
 import isCommentOwner from "../../middlewares/isCommentOwner";
+import { validation } from "../../utils/validation";
 
 const portfolioRouter = Router();
 
@@ -20,7 +21,7 @@ portfolioRouter.get(
 
       const query = { ownerId };
 
-      const portfolios = await portfolioService.findByQuery(query);
+      const portfolios = await portfolioService.getPortfolioByOwnerId(query);
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);
@@ -205,18 +206,18 @@ portfolioRouter.get(
       let total;
 
       if (category) {
-        [portfolios, total] = await portfolioService.findByPosition(
+        ({ portfolios, total } = await portfolioService.getByPosition(
           category,
           sortQuery,
           limit,
           skip
-        );
+        ));
       } else {
-        [portfolios, total] = await portfolioService.findAll(
+        ({ portfolios, total } = await portfolioService.getAllPortfolio(
           sortQuery,
           limit,
           skip
-        );
+        ));
       }
 
       const pages = Math.ceil(total / limit);
@@ -240,11 +241,12 @@ portfolioRouter.get(
       const limit = Number(req.query.limit) || 10;
       const skip = Number(req.query.skip) || 0;
 
-      const [comments, total] = await portfolioService.getCommentsByPortfolioId(
-        portfolioId,
-        limit,
-        skip
-      );
+      const { comments, total } =
+        await portfolioService.getCommentsByPortfolioId(
+          portfolioId,
+          limit,
+          skip
+        );
 
       const totalPages = Math.ceil(total / limit);
 
@@ -261,6 +263,9 @@ portfolioRouter.post(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const newPortfolio = req.body;
+
+      validation.addPortfolioApplication(newPortfolio);
+
       const createdPortfolio = await portfolioService.addPortfolioApplication(
         newPortfolio
       );
@@ -401,7 +406,7 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const portfolios =
-        await portfolioService.findTopMentorPortfoliosByPosition(
+        await portfolioService.getTopMentorPortfoliosByPosition(
           req.currentUser._id
         );
       res.status(200).json({ portfolios, nickName: req.currentUser.nickName });
@@ -415,7 +420,7 @@ portfolioRouter.get(
   "/recommend/topMentor",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const portfolios = await portfolioService.findTopMentorPortfolios();
+      const portfolios = await portfolioService.getTopMentorPortfolios();
       res.status(200).json(portfolios);
     } catch (error) {
       next(error);

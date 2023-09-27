@@ -1,8 +1,6 @@
 import { Strategy as NaverStrategy } from "passport-naver";
-import { userService } from "../../services";
 import passport from "passport";
 import dotenv from "dotenv";
-import { access } from "fs";
 
 dotenv.config();
 
@@ -14,8 +12,6 @@ const naverStrategy = new NaverStrategy(
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      const userEmail = profile.emails?.[0]?.value ?? "";
-      const existingUser = await userService.getUserByEmail(userEmail);
       return done(null, profile);
     } catch (error) {
       return done(error);

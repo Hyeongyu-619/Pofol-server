@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { projectStudyService } from "../services/projectStudyService";
-import { Types } from "mongoose";
 import { portfolioService } from "../services/portfolioService";
 
 const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
@@ -8,7 +7,16 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
     try {
       const userId = (req as any).currentUser._id;
       const { projectStudyId, portfolioId, commentId } = req.params;
-      const resourceId = projectStudyId || portfolioId;
+
+      if (!projectStudyId && !portfolioId) {
+        return next(
+          new Error(
+            "프로젝트/스터디 ID 또는 포트폴리오 ID가 존재하지 않습니다."
+          )
+        );
+      }
+
+      const resourceId = projectStudyId ?? portfolioId;
 
       let resource;
       if (resourceType === "projectStudy") {
@@ -16,34 +24,28 @@ const isCommentOwner = (resourceType: "projectStudy" | "portfolio") => {
       } else if (resourceType === "portfolio") {
         resource = await portfolioService.getPortfolioById(resourceId);
       } else {
-        return res.status(400).json({ error: "잘못된 리소스 타입입니다." });
+        return next(new Error("잘못된 리소스 타입입니다."));
       }
 
       if (!resource) {
-        return res
-          .status(404)
-          .json({ error: "해당하는 게시물이 존재하지 않습니다." });
+        return next(new Error("해당하는 게시물이 존재하지 않습니다."));
       }
 
-      const comment = resource.comments?.find((cmt) =>
-        (cmt.ownerId as any).equals(userId)
+      const comment = resource.comments?.find(
+        (cmt) => (cmt.ownerId as any) === userId
       );
 
       if (!comment) {
-        return res
-          .status(404)
-          .json({ error: "해당하는 댓글이 존재하지 않습니다." });
+        return next(new Error("해당하는 댓글이 존재하지 않습니다."));
       }
 
-      if (!(comment.ownerId as any).equals(userId)) {
-        return res
-          .status(403)
-          .json({ error: "본인이 작성한 댓글만 수정/삭제할 수 있습니다." });
+      if (!(comment.ownerId as any) === userId) {
+        return next(new Error("본인이 작성한 댓글만 수정/삭제할 수 있습니다."));
       }
 
       next();
     } catch (error) {
-      res.status(500).json({ error: "서버 에러" });
+      next(error);
     }
   };
 };

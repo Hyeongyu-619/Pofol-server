@@ -15,7 +15,7 @@ notificationRouter.get("/", loginRequired, async (req: any, res) => {
     }
 
     const [notifications, total] =
-      await notificationService.findAllNotificationsWithPagination(
+      await notificationService.getAllNotificationsWithPagination(
         userId,
         skip,
         limit

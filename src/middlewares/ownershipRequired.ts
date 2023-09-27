@@ -19,15 +19,11 @@ const ownershipRequired = (type: "projectStudy" | "portfolio") => {
       }
 
       if (!item) {
-        res.status(404).send({ message: `${type} not found` });
-        return;
+        return next(new Error(`${type}을(를) 찾을 수 없습니다.`));
       }
 
       if (item.ownerId.toString() !== userId) {
-        res.status(403).send({
-          message: `You do not have permission to modify this ${type}`,
-        });
-        return;
+        return next(new Error(`이 ${type}을(를) 수정할 권한이 없습니다.`));
       }
 
       next();
