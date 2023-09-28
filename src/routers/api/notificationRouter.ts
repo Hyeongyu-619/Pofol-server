@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { notificationService } from "../../services";
-import { adminRequired, loginRequired } from "../../middlewares";
+import { loginRequired } from "../../middlewares";
 
 const notificationRouter = Router();
 

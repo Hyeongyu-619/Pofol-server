@@ -6,10 +6,8 @@ import {
   PortfolioData,
   CommentData,
   CommentInfo,
-  MentoringRequestData,
   MentoringRequestInfo,
 } from "../types/portfolioTypes";
-import { validation } from "../utils/validation";
 import { userService } from "./userService";
 import { UserModel } from "../database/model/userModel";
 

@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { NotificationModel } from "../database/model/notificationModel";
 import { NotificationInfo, NotificationData } from "../types/notificationTypes";
 

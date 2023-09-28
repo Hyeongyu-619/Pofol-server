@@ -3,9 +3,7 @@ import { Portfolio } from "..";
 import {
   PortfolioInfo,
   PortfolioData,
-  CommentData,
   CommentInfo,
-  MentoringRequestInfo,
   MentoringRequestData,
 } from "../../types/portfolioTypes";
 import { PortfolioSchema } from "../schema/portfolioSchema";

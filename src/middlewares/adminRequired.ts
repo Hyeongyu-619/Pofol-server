@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { userService } from "../services/userService";
 
 async function adminRequired(req: any, res: Response, next: NextFunction) {
   const currentUser = req.currentUser;

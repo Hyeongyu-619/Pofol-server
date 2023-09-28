@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { PositionModel } from "../database/model/positionModel";
 import { PositionInfo, PositionData } from "../types/positionTypes";
 
