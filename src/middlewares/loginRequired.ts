@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { userService } from "../services";
 
 async function loginRequired(req: any, res: Response, next: NextFunction) {

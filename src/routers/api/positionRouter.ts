@@ -26,7 +26,7 @@ positionRouter.get(
       const skip = Number(req.query.skip) || 0;
 
       const [positions, total] =
-        await positionService.findAllPositionsWithPagination(skip, limit);
+        await positionService.getAllPositionsWithPagination(skip, limit);
 
       const totalPages = Math.ceil(total / limit);
 

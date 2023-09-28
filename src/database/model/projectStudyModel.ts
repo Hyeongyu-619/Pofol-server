@@ -7,6 +7,11 @@ import {
 } from "../../types/projectTypes";
 import { ProjectStudySchema } from "../schema/projectStudySchema";
 
+interface QueryParams {
+  classification?: string;
+  position?: string;
+}
+
 export class ProjectStudyModel {
   async findByTitle(title: string): Promise<ProjectStudyData | null> {
     try {
@@ -133,7 +138,7 @@ export class ProjectStudyModel {
   }
 
   async findByClassificationAndPosition(
-    query: { [key: string]: string },
+    query: QueryParams,
     limit: number,
     skip: number
   ): Promise<[ProjectStudyInfo[], number]> {
@@ -172,7 +177,11 @@ export class ProjectStudyModel {
   async getAllPositions(): Promise<string[]> {
     try {
       const projectStudies = await ProjectStudy.find().lean();
-      const positions: string[] = [];
+      const positions = projectStudies.flatMap((projectStudy) => {
+        return Array.isArray(projectStudy.position)
+          ? projectStudy.position
+          : [projectStudy.position];
+      });
 
       projectStudies.forEach((projectStudy) => {
         if (Array.isArray(projectStudy.position)) {
@@ -191,9 +200,7 @@ export class ProjectStudyModel {
     }
   }
 
-  async findProjectStudiesByCreatedAt(
-    limit: number
-  ): Promise<ProjectStudyInfo[]> {
+  async findProjectStudies(limit: number): Promise<ProjectStudyInfo[]> {
     try {
       return ProjectStudy.find().sort({ createdAt: -1 }).limit(limit).lean();
     } catch (error) {

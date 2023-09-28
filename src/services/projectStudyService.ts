@@ -60,17 +60,7 @@ class ProjectStudyService {
     return deletedProjectStudy;
   }
 
-  async findAll(): Promise<ProjectStudyInfo[]> {
-    try {
-      const projectStudies = await this.projectStudyModel.findAll();
-      return projectStudies;
-    } catch (error) {
-      throw new Error(
-        "프로젝트/스터디 목록을 조회하는 중에 오류가 발생했습니다."
-      );
-    }
-  }
-  async findAllProjectStudy(
+  async getAllProjectStudy(
     limit: number,
     skip: number
   ): Promise<[ProjectStudyInfo[], number]> {
@@ -99,7 +89,7 @@ class ProjectStudyService {
     }
   }
 
-  async findByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
+  async getByOwnerId(ownerId: string): Promise<ProjectStudyInfo[]> {
     try {
       const portfolios = await this.projectStudyModel.findByOwnerId(ownerId);
       return portfolios;
@@ -108,14 +98,14 @@ class ProjectStudyService {
     }
   }
 
-  async findByClassificationAndPosition(
+  async getByClassificationAndPosition(
     classification: string,
     position: string,
     limit: number,
     skip: number
   ): Promise<[ProjectStudyInfo[], number]> {
     try {
-      const query: { [key: string]: string } = {};
+      const query: Record<string, string> = {};
       if (classification) query["classification"] = classification;
       if (position) query["position"] = position;
 
@@ -200,16 +190,15 @@ class ProjectStudyService {
     projectStudy.comments[commentIndex] = updatedComment;
     return this.projectStudyModel.update(projectStudyId, projectStudy);
   }
-  async findLatestProjectStudies(): Promise<ProjectStudyInfo[]> {
+  async getLatestProjectStudies(): Promise<ProjectStudyInfo[]> {
     try {
-      const projectStudies =
-        await this.projectStudyModel.findProjectStudiesByCreatedAt(8);
+      const projectStudies = await this.projectStudyModel.findProjectStudies(8);
       return projectStudies;
     } catch (error) {
       throw new Error("게시물 목록을 조회하는 중에 오류가 발생했습니다.");
     }
   }
-  async findTopMentorProjectStudiesByPosition(
+  async getTopMentorProjectStudiesByPosition(
     userId: string | null,
     position?: string
   ): Promise<ProjectStudyInfo[]> {

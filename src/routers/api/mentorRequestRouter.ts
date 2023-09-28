@@ -45,14 +45,14 @@ mentorRequestRouter.get(
 
       if (status) {
         [mentorRequests, total] =
-          await mentorRequestService.findMentorRequestsByStatus(
+          await mentorRequestService.getMentorRequestsByStatus(
             status,
             skip,
             limit
           );
       } else {
         [mentorRequests, total] =
-          await mentorRequestService.findAllWithPagination(skip, limit);
+          await mentorRequestService.getAllWithPagination(skip, limit);
       }
 
       const totalPages = Math.ceil(total / limit);

@@ -37,7 +37,7 @@ export class UserModel {
     limit: number
   ): Promise<UserInfo[]> {
     try {
-      return await User.find().skip(skip).limit(limit).exec();
+      return await User.find().skip(skip).limit(limit).lean();
     } catch (error) {
       throw new Error("유저를 페이징 조회하는 중에 오류가 발생했습니다.", {
         cause: error,
@@ -69,7 +69,7 @@ export class UserModel {
   async update(_id: string, update: Partial<UserInfo>): Promise<UserData> {
     try {
       const filter = { _id };
-      const option = { returnOriginal: false, new: true };
+      const option = { new: true };
       const updatedUser = await User.findOneAndUpdate(
         filter,
         update,

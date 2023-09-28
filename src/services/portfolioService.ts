@@ -13,6 +13,9 @@ import { validation } from "../utils/validation";
 import { userService } from "./userService";
 import { UserModel } from "../database/model/userModel";
 
+type MentoringRequestWithPortfolioId = MentoringRequestInfo & {
+  portfolioId: Types.ObjectId;
+};
 class PortfolioService {
   portfolioModel: PortfolioModel;
   notificationModel: NotificationModel;
@@ -41,7 +44,6 @@ class PortfolioService {
       throw error;
     }
 
-    validation.addPortfolioApplication(portfolioInfo);
     const createdNewPortfolio = await this.portfolioModel.create(portfolioInfo);
     return createdNewPortfolio;
   }
@@ -56,17 +58,6 @@ class PortfolioService {
     return portfolio;
   }
 
-  async getPortfolioByIdPopulate(_id: string): Promise<PortfolioData> {
-    const portfolioDoc = await this.portfolioModel.findById(_id);
-    if (!portfolioDoc) {
-      const error = new Error("해당 멘토가 존재하지 않습니다.");
-      error.name = "NotFound";
-      throw error;
-    }
-    const portfolio = await portfolioDoc.populate("comments");
-    return portfolio;
-  }
-
   async getMentoringRequestsByOwnerAndUser(
     ownerId: string,
     userId: string,
@@ -77,31 +68,33 @@ class PortfolioService {
     if (!portfolio) {
       const error = new Error("해당 ownerId의 포트폴리오가 존재하지 않습니다.");
       error.name = "NotFound";
-      return [];
+      throw error;
     }
 
     let filteredRequests: MentoringRequestInfo[] = portfolio.mentoringRequests;
 
     if (status) {
-      filteredRequests = portfolio.mentoringRequests.filter(
-        (request: MentoringRequestInfo) => {
-          return request.status === status;
-        }
+      filteredRequests = filteredRequests.filter(
+        (request: MentoringRequestInfo) => request.status === status
       );
     }
-    filteredRequests.forEach((request) => {
-      request.portfolioId = portfolio._id;
+
+    const updatedRequests = filteredRequests.map((request) => {
+      return {
+        ...request,
+        portfolioId: portfolio._id,
+      };
     });
 
-    return filteredRequests;
+    return updatedRequests;
   }
 
   async getMyMentoringRequests(
     userId: string,
     status?: string
-  ): Promise<any[]> {
+  ): Promise<MentoringRequestWithPortfolioId[]> {
     const portfolios = await this.portfolioModel.findAll();
-    const myMentoringRequests: any[] = [];
+    const myMentoringRequests: MentoringRequestWithPortfolioId[] = [];
 
     portfolios.forEach((portfolio) => {
       let userRequests = portfolio.mentoringRequests.filter(
@@ -116,6 +109,9 @@ class PortfolioService {
       }
 
       const userRequestsWithPortfolioId = userRequests.map((request) => {
+        if (!portfolio._id) {
+          throw new Error("해당하는 포트폴리오 ID가 존재하지 않습니다.");
+        }
         return {
           ...request,
           portfolioId: portfolio._id,
@@ -142,11 +138,11 @@ class PortfolioService {
     return deletedPortfolio;
   }
 
-  async findAll(
+  async getAllPortfolio(
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<[PortfolioInfo[], number]> {
+  ): Promise<{ portfolios: PortfolioInfo[]; total: number }> {
     try {
       return await this.portfolioModel.findAllPortfolio(sortQuery, limit, skip);
     } catch (error) {
@@ -154,19 +150,20 @@ class PortfolioService {
     }
   }
 
-  async findByPosition(
+  async getByPosition(
     position: string,
     sortQuery: any = {},
     limit: number,
     skip: number
-  ): Promise<[PortfolioInfo[], number]> {
+  ): Promise<{ portfolios: PortfolioInfo[]; total: number }> {
     try {
-      return await this.portfolioModel.findByPosition(
+      const { portfolios, total } = await this.portfolioModel.findByPosition(
         position,
         sortQuery,
         limit,
         skip
       );
+      return { portfolios, total };
     } catch (error) {
       throw new Error();
     }
@@ -176,22 +173,24 @@ class PortfolioService {
     id: string,
     limit: number,
     skip: number
-  ): Promise<[CommentInfo[], number]> {
+  ): Promise<{ comments: CommentInfo[]; total: number }> {
     try {
-      const [comments, total] = await portfolioModelInstance.findCommentsById(
+      const { comments, total } = await portfolioModelInstance.findCommentsById(
         id,
         limit,
         skip
       );
-      return [comments, total];
+      return { comments, total };
     } catch (error) {
       throw error;
     }
   }
 
-  async findByQuery(query: any): Promise<PortfolioInfo[]> {
+  async getPortfolioByOwnerId(query: any): Promise<PortfolioInfo[]> {
     try {
-      const portfolios = await this.portfolioModel.findByQuery(query);
+      const portfolios = await this.portfolioModel.findPortfoliosByOwnerId(
+        query
+      );
       return portfolios;
     } catch (error) {
       throw new Error("멘토 목록을 조회하는 중에 오류가 발생했습니다.");
@@ -268,7 +267,7 @@ class PortfolioService {
     return this.portfolioModel.update(portfolioId, portfolio);
   }
 
-  async findTopMentorPortfoliosByPosition(
+  async getTopMentorPortfoliosByPosition(
     userId: string
   ): Promise<PortfolioInfo[]> {
     try {
@@ -284,7 +283,7 @@ class PortfolioService {
     }
   }
 
-  async findTopMentorPortfolios(): Promise<PortfolioInfo[]> {
+  async getTopMentorPortfolios(): Promise<PortfolioInfo[]> {
     try {
       const portfolios =
         await this.portfolioModel.findPortfoliosByCoachingCount(4);
@@ -329,13 +328,15 @@ class PortfolioService {
     message?: string,
     advice?: string
   ): Promise<PortfolioData> {
-    let status: "completed" | "rejected";
-    if (action === "complete") {
-      status = "completed";
-    } else if (action === "reject") {
-      status = "rejected";
-    } else {
-      throw new Error("Invalid action");
+    const statusMap: Record<"complete" | "reject", "completed" | "rejected"> = {
+      complete: "completed",
+      reject: "rejected",
+    };
+
+    const status = statusMap[action];
+
+    if (status === undefined) {
+      throw new Error("유효하지 않은 작업입니다.");
     }
 
     const updatedPortfolio =
@@ -407,7 +408,7 @@ class PortfolioService {
       const portfolio = await this.portfolioModel.findById(portfolioId);
       if (mentor && mentor.coachingCount !== undefined)
         if (!portfolio) {
-          throw new Error("Portfolio not found");
+          throw new Error("포트폴리오를 찾을 수 없습니다.");
         }
       portfolio.coachingCount += 1;
       await this.portfolioModel.update(portfolioId, {
