@@ -1,5 +1,8 @@
 import { Document, model } from "mongoose";
-import { NotificationInfo, NotificationData } from "../../types/notification";
+import {
+  NotificationInfo,
+  NotificationData,
+} from "../../types/notificationTypes";
 import { NotificationSchema } from "../schema/notificationSchema";
 
 export class NotificationModel {

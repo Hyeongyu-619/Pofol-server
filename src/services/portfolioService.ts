@@ -8,7 +8,7 @@ import {
   CommentInfo,
   MentoringRequestData,
   MentoringRequestInfo,
-} from "../types/portfolio";
+} from "../types/portfolioTypes";
 import { validation } from "../utils/validation";
 import { userService } from "./userService";
 import { UserModel } from "../database/model/userModel";

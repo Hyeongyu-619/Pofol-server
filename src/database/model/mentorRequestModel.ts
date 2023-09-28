@@ -2,7 +2,7 @@ import { Document, model } from "mongoose";
 import {
   MentorRequestInfo,
   MentorRequestData,
-} from "../../types/mentorRequest";
+} from "../../types/mentorRequestTypes";
 import { MentorRequestSchema } from "../schema/mentorRequestSchema";
 
 export class MentorRequestModel {

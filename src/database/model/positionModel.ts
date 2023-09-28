@@ -1,5 +1,5 @@
 import { Document, model } from "mongoose";
-import { PositionInfo, PositionData } from "../../types/position";
+import { PositionInfo, PositionData } from "../../types/positionTypes";
 import { PositionSchema } from "../schema/positionSchema";
 
 export class PositionModel {

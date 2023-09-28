@@ -3,9 +3,8 @@ import { ProjectStudy } from "..";
 import {
   ProjectStudyInfo,
   ProjectStudyData,
-  CommentData,
   CommentInfo,
-} from "../../types/projectStudy";
+} from "../../types/projectTypes";
 import { ProjectStudySchema } from "../schema/projectStudySchema";
 
 export class ProjectStudyModel {

@@ -1,6 +1,9 @@
 import { Types } from "mongoose";
 import { MentorRequestModel } from "../database/model/mentorRequestModel";
-import { MentorRequestInfo, MentorRequestData } from "../types/mentorRequest";
+import {
+  MentorRequestInfo,
+  MentorRequestData,
+} from "../types/mentorRequestTypes";
 import { NotificationModel } from "../database/model/notificationModel";
 
 class MentorRequestService {

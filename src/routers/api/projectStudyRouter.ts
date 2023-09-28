@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { loginRequired, ownershipRequired } from "../../middlewares";
 import { projectStudyService } from "../../services";
-import { CommentInfo } from "../../types/projectStudy";
+import { CommentInfo } from "../../types/projectTypes";
 import { Types } from "mongoose";
 import isCommentOwner from "../../middlewares/isCommentOwner";
 

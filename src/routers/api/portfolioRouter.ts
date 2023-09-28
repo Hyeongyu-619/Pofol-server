@@ -5,7 +5,7 @@ import {
   CommentInfo,
   MentoringRequestInfo,
   PortfolioInfo,
-} from "../../types/portfolio";
+} from "../../types/portfolioTypes";
 import { Types } from "mongoose";
 import isCommentOwner from "../../middlewares/isCommentOwner";
 

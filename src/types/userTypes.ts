@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface UserInfo {
   name: string;
   email: string;
@@ -15,5 +17,5 @@ export interface UserInfo {
 }
 
 export interface UserData extends UserInfo {
-  _id: Types.ObjectID;
+  _id: Types.ObjectId;
 }

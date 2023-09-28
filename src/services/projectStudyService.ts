@@ -5,7 +5,7 @@ import {
   ProjectStudyData,
   CommentData,
   CommentInfo,
-} from "../types/projectStudy";
+} from "../types/projectTypes";
 import { validation } from "../utils/validation";
 import { userService } from "./userService";
 import { NotificationModel } from "../database/model/notificationModel";

@@ -1,5 +1,5 @@
 import { UserModel } from "../database/model/userModel";
-import { UserInfo, UserData } from "../types/user";
+import { UserInfo, UserData } from "../types/userTypes";
 import { validation } from "../utils/validation";
 
 class UserService {

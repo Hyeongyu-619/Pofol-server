@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { NotificationModel } from "../database/model/notificationModel";
-import { NotificationInfo, NotificationData } from "../types/notification";
+import { NotificationInfo, NotificationData } from "../types/notificationTypes";
 
 class NotificationService {
   notificationModel: NotificationModel;

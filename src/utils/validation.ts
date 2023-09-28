@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
-import { UserInfo } from "../types/user";
-import { PortfolioInfo } from "../types/portfolio";
-import { ProjectStudyInfo } from "../types/projectStudy";
+import { UserInfo } from "../types/userTypes";
+import { PortfolioInfo } from "../types/portfolioTypes";
+import { ProjectStudyInfo } from "../types/projectTypes";
 
 class Validation {
   addUser(userInfo: UserInfo): void {

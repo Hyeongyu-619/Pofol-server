@@ -7,7 +7,7 @@ import {
   CommentInfo,
   MentoringRequestInfo,
   MentoringRequestData,
-} from "../../types/portfolio";
+} from "../../types/portfolioTypes";
 import { PortfolioSchema } from "../schema/portfolioSchema";
 
 export class PortfolioModel {

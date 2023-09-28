@@ -5,7 +5,7 @@ import {
   projectStudyService,
   userService,
 } from "../../services";
-import { CommentInfo } from "../../types/portfolio";
+import { CommentInfo } from "../../types/portfolioTypes";
 import { Types } from "mongoose";
 
 const adminRouter = Router();

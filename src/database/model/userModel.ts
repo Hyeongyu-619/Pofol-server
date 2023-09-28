@@ -1,6 +1,6 @@
 import { Document, model } from "mongoose";
 import { User } from "..";
-import { UserInfo, UserData } from "../../types/user";
+import { UserInfo, UserData } from "../../types/userTypes";
 import { UserSchema } from "../schema/userSchema";
 
 export class UserModel {
