@@ -16,8 +16,8 @@ adminRouter.get(
   adminRequired,
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const limit = Number(req.query.limit) ?? 10;
-      const skip = Number(req.query.skip) ?? 0;
+      const limit = req.query.limit ?? 10;
+      const skip = req.query.skip ?? 0;
 
       const [allUsers, totalCount] =
         await userService.getAllWithPaginationAndCount(skip, limit);

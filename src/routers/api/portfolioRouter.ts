@@ -189,9 +189,9 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const category = req.query.category;
-      const sort = req.query.sort || "newest";
-      const limit = Number(req.query.limit) || 12;
-      const skip = Number(req.query.skip) || 0;
+      const sort = req.query.sort ?? "newest";
+      const limit = req.query.limit ?? 12;
+      const skip = req.query.skip ?? 0;
 
       let sortQuery: any = {};
 
@@ -238,8 +238,8 @@ portfolioRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { portfolioId } = req.params;
-      const limit = Number(req.query.limit) || 10;
-      const skip = Number(req.query.skip) || 0;
+      const limit = req.query.limit ?? 10;
+      const skip = req.query.skip ?? 0;
 
       const { comments, total } =
         await portfolioService.getCommentsByPortfolioId(

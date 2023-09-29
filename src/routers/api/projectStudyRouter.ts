@@ -42,8 +42,8 @@ projectStudyRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { classification, position } = req.query;
-      const limit = Number(req.query.limit) || 6;
-      const skip = Number(req.query.skip) || 0;
+      const limit = req.query.limit ?? 6;
+      const skip = req.query.skip ?? 0;
       let projectStudies;
       let total;
 
@@ -76,8 +76,8 @@ projectStudyRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { projectStudyId } = req.params;
-      const limit = Number(req.query.limit) || 10;
-      const skip = Number(req.query.skip) || 0;
+      const limit = req.query.limit ?? 10;
+      const skip = req.query.skip ?? 0;
 
       const [comments, total] =
         await projectStudyService.getCommentsByProjectStudyId(

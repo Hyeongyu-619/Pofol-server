@@ -16,7 +16,7 @@ apiRouter.use("/users", userRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/portfolios", portfolioRouter);
 apiRouter.use("/projectStudies", projectStudyRouter);
-apiRouter.use("/admins", adminRouter);
+apiRouter.use("/admin", adminRouter);
 apiRouter.use("/positions", positionRouter);
 apiRouter.use("/mentorRequests", mentorRequestRouter);
 apiRouter.use("/notifications", notificationRouter);

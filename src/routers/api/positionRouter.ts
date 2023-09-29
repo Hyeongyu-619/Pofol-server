@@ -18,30 +18,27 @@ positionRouter.post(
   }
 );
 
-positionRouter.get(
-  "/",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const limit = Number(req.query.limit) || 10;
-      const skip = Number(req.query.skip) || 0;
+positionRouter.get("/", async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const limit = req.query.limit ?? 10;
+    const skip = req.query.skip ?? 0;
 
-      const [positions, total] =
-        await positionService.getAllPositionsWithPagination(skip, limit);
+    const [positions, total] =
+      await positionService.getAllPositionsWithPagination(skip, limit);
 
-      const totalPages = Math.ceil(total / limit);
+    const totalPages = Math.ceil(total / limit);
 
-      res.status(200).json({
-        positions,
-        total,
-        totalPages,
-        limit,
-        skip,
-      });
-    } catch (error) {
-      next(error);
-    }
+    res.status(200).json({
+      positions,
+      total,
+      totalPages,
+      limit,
+      skip,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 positionRouter.put(
   "/:id",
