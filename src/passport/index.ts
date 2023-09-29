@@ -1,5 +1,4 @@
 import passport from "passport";
-import { userService } from "../services/userService";
 import "./strategies/naver";
 
 passport.serializeUser((user, done) => {

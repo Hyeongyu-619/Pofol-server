@@ -38,7 +38,7 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
         res.cookie("isToken", "true", { maxAge: 21600000 });
         res.cookie("email", email, { maxAge: 21600000 });
         res.cookie("isUser", 1, { maxAge: 21600000 });
-        return res.redirect("/");
+        return res.redirect("/signinaccess");
       } else {
         res.cookie("email", email);
         return res.redirect("/signup");
@@ -73,7 +73,7 @@ authRouter.post("/signup", async (req, res, next) => {
 
     res.cookie("isUser", 1, { maxAge: 21600000 });
     res.cookie("token", token, { maxAge: 21600000 });
-    return res.redirect("/");
+    return res.redirect("/signinaccess");
   } catch (error) {
     next(error);
   }
