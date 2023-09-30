@@ -206,4 +206,4 @@ $RECYCLE.BIN/
 awsconfig.json
 
 data/*
-init.letsencrypt.sh
+init-letsencrypt.sh
