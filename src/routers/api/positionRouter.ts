@@ -73,9 +73,14 @@ positionRouter.delete(
   }
 );
 
-positionRouter.get("/validate-position/:position", async (req, res, next) => {
+positionRouter.post("/validate-position", async (req, res, next) => {
   try {
-    const { position } = req.params;
+    const { position } = req.body;
+
+    if (!position) {
+      return res.status(400).json({ error: "포지션 정보를 입력해야 합니다." });
+    }
+
     const isDuplicated = await positionService.checkPositionDuplication(
       position
     );
