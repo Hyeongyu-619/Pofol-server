@@ -88,7 +88,7 @@ export class PositionModel {
 
   async findByPosition(position: string): Promise<PositionData | null> {
     const positionCategory = await Position.findOne({
-      position: position,
+      name: position,
     }).lean();
     return positionCategory;
   }
