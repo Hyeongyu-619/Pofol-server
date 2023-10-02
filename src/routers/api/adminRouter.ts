@@ -111,8 +111,8 @@ adminRouter.get(
   "/portfolios",
   async (req: any, res: Response, next: NextFunction) => {
     try {
-      const limit = Number(req.query.limit) ?? 10;
-      const skip = Number(req.query.skip) ?? 0;
+      const limit = req.query.limit ?? 10;
+      const skip = req.query.skip ?? 0;
       const sortQuery = { createdAt: -1 };
 
       const { portfolios: allPortfolios, total: totalCount } =
@@ -167,8 +167,8 @@ adminRouter.get(
   async (req: any, res: Response, next: NextFunction) => {
     try {
       const { classification, position } = req.query;
-      const limit = Number(req.query.limit) ?? 10;
-      const skip = Number(req.query.skip) ?? 0;
+      const limit = req.query.limit ?? 10;
+      const skip = req.query.skip ?? 0;
 
       let projectStudies;
       let total;
