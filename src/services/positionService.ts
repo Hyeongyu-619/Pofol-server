@@ -34,6 +34,11 @@ class PositionService {
     const total = await this.positionModel.countAllPositions();
     return [positions, total];
   }
+
+  async checkPositionDuplication(positionName: string): Promise<boolean> {
+    const position = await this.positionModel.findByPosition(positionName);
+    return !!position;
+  }
 }
 
 const positionModelInstance = new PositionModel();

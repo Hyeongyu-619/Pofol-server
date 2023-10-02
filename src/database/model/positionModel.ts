@@ -85,6 +85,11 @@ export class PositionModel {
       });
     }
   }
+
+  async findByPosition(positionName: string): Promise<PositionData | null> {
+    const position = await Position.findOne({ position: positionName }).lean();
+    return position;
+  }
 }
 
 const Position = model<PositionInfo & Document>("Position", PositionSchema);

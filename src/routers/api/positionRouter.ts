@@ -73,4 +73,19 @@ positionRouter.delete(
   }
 );
 
+positionRouter.get("/validate-position/:position", async (req, res, next) => {
+  try {
+    const { position } = req.params;
+    const isDuplicated = await positionService.checkPositionDuplication(
+      position
+    );
+    if (isDuplicated) {
+      return res.status(409).json({ error: "이미 사용 중인 직무입니다." });
+    }
+    return res.status(200).json({ message: "사용 가능한 직무입니다." });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export { positionRouter };
