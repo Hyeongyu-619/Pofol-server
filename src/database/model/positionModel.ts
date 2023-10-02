@@ -86,9 +86,11 @@ export class PositionModel {
     }
   }
 
-  async findByPosition(positionName: string): Promise<PositionData | null> {
-    const position = await Position.findOne({ position: positionName }).lean();
-    return position;
+  async findByPosition(position: string): Promise<PositionData | null> {
+    const positionCategory = await Position.findOne({
+      position: position,
+    }).lean();
+    return positionCategory;
   }
 }
 
