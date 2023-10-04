@@ -73,7 +73,7 @@ authRouter.post("/signup", async (req, res, next) => {
 
     res.cookie("isUser", 1, { maxAge: 21600000 });
     res.cookie("token", token, { maxAge: 21600000 });
-    return res.redirect("/signinaccess");
+    return res.redirect("/");
   } catch (error) {
     next(error);
   }
