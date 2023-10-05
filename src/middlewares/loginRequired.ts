@@ -11,18 +11,13 @@ function isJwtPayloadWithExpiration(
 async function loginRequired(req: any, res: Response, next: NextFunction) {
   const token = req.cookies.token;
 
-  if (!token || token === "null") {
+  const decodedToken = jwt.decode(token);
+
+  if (!token || token === "null" || !decodedToken) {
+    res.cookie("token", "", { maxAge: -1 });
     return res.status(401).json({
       result: "Unauthorized",
       reason: "로그인한 유저만 사용할 수 있는 서비스입니다.",
-    });
-  }
-  const decodedToken = jwt.decode(token);
-
-  if (!decodedToken) {
-    return res.status(401).json({
-      result: "Unauthorized",
-      reason: "정상적인 토큰이 아닙니다.",
     });
   }
 
@@ -46,10 +41,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
     req.currentUser = user;
     next();
   } catch (error) {
-    return res.status(401).json({
-      result: "Unauthorized",
-      reason: "정상적인 토큰이 아닙니다.",
-    });
+    return res.status(500).json(error);
   }
 }
 
