@@ -17,7 +17,7 @@ async function loginRequired(req: any, res: Response, next: NextFunction) {
       reason: "로그인한 유저만 사용할 수 있는 서비스입니다.",
     });
   }
-  const decodedToken = jwt.decode(token); // verify가 아닌 decode를 사용하여 토큰 내용만 가져옵니다.
+  const decodedToken = jwt.decode(token);
 
   if (!decodedToken) {
     return res.status(401).json({
