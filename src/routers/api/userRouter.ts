@@ -71,6 +71,10 @@ userRouter.delete(
       const userId = req.currentUser._id;
       const deleteResult = await userService.deleteUser(userId);
 
+      res.clearCookie("token");
+      res.clearCookie("email");
+      res.clearCookie("isToken");
+      res.clearCookie("isUser");
       res.status(200).json(deleteResult);
     } catch (error) {
       next(error);
