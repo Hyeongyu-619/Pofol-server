@@ -49,6 +49,10 @@ const UserSchema = new Schema(
       type: String,
       requried: false,
     },
+    password: {
+      type: String,
+      required: false,
+    },
   },
   {
     collection: "users",

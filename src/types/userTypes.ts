@@ -14,6 +14,7 @@ export interface UserInfo {
   createdAt?: Date;
   updatedAt?: Date;
   coachingCount?: number;
+  password?: string;
 }
 
 export interface UserData extends UserInfo {

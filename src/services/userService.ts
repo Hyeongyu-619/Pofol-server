@@ -1,6 +1,7 @@
 import { UserModel } from "../database/model/userModel";
 import { UserInfo, UserData } from "../types/userTypes";
 import { validation } from "../utils/validation";
+import bcrypt from "bcrypt";
 
 class UserService {
   userModel: UserModel;
@@ -95,6 +96,18 @@ class UserService {
   async checkNicknameDuplication(nickname: string): Promise<boolean> {
     const user = await this.userModel.findByNickName(nickname);
     return !!user;
+  }
+
+  async validatePassword(
+    inputPassword: string,
+    userPassword: string
+  ): Promise<boolean> {
+    try {
+      return await bcrypt.compare(inputPassword, userPassword);
+    } catch (error) {
+      console.error(error);
+      throw new Error("비밀번호 검증 과정에서 오류가 발생했습니다.");
+    }
   }
 }
 

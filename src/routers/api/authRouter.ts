@@ -49,6 +49,46 @@ authRouter.get("/login/naver/callback", (req, res, next) => {
   })(req, res, next);
 });
 
+authRouter.post("/admin/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const adminUser = await userService.getUserByEmail(email);
+    if (!adminUser) {
+      return res
+        .status(400)
+        .json({ error: "등록되지 않은 관리자 이메일입니다." });
+    }
+
+    if (!adminUser.password) {
+      throw new Error("관리자 비밀번호가 존재하지 않습니다.");
+    }
+
+    const isPasswordCorrect = await userService.validatePassword(
+      password,
+      adminUser.password
+    );
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "비밀번호가 틀렸습니다." });
+    }
+
+    const secretKey = process.env.JWT_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error("JWT_SECRET_KEY 환경변수가 설정되지 않았습니다.");
+    }
+
+    const token = jwt.sign({ id: adminUser._id }, secretKey, {
+      expiresIn: "6h",
+    });
+
+    res.cookie("isAdmin", 1, { maxAge: 21600000 });
+    res.cookie("token", token, { maxAge: 21600000 });
+    return res.redirect("/admin");
+  } catch (error) {
+    next(error);
+  }
+});
+
 authRouter.post("/signup", async (req, res, next) => {
   try {
     const { email, name, nickName, position, role } = req.body;
