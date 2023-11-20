@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const UserSchema = new Schema(
   {
@@ -57,7 +57,10 @@ const UserSchema = new Schema(
   {
     collection: "users",
     timestamps: true,
+    collation: { locale: "en", strength: 2 },
   }
 );
 
-export { UserSchema };
+const UserModel = mongoose.model("User", UserSchema);
+
+export { UserModel };
