@@ -82,7 +82,9 @@ authRouter.post("/admin/login", async (req, res, next) => {
     });
 
     res.cookie("isUser", 1, { maxAge: 21600000 });
-    res.cookie("token", token, { maxAge: 21600000 });
+    res.cookie("token", token, { httpOnly: true, maxAge: 21600000 });
+    res.cookie("isToken", "true", { maxAge: 21600000 });
+    res.cookie("email", email, { maxAge: 21600000 });
     return res.redirect("/admin");
   } catch (error) {
     next(error);
