@@ -81,7 +81,7 @@ authRouter.post("/admin/login", async (req, res, next) => {
       expiresIn: "6h",
     });
 
-    res.cookie("isAdmin", 1, { maxAge: 21600000 });
+    res.cookie("isUser", 1, { maxAge: 21600000 });
     res.cookie("token", token, { maxAge: 21600000 });
     return res.redirect("/admin");
   } catch (error) {
