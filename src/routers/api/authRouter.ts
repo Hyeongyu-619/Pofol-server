@@ -64,10 +64,7 @@ authRouter.post("/admin/login", async (req, res, next) => {
       throw new Error("관리자 비밀번호가 존재하지 않습니다.");
     }
 
-    const isPasswordCorrect = await userService.validatePassword(
-      password,
-      adminUser.password
-    );
+    const isPasswordCorrect = password === adminUser.password;
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "비밀번호가 틀렸습니다." });
     }
